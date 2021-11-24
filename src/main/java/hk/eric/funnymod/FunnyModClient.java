@@ -12,6 +12,13 @@ import static net.fabricmc.api.EnvType.CLIENT;
 @Environment(CLIENT)
 public class FunnyModClient implements ClientModInitializer {
 
+    /*TODO:
+    *  Mob ESP
+    *  Freecam
+    *  Lock hotbar(Slot locking)
+    *  XP time left
+    *  Stat change preview*/
+
     public static Minecraft mc = Minecraft.getInstance();
 
     @Override

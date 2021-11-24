@@ -8,6 +8,7 @@ import baritone.api.event.events.SprintStateEvent;
 import baritone.api.event.events.type.EventState;
 import baritone.behavior.LookBehavior;
 import com.mojang.authlib.GameProfile;
+import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
 import net.minecraft.client.ClientRecipeBook;
@@ -17,6 +18,8 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Abilities;
+import net.minecraft.world.item.BookItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,6 +27,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = LocalPlayer.class,priority = 99999)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
@@ -41,6 +45,18 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     @Shadow public Input input;
 
     @Shadow public abstract void tick();
+
+    @Inject(method = "drop", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/player/Inventory;removeFromSelected(Z)Lnet/minecraft/world/item/ItemStack;", shift = At.Shift.BEFORE), cancellable = true)
+    public void onDrop(boolean bl, CallbackInfoReturnable<Boolean> cir) {
+        if(MCQPPreventDropModule.getToggle().isOn()) {
+            ItemStack item;
+            if((item = this.getInventory().getSelected()) != null) {
+                if(item.getMaxStackSize() == 1 || item.getItem() instanceof BookItem) {
+                    cir.setReturnValue(false);
+                }
+            }
+        }
+    }
 
     @Redirect(method = "aiStep",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z")

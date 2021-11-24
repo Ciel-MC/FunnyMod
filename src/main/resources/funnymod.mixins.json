@@ -15,6 +15,7 @@
     "LocalPlayerMixin",
     "MinecraftMixin",
     "PlayerMixin",
+    "ScreenMixin",
     "TimerMixin"
   ]
 }

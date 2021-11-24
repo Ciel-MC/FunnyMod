@@ -3,9 +3,11 @@ package hk.eric.funnymod.modules;
 import com.lukflug.panelstudio.setting.ICategory;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
+import hk.eric.funnymod.modules.combat.VelocityModule;
 import hk.eric.funnymod.modules.mcqp.MCQPAuraModule;
 import hk.eric.funnymod.modules.mcqp.MCQPAutoClickerModule;
 import hk.eric.funnymod.modules.mcqp.MCQPFastReviveModule;
+import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
@@ -36,7 +38,7 @@ public enum Category implements ICategory {
 	
 	public static void init() {
 		addModule(COMBAT,
-				Random.getRandomModule()
+				new VelocityModule()
 		);
 		addModule(MOVEMENT,
 				new SprintModule(),
@@ -61,7 +63,8 @@ public enum Category implements ICategory {
 		addModule(MCQP,
 				new MCQPAuraModule(),
 				new MCQPAutoClickerModule(),
-				new MCQPFastReviveModule()
+				new MCQPFastReviveModule(),
+				new MCQPPreventDropModule()
 		);
 		for (Category value : values()) {
 			value.modules.sort(Comparator.comparing(Module::getDisplayName));
@@ -81,7 +84,14 @@ public enum Category implements ICategory {
 	public Stream<IModule> getModules() {
 		return modules.stream().map(module->module);
 	}
-	
+
+	public static void reloadModules() {
+		for (Category category : values()) {
+			category.modules.clear();
+		}
+		init();
+	}
+
 	public static IClient getClient() {
 		return () -> Arrays.stream(Category.values());
 	}

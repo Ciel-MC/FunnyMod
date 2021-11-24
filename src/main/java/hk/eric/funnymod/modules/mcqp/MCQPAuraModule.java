@@ -87,7 +87,7 @@ public class MCQPAuraModule extends ToggleableModule {
     }
 
     public MCQPAuraModule() {
-        super("文靜Aura", "Killaura for MCQP", () -> true);
+        super("MCQPAura", "Killaura for MCQP", () -> true);
         instance = this;
         settings.add(range);
         settings.add(maxTarget);
