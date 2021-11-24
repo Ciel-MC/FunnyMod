@@ -1,8 +1,10 @@
 package hk.eric.funnymod.gui;
 
+import baritone.api.event.events.type.EventState;
 import hk.eric.funnymod.event.EventListener;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.KeyEvent;
+import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.Category;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -15,6 +17,8 @@ public class Gui {
 
     public void init() {
         Category.init();
+        ClientTickEvents.START_CLIENT_TICK.register((startTick)->new TickEvent(EventState.PRE).call());
+        ClientTickEvents.END_CLIENT_TICK.register((endTick)->new TickEvent(EventState.POST).call());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!initialized) {
                 gui = new ClickGUI();

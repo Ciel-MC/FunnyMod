@@ -3,6 +3,9 @@ package hk.eric.funnymod.modules;
 import com.lukflug.panelstudio.setting.ICategory;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
+import hk.eric.funnymod.modules.mcqp.MCQPAuraModule;
+import hk.eric.funnymod.modules.mcqp.MCQPAutoClickerModule;
+import hk.eric.funnymod.modules.mcqp.MCQPFastReviveModule;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
@@ -22,7 +25,8 @@ public enum Category implements ICategory {
 	PLAYER("Player"),
 	VISUAL("Visual"),
 	WORLD("World"),
-	MISC("Misc");
+	MISC("Misc"),
+	MCQP("文靜");
 	public final String displayName;
 	public final List<Module> modules= new ArrayList<>();
 	
@@ -53,6 +57,11 @@ public enum Category implements ICategory {
 		addModule(MISC,
 				new BindModule(),
 				new CommandModule()
+		);
+		addModule(MCQP,
+				new MCQPAuraModule(),
+				new MCQPAutoClickerModule(),
+				new MCQPFastReviveModule()
 		);
 		for (Category value : values()) {
 			value.modules.sort(Comparator.comparing(Module::getDisplayName));

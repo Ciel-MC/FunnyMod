@@ -3,14 +3,21 @@ package hk.eric.funnymod.gui.setting;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.INumberSetting;
 
+import java.util.function.Consumer;
+
 public class IntegerSetting extends Setting<Integer> implements INumberSetting {
 	public final int min,max;
-	
-	public IntegerSetting (String displayName, String configName, String description, IBoolean visible, int min, int max, int value) {
-		super(displayName,configName,description,visible,value);
-		this.min=min;
-		this.max=max;
+
+	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer min, Integer max, Integer value) {
+		this(displayName, configName, description, visible, min, max, value, null);
 	}
+
+	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer min, Integer max, Integer value, Consumer<Integer> onChange) {
+		super(displayName, configName, description, visible, value, onChange);
+		this.min = min;
+		this.max = max;
+	}
+
 
 	@Override
 	public double getNumber() {

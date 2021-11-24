@@ -12,35 +12,19 @@ import hk.eric.funnymod.modules.Module;
 import hk.eric.funnymod.modules.ToggleableModule;
 import org.lwjgl.glfw.GLFW;
 
-public class BindModule extends ToggleableModule {
+public class BindModule extends Module{
 
     private static BindModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "BindKeybind", null, () -> true, -1, ()-> instance.toggle());
-//    private static final EventHandler<KeyEvent> keybindHandler = (event) -> {
-//        if(!Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
-//            for (Category value : Category.values()) {
-//                value.modules.forEach(module -> {
-//                    module.settings.forEach(setting -> {
-//                        if(setting instanceof KeybindSetting keybindSetting) {
-//                            if(keybindSetting.getKey() == event.getKey()) {
-//                                keybindSetting.getAction().run();
-//                            }
-//                        }
-//                    });
-//                });
-//            }
-//        }
-//    };
-    private static final EventHandler<KeyEvent> keybindHandler = new EventHandler<KeyEvent>() {
+    private static final EventHandler<KeyEvent> keybindHandler = new EventHandler<>() {
         @Override
         @EventListener
-        public void accept(KeyEvent keyEvent) {
-            if(keyEvent.getAction() != GLFW.GLFW_PRESS) return;
-            if(!Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
+        public void handle(KeyEvent keyEvent) {
+            if (keyEvent.getAction() != GLFW.GLFW_PRESS) return;
+            if (!Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
                 for (Category value : Category.values()) {
                     value.modules.forEach(module -> module.settings.forEach(setting -> {
-                        if(setting instanceof KeybindSetting keybindSetting) {
-                            if(keybindSetting.getKey() == keyEvent.getKey()) {
+                        if (setting instanceof KeybindSetting keybindSetting) {
+                            if (keybindSetting.getKey() == keyEvent.getKey()) {
                                 keybindSetting.getAction().run();
                             }
                         }
@@ -51,24 +35,12 @@ public class BindModule extends ToggleableModule {
     };
 
     public BindModule() {
-        super("Bind", "Triggers keybinds.", () -> true,true);
+        super("Bind", "Triggers keybinds.", () -> true);
         instance = this;
-        settings.add(keybind);
+        EventManager.getInstance().register(keybindHandler);
     }
 
     public static IToggleable getToggle() {
         return instance.isEnabled();
-    }
-
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        EventManager.getInstance().register(keybindHandler);
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        EventManager.getInstance().unregister(keybindHandler);
     }
 }
