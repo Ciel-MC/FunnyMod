@@ -1,0 +1,25 @@
+package hk.eric.funnymod.modules.utilities;
+
+import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.modules.ToggleableModule;
+
+public class SlotLockingModule extends ToggleableModule {
+
+    private static SlotLockingModule instance;
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "SlotLockingKeybind", "", () -> true, -1, () -> {
+        /*TODO:
+        *  Actually implement slot locking*/
+    });
+
+    public SlotLockingModule() {
+        super("SlotLocking", "Locks Slots", () -> true);
+        instance = this;
+        settings.add(keybind);
+    }
+
+    public static IToggleable getToggle() {
+        return instance.isEnabled();
+    }
+
+}

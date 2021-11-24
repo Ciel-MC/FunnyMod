@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "funnymod",
+  "version": "${version}",
+  "name": "FunnyMod",
+  "description": "Hehe funny",
+  "authors": [
+    "Eric",
+    "Eric",
+    "Eric"
+  ],
+  "contact": {
+    "website": "www.example.com",
+    "repo": "repo.example.com"
+  },
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "hk.eric.funnymod.FunnyModClient"
+    ]
+  },
+  "mixins": [
+    "funnymod.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.5",
+    "fabric": "*",
+    "minecraft": "1.17.1"
+  }
+}

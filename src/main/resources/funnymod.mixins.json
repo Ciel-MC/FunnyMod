@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "hk.eric.funnymod.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "InventoryScreenMixin",
+    "KeyboardMixin",
+    "LivingEntityMixin",
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "PlayerMixin",
+    "TimerMixin"
+  ]
+}
