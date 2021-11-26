@@ -15,8 +15,8 @@ public class FunnyModClient implements ClientModInitializer {
     /*TODO:
     *  Mob ESP
     *  Freecam
-    *  Lock hotbar(Slot locking)
-    *  XP time left
+    *  Slot locking
+    *  XP boost time left
     *  Stat change preview*/
 
     public static Minecraft mc = Minecraft.getInstance();

@@ -1,6 +1,7 @@
 package hk.eric.funnymod.event;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 public class EventManager {
@@ -8,7 +9,7 @@ public class EventManager {
     /*Potential to have mapped events called by strings*/
 
     private final static EventManager instance;
-    private final Map<Class<? extends Event>, List<ListeningMethod>> registry;
+    private final Map<Class<? extends Event>, Set<ListeningMethod>> registry;
 
     static {
         instance = new EventManager();
@@ -24,9 +25,9 @@ public class EventManager {
 
     public void register(Object handler) {
         Class<?> clazz = handler.getClass();
-        Map<Class<? extends Event>,List<ListeningMethod>> methods = new HashMap<>();
+        Map<Class<? extends Event>, List<ListeningMethod>> methods = new HashMap<>();
         Arrays.stream(clazz.getDeclaredMethods()).filter(method -> method.isAnnotationPresent(EventListener.class)).forEach(method -> {
-            if(method.getParameterCount() != 1) {
+            if (method.getParameterCount() != 1) {
                 throw new IllegalArgumentException("Method " + method.getName() + " has wrong number of arguments");
             }
             Class<? extends Event> eventClass = (Class<? extends Event>) method.getParameterTypes()[0];
@@ -35,19 +36,26 @@ public class EventManager {
             methods.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(new ListeningMethod(handler, method));
         });
         methods.forEach((aClass, listeningMethods) -> {
-            registry.computeIfAbsent(aClass, k -> new ArrayList<>()).addAll(listeningMethods);
+            registry.computeIfAbsent(aClass, k -> new HashSet<>()).addAll(listeningMethods);
         });
     }
 
+    public <E extends Event> void register(EventHandler<E> handler) {
+        Class<E> eventClass = getEventClassOfEventHandler(handler);
+        Method method = handler.getClass().getDeclaredMethods()[0];
+        method.setAccessible(true);
+        registry.computeIfAbsent(eventClass, k -> new HashSet<>()).add(new ListeningMethod(handler, method));
+    }
+
     public void unregister(Object handler) {
-        for (Map.Entry<Class<? extends Event>, List<ListeningMethod>> entry : registry.entrySet()) {
-            List<ListeningMethod> handlers = entry.getValue();
+        for (Map.Entry<Class<? extends Event>, Set<ListeningMethod>> entry : registry.entrySet()) {
+            Set<ListeningMethod> handlers = entry.getValue();
             handlers.removeIf(listeningMethod -> listeningMethod.object() == handler);
         }
     }
 
     public void callEvent(Event event) {
-        List<ListeningMethod> handlers = registry.get(event.getClass());
+        Set<ListeningMethod> handlers = registry.get(event.getClass());
         if(handlers != null) {
             handlers.forEach(listeningMethod -> {
                 try {
@@ -57,5 +65,13 @@ public class EventManager {
                 }
             });
         }
+    }
+
+    public < E extends Event > Class<E> getEventClassOfEventHandler(EventHandler<E> handler) {
+        return (Class<E>) ((ParameterizedType) handler.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    public int dothing() {
+        return 0;
     }
 }

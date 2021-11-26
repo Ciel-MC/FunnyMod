@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Predicate;
 
-public class EntityUtils {
+public class EntityUtil {
 
     private static final Predicate<Entity> isHostile = (entity) -> entity instanceof Blaze ||
             entity instanceof Creeper ||
@@ -67,6 +67,9 @@ public class EntityUtils {
             entity instanceof Zombie ||
             entity instanceof ZombieHorse;
 
+    public static final Predicate<Entity> isNeutral = (entity) -> {
+        return entity instanceof EnderMan || entity instanceof IronGolem || entity instanceof SnowGolem;
+    };
     public static boolean isHostile(Entity entity) {
         return isHostile.test(entity);
     }
@@ -77,6 +80,6 @@ public class EntityUtils {
         return isPassive.test(entity);
     }
     public static boolean isNeutral(Entity entity) {
-        return false;
+        return isNeutral.test(entity);
     }
 }

@@ -8,6 +8,7 @@
   },
   "mixins": [
     "ClientPacketListenerMixin",
+    "ConnectionMixin",
     "InventoryScreenMixin",
     "KeyboardMixin",
     "LevelMixin",

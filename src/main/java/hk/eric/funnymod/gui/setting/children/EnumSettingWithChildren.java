@@ -40,4 +40,19 @@ public class EnumSettingWithChildren<E extends Enum<E>> extends EnumSetting<E> i
         childrenMap.forEach((state, children) -> allChildren.addAll(children));
         return allChildren;
     }
+
+    @Override
+    public void removeChild(E state, Setting<?> child) {
+        childrenMap.get(state).remove(child);
+    }
+
+    @Override
+    public void removeAllChildren(E state) {
+        childrenMap.remove(state);
+    }
+
+    @Override
+    public void removeAllChildren() {
+        childrenMap.clear();
+    }
 }

@@ -15,11 +15,14 @@ import java.util.function.IntPredicate;
 import java.util.function.Supplier;
 
 import com.lukflug.panelstudio.setting.*;
+import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
+import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
 import hk.eric.funnymod.modules.visual.TabGUIModule;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 
 import hk.eric.funnymod.modules.Category;
@@ -78,7 +81,13 @@ public class ClickGUI extends MinecraftHUDGUI {
 	private final GUIInterface inter;
 	private final HUDGUI gui;
 	public static final int WIDTH=120,HEIGHT=12,DISTANCE=6,BORDER=2;
-	
+
+	@Override
+	public void removed() {
+		if (getGUI().getGUIVisibility().isOn()) getGUI().getGUIVisibility().toggle();
+		if (getGUI().getHUDVisibility().isOn()) getGUI().getHUDVisibility().toggle();
+	}
+
 	public ClickGUI() {
 		// Getting client structure ...
 		IClient client=Category.getClient();

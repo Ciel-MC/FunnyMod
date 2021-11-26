@@ -19,7 +19,6 @@ public class BooleanSettingWithChildren extends BooleanSetting implements HasChi
     @Override
     public <E> void addChild(Boolean state, Setting<E> child) {
         child.visible = () -> getValue() == state;
-        System.out.println("addChild: " + child.displayName + " " + state);
         getChildrenList(state).add(child);
     }
 
@@ -43,5 +42,21 @@ public class BooleanSettingWithChildren extends BooleanSetting implements HasChi
         allChildren.addAll(trueChildren);
         allChildren.addAll(falseChildren);
         return allChildren;
+    }
+
+    @Override
+    public void removeChild(Boolean state, Setting<?> child) {
+        getChildrenList(state).remove(child);
+    }
+
+    @Override
+    public void removeAllChildren(Boolean state) {
+        getChildrenList(state).clear();
+    }
+
+    @Override
+    public void removeAllChildren() {
+        trueChildren.clear();
+        falseChildren.clear();
     }
 }

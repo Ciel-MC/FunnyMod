@@ -8,6 +8,8 @@ import baritone.api.event.events.SprintStateEvent;
 import baritone.api.event.events.type.EventState;
 import baritone.behavior.LookBehavior;
 import com.mojang.authlib.GameProfile;
+import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.gui.Gui;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
@@ -17,6 +19,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +28,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -46,12 +51,14 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
     @Shadow public abstract void tick();
 
-    @Inject(method = "drop", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/player/Inventory;removeFromSelected(Z)Lnet/minecraft/world/item/ItemStack;", shift = At.Shift.BEFORE), cancellable = true)
+    @Inject(method = "drop", at = @At("HEAD"), cancellable = true)
     public void onDrop(boolean bl, CallbackInfoReturnable<Boolean> cir) {
         if(MCQPPreventDropModule.getToggle().isOn()) {
             ItemStack item;
             if((item = this.getInventory().getSelected()) != null) {
                 if(item.getMaxStackSize() == 1 || item.getItem() instanceof BookItem) {
+                    FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("§7[§bFunnyMod§7] §cA feature has stopped you from dropping this \"rare\" item or tool from your hotbar."));
+                    cir.cancel();
                     cir.setReturnValue(false);
                 }
             }
@@ -178,5 +185,13 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         if (baritone != null) {
             ((LookBehavior) baritone.getLookBehavior()).pig();
         }
+    }
+
+    @Redirect(method = "clientSideCloseContainer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;closeContainer()V"))
+    public void redirectCloseContainer(AbstractClientPlayer instance) {
+        if(Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
+//            Gui.getGUI().getGUI().getGUIVisibility().toggle();
+        }
+        super.closeContainer();
     }
 }

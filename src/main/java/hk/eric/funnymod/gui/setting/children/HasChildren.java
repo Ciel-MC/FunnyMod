@@ -19,4 +19,10 @@ public interface HasChildren<T> {
     public List<Setting<?>> getCurrentChildren();
 
     public List<Setting<?>> getAllChildren();
+
+    public void removeChild(T state, Setting<?> child);
+
+    public void removeAllChildren(T state);
+
+    public void removeAllChildren();
 }

@@ -1,8 +1,6 @@
 package hk.eric.funnymod.event;
 
-import java.util.function.Consumer;
+public abstract class EventHandler<E extends Event> {
 
-public interface EventHandler<E extends Event> {
-    @EventListener
-    void handle(E e);
+    public abstract void handle(E e);
 }
