@@ -7,6 +7,7 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "CameraMixin",
     "ClientPacketListenerMixin",
     "ConnectionMixin",
     "InventoryScreenMixin",
@@ -16,7 +17,6 @@
     "LocalPlayerMixin",
     "MinecraftMixin",
     "PlayerMixin",
-    "PlayerRendererMixin",
     "ScreenMixin",
     "TimerMixin"
   ]

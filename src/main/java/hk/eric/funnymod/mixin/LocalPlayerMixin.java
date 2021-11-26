@@ -100,6 +100,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
     /**
      * @author Eric
+     * @reason To implement omnidirectional sprinting
      */
     @Overwrite
     private boolean hasEnoughImpulseToStartSprinting() {

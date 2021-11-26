@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.setting;
  * Interface representing a keybind.
  * @author lukflug
  */
-public interface IKeybindSetting extends ISetting<String> {
+public interface IKeybindSetting extends ISetting<Integer> {
 	/**
 	 * Get the value of the keybind.
 	 * @return the scancode of the key
@@ -24,12 +24,7 @@ public interface IKeybindSetting extends ISetting<String> {
     String getKeyName();
 	
 	@Override
-    default String getSettingState() {
-		return getKeyName();
-	}
-	
-	@Override
-    default Class<String> getSettingClass() {
-		return String.class;
+    default Class<Integer> getSettingClass() {
+		return Integer.class;
 	}
 }

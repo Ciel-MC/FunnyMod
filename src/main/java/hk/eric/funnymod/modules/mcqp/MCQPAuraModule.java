@@ -32,9 +32,9 @@ public class MCQPAuraModule extends ToggleableModule {
     static final Minecraft mc = FunnyModClient.mc;
 
     private static MCQPAuraModule instance;
-    public static final IntegerSetting range = new IntegerSetting("Range", "MCQPAuraRange", "The range of the aura", ()->true, 1, 20, 10);
-    public static final IntegerSetting maxTarget = new IntegerSetting("Max Target", "MCQPAuraTargets", "How many entity to attack in 1 tick", ()->true, 1, 20, 5);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final IntegerSetting range = new IntegerSetting("Range", "MCQPAuraRange", "The range of the aura", 1, 20, 10);
+    public static final IntegerSetting maxTarget = new IntegerSetting("Max Target", "MCQPAuraTargets", "How many entity to attack in 1 tick", 1, 20, 5);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", "", -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> killaura = new EventHandler<TickEvent>() {
         @Override
@@ -75,7 +75,7 @@ public class MCQPAuraModule extends ToggleableModule {
     }
 
     public MCQPAuraModule() {
-        super("MCQPAura", "Killaura for MCQP", () -> true);
+        super("MCQPAura", "Killaura for MCQP");
         instance = this;
         settings.add(range);
         settings.add(maxTarget);

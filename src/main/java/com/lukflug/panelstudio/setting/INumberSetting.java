@@ -4,7 +4,7 @@ package com.lukflug.panelstudio.setting;
  * Setting representing an adjustable number.
  * @author lukflug
  */
-public interface INumberSetting extends ISetting<String> {
+public interface INumberSetting<E extends Number> extends ISetting<E> {
 	/**
 	 * Get the number as double.
 	 * @return the current setting
@@ -37,13 +37,5 @@ public interface INumberSetting extends ISetting<String> {
     int getPrecision();
 	
 	@Override
-    default String getSettingState() {
-		if (getPrecision()==0) return ""+(int)getNumber();
-		else return String.format("%."+getPrecision()+"f",getNumber());
-	}
-	
-	@Override
-    default Class<String> getSettingClass() {
-		return String.class;
-	}
+    Class<E> getSettingClass();
 }

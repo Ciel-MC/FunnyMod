@@ -1,13 +1,5 @@
 package hk.eric.funnymod.modules.visual;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.util.function.Supplier;
-
-import hk.eric.funnymod.modules.ToggleableModule;
-import org.lwjgl.glfw.GLFW;
-
-import hk.eric.funnymod.gui.setting.ColorSetting;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.IFixedComponent;
@@ -18,24 +10,31 @@ import com.lukflug.panelstudio.tabgui.StandardTheme;
 import com.lukflug.panelstudio.tabgui.TabGUI;
 import com.lukflug.panelstudio.theme.IColorScheme;
 import com.lukflug.panelstudio.theme.ITheme;
+import hk.eric.funnymod.gui.setting.ColorSetting;
+import hk.eric.funnymod.gui.setting.Setting;
+import hk.eric.funnymod.modules.ToggleableModule;
+import org.lwjgl.glfw.GLFW;
+
+import java.awt.*;
+import java.util.function.Supplier;
 
 public class TabGUIModule extends ToggleableModule {
 	private static TabGUIModule instance;
 	private static ITabGUITheme theme;
 	
 	public TabGUIModule() {
-		super("TabGUI","HUD module that lets toggle modules.",()->true,true);
+		super("TabGUI","HUD module that lets toggle modules.",true);
 		instance=this;
 		theme=new StandardTheme(new IColorScheme() {
 			@Override
 			public void createSetting(ITheme theme, String name, String description, boolean hasAlpha, boolean allowsRainbow, Color color, boolean rainbow) {
-				ColorSetting setting=new ColorSetting(name,name,description,()->true,allowsRainbow,hasAlpha,color,rainbow);
+				ColorSetting setting=new ColorSetting(name,name,description,allowsRainbow,hasAlpha,color,rainbow);
 				instance.settings.add(setting);
 			}
 
 			@Override
 			public Color getColor (String name) {
-				return (Color)instance.settings.stream().filter(setting->setting.configName.equals(name)).findFirst().orElse(null).getValue();
+				return (Color)instance.settings.stream().filter(setting->((Setting) setting).getConfigName().equals(name)).findFirst().orElse(null).getValue();
 			}
 		},75,9,2,10);
 	}

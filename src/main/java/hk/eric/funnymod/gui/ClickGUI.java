@@ -1,81 +1,45 @@
 package hk.eric.funnymod.gui;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.IntPredicate;
-import java.util.function.Supplier;
-
-import com.lukflug.panelstudio.setting.*;
-import hk.eric.funnymod.modules.visual.LogoModule;
-import hk.eric.funnymod.modules.visual.TabGUIModule;
-import net.minecraft.ChatFormatting;
-import org.lwjgl.glfw.GLFW;
-
-import hk.eric.funnymod.modules.Category;
-import hk.eric.funnymod.modules.ClickGUIModule;
-import hk.eric.funnymod.modules.ClickGUIModule.Theme;
-import hk.eric.funnymod.gui.setting.BooleanSetting;
-import hk.eric.funnymod.gui.setting.ColorSetting;
-import hk.eric.funnymod.gui.setting.IntegerSetting;
-import com.lukflug.panelstudio.base.Animation;
-import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.base.SettingsAnimation;
-import com.lukflug.panelstudio.base.SimpleToggleable;
+import com.lukflug.panelstudio.base.*;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.component.IResizable;
 import com.lukflug.panelstudio.component.IScrollSize;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.hud.HUDGUI;
-import com.lukflug.panelstudio.layout.CSGOLayout;
+import com.lukflug.panelstudio.layout.*;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
-import com.lukflug.panelstudio.layout.ComponentGenerator;
-import com.lukflug.panelstudio.layout.IComponentAdder;
-import com.lukflug.panelstudio.layout.IComponentGenerator;
-import com.lukflug.panelstudio.layout.ILayout;
-import com.lukflug.panelstudio.layout.PanelAdder;
-import com.lukflug.panelstudio.layout.PanelLayout;
-import com.lukflug.panelstudio.layout.SearchableLayout;
-import com.lukflug.panelstudio.layout.SinglePanelAdder;
-import com.lukflug.panelstudio.layout.StackedPanelAdder;
 import com.lukflug.panelstudio.mc17.MinecraftHUDGUI;
 import com.lukflug.panelstudio.popup.CenteredPositioner;
 import com.lukflug.panelstudio.popup.MousePositioner;
 import com.lukflug.panelstudio.popup.PanelPositioner;
 import com.lukflug.panelstudio.popup.PopupTuple;
-import com.lukflug.panelstudio.theme.ClearTheme;
-import com.lukflug.panelstudio.theme.GameSenseTheme;
-import com.lukflug.panelstudio.theme.IColorScheme;
-import com.lukflug.panelstudio.theme.ITheme;
-import com.lukflug.panelstudio.theme.IThemeMultiplexer;
-import com.lukflug.panelstudio.theme.ImpactTheme;
-import com.lukflug.panelstudio.theme.OptimizedTheme;
-import com.lukflug.panelstudio.theme.RainbowTheme;
-import com.lukflug.panelstudio.theme.ThemeTuple;
-import com.lukflug.panelstudio.theme.Windows31Theme;
-import com.lukflug.panelstudio.widget.ColorPickerComponent;
-import com.lukflug.panelstudio.widget.CycleSwitch;
-import com.lukflug.panelstudio.widget.DropDownList;
-import com.lukflug.panelstudio.widget.ITextFieldKeys;
-import com.lukflug.panelstudio.widget.Spinner;
-import com.lukflug.panelstudio.widget.ToggleSwitch;
+import com.lukflug.panelstudio.setting.*;
+import com.lukflug.panelstudio.theme.*;
+import com.lukflug.panelstudio.widget.*;
+import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.gui.setting.*;
+import hk.eric.funnymod.modules.Category;
+import hk.eric.funnymod.modules.ClickGUIModule;
+import hk.eric.funnymod.modules.ClickGUIModule.Theme;
+import hk.eric.funnymod.modules.visual.LogoModule;
+import hk.eric.funnymod.modules.visual.TabGUIModule;
+import net.minecraft.ChatFormatting;
+import org.lwjgl.glfw.GLFW;
+
+import java.awt.*;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.*;
 
 public class ClickGUI extends MinecraftHUDGUI {
 	private final GUIInterface inter;
 	private final HUDGUI gui;
 	public static final int WIDTH=120,HEIGHT=12,DISTANCE=6,BORDER=2;
+	
+	private static final String title = FunnyModClient.MOD_NAME;
 
 	@Override
 	public void removed() {
@@ -86,12 +50,12 @@ public class ClickGUI extends MinecraftHUDGUI {
 	public ClickGUI() {
 		// Getting client structure ...
 		IClient client=Category.getClient();
-		/* Set to false to disable horizontal clipping, this may cause graphical glitches,
+		/* Set to false in order to disable horizontal clipping, this may cause graphical glitches,
 		 * but will let you see long text, even if it is too long to fit in the panel. */
 		inter=new GUIInterface(true) {
 			@Override
 			protected String getResourcePrefix() {
-				return "funnymod:";
+				return FunnyModClient.MOD_ID + ":";
 			}
 		};
 		// Instantiating theme ...
@@ -106,7 +70,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		gui.addHUDComponent(TabGUIModule.getComponent(client, new IContainer<>() {
 			@Override
 			public boolean addComponent(IFixedComponent component) {
-				return gui.addHUDComponent(component, () -> true);
+				return gui.addHUDComponent(component);
 			}
 
 			@Override
@@ -319,7 +283,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		ILayout draggablePanelLayout=new PanelLayout(WIDTH,new Point(DISTANCE,DISTANCE),(WIDTH+DISTANCE)/2,HEIGHT+DISTANCE,animation,level->level==0?ChildMode.DRAG_POPUP:ChildMode.DOWN,level->ChildMode.DOWN,popupType);
 		draggablePanelLayout.populateGUI(draggablePanelAdder,generator,client,theme);
 		// Single Panel
-		IComponentAdder singlePanelAdder=new SinglePanelAdder(gui,new Labeled("Example Menu",null,()->true),theme,new Point(10,10),WIDTH*Category.values().length,animation,()->ClickGUIModule.layout.getValue()==ClickGUIModule.Layout.SinglePanel,"singlePanel") {
+		IComponentAdder singlePanelAdder=new SinglePanelAdder(gui,new Labeled(title,null),theme,new Point(10,10),WIDTH*Category.values().length,animation,()->ClickGUIModule.layout.getValue()==ClickGUIModule.Layout.SinglePanel,"singlePanel") {
 			@Override
 			protected IResizable getResizable (int width) {
 				return resizable.apply(width);
@@ -333,7 +297,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		ILayout singlePanelLayout=new PanelLayout(WIDTH,new Point(DISTANCE,DISTANCE),(WIDTH+DISTANCE)/2,HEIGHT+DISTANCE,animation,level->ChildMode.DOWN,level->ChildMode.DOWN,popupType);
 		singlePanelLayout.populateGUI(singlePanelAdder,generator,client,theme);
 		// Panel Menu
-		IComponentAdder panelMenuAdder=new StackedPanelAdder(gui,new Labeled("Example Menu",null,()->true),theme,new Point(10,10),WIDTH,animation,ChildMode.POPUP,new PanelPositioner(new Point(0,0)),()->ClickGUIModule.layout.getValue()==ClickGUIModule.Layout.PanelMenu,"panelMenu");
+		IComponentAdder panelMenuAdder=new StackedPanelAdder(gui,new Labeled(title,null),theme,new Point(10,10),WIDTH,animation,ChildMode.POPUP,new PanelPositioner(new Point(0,0)),()->ClickGUIModule.layout.getValue()==ClickGUIModule.Layout.PanelMenu,"panelMenu");
 		ILayout panelMenuLayout=new PanelLayout(WIDTH,new Point(DISTANCE,DISTANCE),(WIDTH+DISTANCE)/2,HEIGHT+DISTANCE,animation,level->ChildMode.POPUP,level->ChildMode.POPUP,popupType);
 		panelMenuLayout.populateGUI(panelMenuAdder,generator,client,theme);
 		// Color Panel
@@ -359,7 +323,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				return horizontalResizable.get();
 			}
 		};
-		ILayout horizontalCSGOLayout=new CSGOLayout(new Labeled("Example",null,()->true),new Point(100,100),480,WIDTH,animation,"Enabled",true,true,2,ChildMode.POPUP,colorPopup) {
+		ILayout horizontalCSGOLayout=new CSGOLayout(new Labeled(title,null),new Point(100,100),480,WIDTH,animation,"Enabled",true,true,2,ChildMode.POPUP,colorPopup) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return resizableHeight.apply(horizontalResizable.get()).getScrollHeight(null,height);
@@ -375,7 +339,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				return verticalResizable.get();
 			}
 		};
-		ILayout verticalCSGOLayout=new CSGOLayout(new Labeled("Example",null,()->true),new Point(100,100),480,WIDTH,animation,"Enabled",false,true,2,ChildMode.POPUP,colorPopup) {
+		ILayout verticalCSGOLayout=new CSGOLayout(new Labeled(title,null),new Point(100,100),480,WIDTH,animation,"Enabled",false,true,2,ChildMode.POPUP,colorPopup) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return resizableHeight.apply(verticalResizable.get()).getScrollHeight(null,height);
@@ -391,7 +355,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				return categoryResizable.get();
 			}
 		};
-		ILayout categoryCSGOLayout=new CSGOLayout(new Labeled("Example",null,()->true),new Point(100,100),480,WIDTH,animation,"Enabled",false,false,2,ChildMode.POPUP,colorPopup) {
+		ILayout categoryCSGOLayout=new CSGOLayout(new Labeled(title,null),new Point(100,100),480,WIDTH,animation,"Enabled",false,false,2,ChildMode.POPUP,colorPopup) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return resizableHeight.apply(categoryResizable.get()).getScrollHeight(null,height);
@@ -407,7 +371,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				return searchableResizable.get();
 			}
 		};
-		ILayout searchableCSGOLayout=new SearchableLayout(new Labeled("Example",null,()->true),new Labeled("Search",null,()->true),new Point(100,100),480,WIDTH,animation,"Enabled",2,ChildMode.POPUP,colorPopup, Comparator.comparing(ILabeled::getDisplayName),charFilter,keys) {
+		ILayout searchableCSGOLayout=new SearchableLayout(new Labeled(title,null),new Labeled("Search",null),new Point(100,100),480,WIDTH,animation,"Enabled",2,ChildMode.POPUP,colorPopup, Comparator.comparing(ILabeled::getDisplayName),charFilter,keys) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {
 				return resizableHeight.apply(searchableResizable.get()).getScrollHeight(null,height);
@@ -444,10 +408,10 @@ public class ClickGUI extends MinecraftHUDGUI {
 			BooleanSetting ignoreDisabled=new BooleanSetting("Ignore Disabled","ignoreDisabled","Have the rainbow drawn for disabled containers.",()->ClickGUIModule.theme.getValue()==Theme.Rainbow,false);
 			BooleanSetting buttonRainbow=new BooleanSetting("Button Rainbow","buttonRainbow","Have a separate rainbow for each component.",()->ClickGUIModule.theme.getValue()==Theme.Rainbow,false);
 			IntegerSetting rainbowGradient=new IntegerSetting("Rainbow Gradient","rainbowGradient","How fast the rainbow should repeat.",()->ClickGUIModule.theme.getValue()==Theme.Rainbow,150,50,300);
-			ClickGUIModule.theme.subSettings.add(clearGradient);
-			ClickGUIModule.theme.subSettings.add(ignoreDisabled);
-			ClickGUIModule.theme.subSettings.add(buttonRainbow);
-			ClickGUIModule.theme.subSettings.add(rainbowGradient);
+			ClickGUIModule.theme.addGlobalSubSetting(clearGradient);
+			ClickGUIModule.theme.addGlobalSubSetting(ignoreDisabled);
+			ClickGUIModule.theme.addGlobalSubSetting(buttonRainbow);
+			ClickGUIModule.theme.addGlobalSubSetting(rainbowGradient);
 			addTheme(Theme.Clear,new ClearTheme(new ThemeScheme(Theme.Clear), clearGradient::getValue,9,3,1,": "+ChatFormatting.GRAY));
 			addTheme(Theme.GameSense,new GameSenseTheme(new ThemeScheme(Theme.GameSense),9,4,5,": "+ChatFormatting.GRAY));
 			addTheme(Theme.Rainbow,new RainbowTheme(new ThemeScheme(Theme.Rainbow), ignoreDisabled::getValue, buttonRainbow::getValue, rainbowGradient::getValue,9,3,": "+ChatFormatting.GRAY));
@@ -477,12 +441,18 @@ public class ClickGUI extends MinecraftHUDGUI {
 			
 			@Override
 			public void createSetting (ITheme theme, String name, String description, boolean hasAlpha, boolean allowsRainbow, Color color, boolean rainbow) {
-				ClickGUIModule.theme.subSettings.add(new ColorSetting(name,themeName+"-"+name,description,()->ClickGUIModule.theme.getValue()==themeValue,hasAlpha,allowsRainbow,color,rainbow));
+				ClickGUIModule.theme.addGlobalSubSetting(new ColorSetting(name,themeName+"-"+name,description,()->ClickGUIModule.theme.getValue()==themeValue,hasAlpha,allowsRainbow,color,rainbow));
 			}
 
 			@Override
 			public Color getColor (String name) {
-				return ((ColorSetting)ClickGUIModule.theme.subSettings.stream().filter(setting->setting.configName.equals(themeName+"-"+name)).findFirst().orElse(null)).getValue();
+				return ((ColorSetting)ClickGUIModule.theme.getAllSubSettings().filter(setting-> {
+					if(setting instanceof Setting<?> setting1) {
+						return setting1.getConfigName().equals(themeName + "-" + name);
+					}else {
+						return false;
+					}
+				}).findFirst().orElse(null)).getValue();
 			}
 		}
 	}

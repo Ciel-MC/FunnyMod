@@ -8,11 +8,11 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class NoSlowModule extends ToggleableModule {
 
     private static NoSlowModule instance;
-    public static final EnumSetting<Mode> NO_SLOW_MODE = new EnumSetting<>("Mode", "NoSlowMode", null, () -> true, Mode.VANILLA, Mode.class);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoSlowKeybind", null, () -> true, -1,()-> instance.toggle());
+    public static final EnumSetting<Mode> NO_SLOW_MODE = new EnumSetting<>("Mode", "NoSlowMode", null, Mode.VANILLA, Mode.class);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoSlowKeybind", null, -1,()-> instance.toggle());
 
     public NoSlowModule() {
-        super("NoSlow", "Doesn't slow you down when you are using an item.", ()->true);
+        super("NoSlow", "Doesn't slow you down when you are using an item.");
         instance = this;
         settings.add(NO_SLOW_MODE);
         settings.add(keybind);

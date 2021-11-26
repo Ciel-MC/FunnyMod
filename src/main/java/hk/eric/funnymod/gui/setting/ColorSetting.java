@@ -1,19 +1,25 @@
 package hk.eric.funnymod.gui.setting;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.ITheme;
 import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.ColorModel;
+import hk.eric.funnymod.utils.Constants;
+import hk.eric.funnymod.utils.ObjectUtil;
+import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 import java.awt.*;
 
-public class ColorSetting extends Setting<Color> implements IColorSetting {
+public class ColorSetting extends SavableSettingWithChild<Color> implements IColorSetting {
 	private boolean hasAlpha,allowsRainbow;
 	private boolean rainbow;
-	
+
+	public ColorSetting(String displayName, String configName, String description, boolean hasAlpha, boolean allowsRainbow, Color value, boolean rainbow) {
+		this(displayName, configName, description, Constants.alwaysTrue, hasAlpha, allowsRainbow, value, rainbow);
+	}
+
 	public ColorSetting (String displayName, String configName, String description, IBoolean visible, boolean hasAlpha, boolean allowsRainbow, Color value, boolean rainbow) {
 		super(displayName,configName,description,visible,value);
 		this.hasAlpha=hasAlpha;
@@ -28,6 +34,21 @@ public class ColorSetting extends Setting<Color> implements IColorSetting {
 			return ITheme.combineColors(Color.getHSBColor((System.currentTimeMillis()%(360*speed))/(float)(360*speed),1,1),super.getValue());
 		}
 		else return super.getValue();
+	}
+
+	@Override
+	public TwoWayFunction<Color, String> getConverter() {
+		return new TwoWayFunction<Color, String>() {
+			@Override
+			public String convert(Color color) {
+				return String.valueOf(color.getRGB());
+			}
+
+			@Override
+			public Color revert(String s) {
+				return Color.getColor(s);
+			}
+		};
 	}
 
 	@Override
@@ -62,7 +83,7 @@ public class ColorSetting extends Setting<Color> implements IColorSetting {
 
 	@Override
 	public ObjectNode saveThis() {
-		return new ObjectMapper().createObjectNode().put("value", getValue().getRGB()).put("rainbow",rainbow).put("allowsRainbow",allowsRainbow).put("hasAlpha",hasAlpha);
+		return ObjectUtil.getObjectNode().put("value", getValue().getRGB()).put("rainbow",rainbow).put("allowsRainbow",allowsRainbow).put("hasAlpha",hasAlpha);
 	}
 
 	@Override

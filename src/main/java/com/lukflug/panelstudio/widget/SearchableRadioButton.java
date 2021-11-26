@@ -1,8 +1,5 @@
 package com.lukflug.panelstudio.widget;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.SimpleToggleable;
@@ -13,6 +10,9 @@ import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Radio list that can be searched via a search bar.
@@ -36,6 +36,16 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			}
 
 			@Override
+			public String getDescription() {
+				return setting.getDescription();
+			}
+
+			@Override
+			public IBoolean isVisible() {
+				return setting.isVisible();
+			}
+
+			@Override
 			public String getValue() {
 				return searchTerm.get();
 			}
@@ -43,6 +53,11 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			@Override
 			public void setValue(String string) {
 				searchTerm.set(string);
+			}
+
+			@Override
+			public String getValueName() {
+				return setting.getValueName();
 			}
 		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
 			@Override
@@ -89,11 +104,6 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			}
 
 			@Override
-			public void fromString(String value) {
-				setting.fromString(value);
-			}
-
-			@Override
 			public void setValueIndex (int index) {
 				setting.setValueIndex(index);
 			}
@@ -101,6 +111,21 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			@Override
 			public ILabeled[] getAllowedValues() {
 				return values;
+			}
+
+			@Override
+			public Object getValue() {
+				return values[setting.getValueIndex()];
+			}
+
+			@Override
+			public void setValue(Object value) {
+				setValueIndex(Arrays.asList(values).indexOf(value));
+			}
+
+			@Override
+			public Class getSettingClass() {
+				return Enum.class;
 			}
 		},theme.getRadioRenderer(container),getAnimation(),false) {
 			@Override

@@ -35,7 +35,7 @@ public class BindModule extends Module{
     };
 
     public BindModule() {
-        super("Bind", "Triggers keybinds.", () -> true);
+        super("Bind", "Triggers keybinds.");
         instance = this;
         EventManager.getInstance().register(keybindHandler);
     }

@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.widget;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.container.VerticalContainer;
@@ -10,6 +8,7 @@ import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.INumberSetting;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.Constants;
 
 import java.awt.*;
 
@@ -59,10 +58,25 @@ public abstract class ColorComponent extends VerticalContainer {
 	 */
 	protected final class RainbowToggle implements IBooleanSetting {
 		@Override
+		public Boolean getValue() {
+			return setting.getRainbow();
+		}
+
+		@Override
+		public void setValue(Boolean value) {
+			setting.setRainbow(value);
+		}
+
+		@Override
 		public String getDisplayName() {
 			return "Rainbow";
 		}
-		
+
+		@Override
+		public String getDescription() {
+			return null;
+		}
+
 		@Override
 		public IBoolean isVisible() {
 			return ()->setting.allowsRainbow();
@@ -84,16 +98,25 @@ public abstract class ColorComponent extends VerticalContainer {
 	 * Number setting for color sliders.
 	 * @author lukflug
 	 */
-	protected final class ColorNumber implements INumberSetting {
+	protected final class ColorNumber implements INumberSetting<Integer> {
 		/**
 		 * Number indicating the index of the component for the color model.
 		 */
-		private final int value;
+		private int value;
 		/**
 		 * Boolean indicating whether HSB model is used.
 		 */
 		private final IBoolean model;
-		
+
+		/**
+		 * Constructor.  
+ * @param value the component index
+		 * 
+		 */
+		public ColorNumber(int value) {
+			this(value, Constants.alwaysTrue);
+		}
+
 		/**
 		 * Constructor.
 		 * @param value the component index
@@ -103,7 +126,17 @@ public abstract class ColorComponent extends VerticalContainer {
 			this.value=value;
 			this.model=model;
 		}
-		
+
+		@Override
+		public Integer getValue() {
+			return value;
+		}
+
+		@Override
+		public void setValue(Integer value) {
+			this.value = value;
+		}
+
 		@Override
 		public String getDisplayName() {
 			return switch (value) {
@@ -114,7 +147,12 @@ public abstract class ColorComponent extends VerticalContainer {
 				default -> "";
 			};
 		}
-		
+
+		@Override
+		public String getDescription() {
+			return null;
+		}
+
 		@Override
 		public IBoolean isVisible() {
 			return ()->value!=3||setting.hasAlpha();
@@ -186,13 +224,8 @@ public abstract class ColorComponent extends VerticalContainer {
 		}
 
 		@Override
-		public ObjectNode saveThis() {
-			return new ObjectMapper().createObjectNode().put("value", getNumber());
-		}
-
-		@Override
-		public void loadThis(ObjectNode node) {
-			setNumber(node.get("value").asDouble());
+		public Class getSettingClass() {
+			return null;
 		}
 	}
 }

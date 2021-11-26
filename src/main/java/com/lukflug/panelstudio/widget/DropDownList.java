@@ -1,18 +1,6 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-
-import com.lukflug.panelstudio.base.Animation;
-import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.base.IToggleable;
-import com.lukflug.panelstudio.base.SimpleToggleable;
+import com.lukflug.panelstudio.base.*;
 import com.lukflug.panelstudio.component.HorizontalComponent;
 import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.component.IScrollSize;
@@ -26,6 +14,11 @@ import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * Drop-down list widget.
@@ -65,6 +58,16 @@ public abstract class DropDownList extends HorizontalContainer {
 			}
 
 			@Override
+			public String getDescription() {
+				return setting.getDescription();
+			}
+
+			@Override
+			public IBoolean isVisible() {
+				return setting.isVisible();
+			}
+
+			@Override
 			public String getValue() {
 				String returnValue=(allowSearch&&toggle.isOn())?searchTerm.get():setting.getValueName();
 				searchTerm.set(returnValue);
@@ -75,6 +78,12 @@ public abstract class DropDownList extends HorizontalContainer {
 			public void setValue(String string) {
 				searchTerm.set(string);
 			}
+
+			@Override
+			public String getValueName() {
+				return setting.getValueName();
+			}
+
 		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
@@ -135,11 +144,6 @@ public abstract class DropDownList extends HorizontalContainer {
 			}
 
 			@Override
-			public void fromString(String value) {
-				setting.fromString(value);
-			}
-
-			@Override
 			public void setValueIndex(int index) {
 				setting.setValueIndex(index);
 			}
@@ -147,6 +151,21 @@ public abstract class DropDownList extends HorizontalContainer {
 			@Override
 			public ILabeled[] getAllowedValues() {
 				return values;
+			}
+
+			@Override
+			public Object getValue() {
+				return null;
+			}
+
+			@Override
+			public void setValue(Object value) {
+				setting.setValue(value);
+			}
+
+			@Override
+			public Class getSettingClass() {
+				return setting.getSettingClass();
 			}
 		},popupTheme.getRadioRenderer(false),getAnimation(),false) {
 			@Override
@@ -167,7 +186,7 @@ public abstract class DropDownList extends HorizontalContainer {
 				return new Point(component.x,component.y+component.height);
 			}
 		};
-		Button<Void> button=new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
+		Button<Void> button=new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);

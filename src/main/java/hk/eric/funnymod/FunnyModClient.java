@@ -11,6 +11,9 @@ import static net.fabricmc.api.EnvType.CLIENT;
 @Environment(CLIENT)
 public class FunnyModClient implements ClientModInitializer {
 
+    public static final String MOD_ID = "funnymod";
+    public static final String MOD_NAME = "Funny Mod";
+
     /*TODO:
     *  Mob ESP
     *  Freecam

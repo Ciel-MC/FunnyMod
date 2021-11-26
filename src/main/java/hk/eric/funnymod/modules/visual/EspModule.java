@@ -13,12 +13,12 @@ import java.util.function.Predicate;
 public class EspModule extends ToggleableModule {
 
     private static EspModule instance;
-    public static final BooleanSetting player = new BooleanSetting("Player", "EspPlayer", "shows players", () -> true, true);
-    public static final BooleanSetting hostile = new BooleanSetting("Hostile", "EspHostTile", "shows hostile entities", () -> true, true);
-    public static final BooleanSetting passive = new BooleanSetting("Passive", "EspPassive", "shows passive entities", () -> true, true);
-    public static final BooleanSetting neutral = new BooleanSetting("Neutral", "EspNeutral", "shows neutral entities", () -> true, true);
-    public static final EnumSetting<EspMode> ESP_MODE = new EnumSetting<>("ESP Mode", "EspMode", null, () -> true, EspMode.GLOWING, EspMode.class);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "EspKeybind", null, () -> true, -1, () -> instance.toggle());
+    public static final BooleanSetting player = new BooleanSetting("Player", "EspPlayer", "shows players", true);
+    public static final BooleanSetting hostile = new BooleanSetting("Hostile", "EspHostTile", "shows hostile entities", true);
+    public static final BooleanSetting passive = new BooleanSetting("Passive", "EspPassive", "shows passive entities", true);
+    public static final BooleanSetting neutral = new BooleanSetting("Neutral", "EspNeutral", "shows neutral entities", true);
+    public static final EnumSetting<EspMode> ESP_MODE = new EnumSetting<>("ESP Mode", "EspMode", null, EspMode.GLOWING, EspMode.class);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "EspKeybind", null, -1, () -> instance.toggle());
 
     public static final Predicate<Entity> shouldGlow = (entity) ->
             (hostile.isOn() && EntityUtil.isHostile(entity)) ||
@@ -27,7 +27,7 @@ public class EspModule extends ToggleableModule {
                     (player.isOn() && EntityUtil.isPlayer(entity));
 
     public EspModule() {
-        super("Esp", null, () -> true);
+        super("Esp", null);
         instance = this;
         settings.add(player);
         settings.add(hostile);

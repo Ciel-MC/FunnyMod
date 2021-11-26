@@ -1,15 +1,12 @@
 package com.lukflug.panelstudio.setting;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.util.Arrays;
 
 /**
  * A setting representing an enumeration.
  * @author lukflug
  */
-public interface IEnumSetting extends ISetting<String> {
+public interface IEnumSetting<E extends Enum<E>> extends ISetting<E> {
 	/**
 	 * Cycle through the values of the enumeration.
 	 */
@@ -19,14 +16,6 @@ public interface IEnumSetting extends ISetting<String> {
 	 * Cycle through the values of the enumeration in inverse order
 	 */
 	void decrement();
-	
-	/**
-	 * Get the current value.
-	 * @return the name of the current enum value
-	 */
-	String getValueName();
-
-	void fromString(String value);
 	
 	/**
 	 * Get a sequential number of the current enum state.
@@ -54,14 +43,7 @@ public interface IEnumSetting extends ISetting<String> {
 	ILabeled[] getAllowedValues();
 	
 	@Override
-	default String getSettingState() {
-		return getValueName();
-	}
-	
-	@Override
-	default Class<String> getSettingClass() {
-		return String.class;
-	}
+	Class<E> getSettingClass();
 	
 	/**
 	 * Get a list of enum values that are visible.
@@ -70,15 +52,5 @@ public interface IEnumSetting extends ISetting<String> {
 	 */
 	static ILabeled[] getVisibleValues(IEnumSetting setting) {
 		return Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new);
-	}
-
-	@Override
-	default ObjectNode saveThis() {
-		return new ObjectMapper().createObjectNode().put("value", getValueName());
-	}
-
-	@Override
-	default void loadThis(ObjectNode node) {
-		fromString(node.get("value").asText());
 	}
 }

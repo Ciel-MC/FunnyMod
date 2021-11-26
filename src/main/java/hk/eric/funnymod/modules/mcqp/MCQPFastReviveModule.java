@@ -15,7 +15,7 @@ import net.minecraft.world.InteractionHand;
 public class MCQPFastReviveModule extends ToggleableModule {
 
     private static MCQPFastReviveModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPFastReviveKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPFastReviveKeybind", "", -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> spamRevive = new EventHandler<TickEvent>() {
         @Override
@@ -28,7 +28,7 @@ public class MCQPFastReviveModule extends ToggleableModule {
     };
 
     public MCQPFastReviveModule() {
-        super("MCQPFastRevive", "Spams revive button", () -> true);
+        super("MCQPFastRevive", "Spams revive button");
         instance = this;
         settings.add(keybind);
     }

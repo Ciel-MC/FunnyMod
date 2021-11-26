@@ -1,22 +1,23 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Point;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.IntFunction;
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
 import com.lukflug.panelstudio.popup.PopupTuple;
+import com.lukflug.panelstudio.setting.HasSubSettings;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.ISetting;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ToggleButton;
+
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
 
 /**
  * A layout that organizes components in the traditional ClickGUI panels.
@@ -114,17 +115,17 @@ public class PanelLayout implements ILayout {
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int nextLevel=(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
-		boolean isContainer=(setting.getSubSettings()!=null)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
+		boolean isContainer=(setting instanceof HasSubSettings)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
-			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
-		} else if (setting.getSubSettings()!=null) {
+			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
+		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.theme.getContainerRenderer(theme.logicalLevel,nextLevel,false));
 			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),layoutType.apply(theme.logicalLevel-1));
-			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,nextLevel+1)));
+			hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,nextLevel+1)));
 		} else {
 			container.addComponent(component);
 		}

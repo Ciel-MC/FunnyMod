@@ -7,7 +7,6 @@ import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
-import hk.eric.funnymod.gui.setting.children.BooleanSettingWithChildren;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -34,9 +33,9 @@ public class InventoryManagerModule extends ToggleableModule {
     private static final Set<String> MCQPEnabled = new HashSet<>();
 
     private static InventoryManagerModule instance;
-    public static final BooleanSettingWithChildren MCQPDropEnabled = new BooleanSettingWithChildren("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", ()->true, false);
-    public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", ()->true, false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InventoryManKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final BooleanSetting MCQPDropEnabled = new BooleanSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
+    public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", false);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InventoryManKeybind", "", -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override
@@ -55,7 +54,7 @@ public class InventoryManagerModule extends ToggleableModule {
     };
 
     public InventoryManagerModule() {
-        super("InventoryManager", "Manages Inventory", () -> true);
+        super("InventoryManager", "Manages Inventory");
         instance = this;
         updateMCQPThrow();
         settings.add(dropHotbar);
@@ -88,8 +87,8 @@ public class InventoryManagerModule extends ToggleableModule {
     }
 
     public static void updateMCQPThrow() {
-        MCQPDropEnabled.removeAllChildren();
-        MCQPList.forEach(s -> MCQPDropEnabled.addChildren(true, new BooleanSetting(s, "InvManMCQPDrop" + s, "Drop " + s, () -> true, false, (bool)->{
+        MCQPDropEnabled.removeAllSubSettings();
+        MCQPList.forEach(s -> MCQPDropEnabled.addSubSettings(true, new BooleanSetting(s, "InvManMCQPDrop" + s, "Drop " + s, false, (bool)->{
             if(bool) {
                 MCQPEnabled.add(s);
             }else {

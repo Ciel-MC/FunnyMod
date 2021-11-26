@@ -1,25 +1,42 @@
 package hk.eric.funnymod.gui.setting;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.INumberSetting;
+import com.lukflug.panelstudio.setting.ISetting;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public class IntegerSetting extends Setting<Integer> implements INumberSetting {
+public class IntegerSetting extends Setting<Integer> implements INumberSetting<Integer> {
 	public final int min,max;
 
-	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer min, Integer max, Integer value) {
-		this(displayName, configName, description, visible, min, max, value, null);
-	}
+	private final Map<Integer,List<ISetting<?>>> subSettings = new HashMap<>();
 
-	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer min, Integer max, Integer value, Consumer<Integer> onChange) {
-		super(displayName, configName, description, visible, value, onChange);
+	public IntegerSetting(String displayName, String configName, String description, Integer value, int min, int max) {
+		super(displayName, configName, description, value);
 		this.min = min;
 		this.max = max;
 	}
 
+	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer value, int min, int max) {
+		super(displayName, configName, description, visible, value);
+		this.min = min;
+		this.max = max;
+	}
+
+	public IntegerSetting(String displayName, String configName, String description, Integer value, int min, int max, Consumer<Integer> onChange) {
+		super(displayName, configName, description, value, onChange);
+		this.min = min;
+		this.max = max;
+	}
+
+	public IntegerSetting(String displayName, String configName, String description, IBoolean visible, Integer value, int min, int max, Consumer<Integer> onChange) {
+		super(displayName, configName, description, visible, value, onChange);
+		this.min = min;
+		this.max = max;
+	}
 
 	@Override
 	public double getNumber() {
@@ -47,12 +64,7 @@ public class IntegerSetting extends Setting<Integer> implements INumberSetting {
 	}
 
 	@Override
-	public ObjectNode saveThis() {
-		return new ObjectMapper().createObjectNode().put("value", getValue());
-	}
-
-	@Override
-	public void loadThis(ObjectNode node) {
-		setValue(node.get("value").asInt());
+	public Class<Integer> getSettingClass() {
+		return Integer.class;
 	}
 }

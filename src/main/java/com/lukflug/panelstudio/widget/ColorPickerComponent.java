@@ -21,8 +21,8 @@ public class ColorPickerComponent extends ColorComponent {
 	public void populate (ThemeTuple theme) {
 		addComponent(new ToggleButton(new RainbowToggle(),theme.getButtonRenderer(Boolean.class,false)));
 		addComponent(new ColorPicker(setting,theme.theme.getColorPickerRenderer()));
-		addComponent(new NumberSlider(new ColorNumber(0,()->true),theme.getSliderRenderer(false)));
-		addComponent(new NumberSlider(new ColorNumber(3,()->true),theme.getSliderRenderer(false)));
+		addComponent(new NumberSlider(new ColorNumber(0),theme.getSliderRenderer(false)));
+		addComponent(new NumberSlider(new ColorNumber(3),theme.getSliderRenderer(false)));
 	}
 
 }

@@ -11,15 +11,15 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class TimerModule extends ToggleableModule {
 
     private static TimerModule instance;
-    public static final IntegerSetting speed = new IntegerSetting("Time", "TimerSpeed", "How many ticks are in a second", ()-> true, 1, 100, 20, (integer)-> {
+    public static final IntegerSetting speed = new IntegerSetting("Time", "TimerSpeed", "How many ticks are in a second", 1, 100, 20, (integer)-> {
         if(getToggle().isOn()) {
             getOpenTimer().setTicks(integer);
         }
     });
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TimerKeybind", "", () -> true, -1, () -> getToggle().toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TimerKeybind", "", -1, () -> getToggle().toggle());
 
     public TimerModule() {
-        super("Timer", "Changes game speed", () -> true);
+        super("Timer", "Changes game speed");
         instance = this;
         settings.add(speed);
         settings.add(keybind);

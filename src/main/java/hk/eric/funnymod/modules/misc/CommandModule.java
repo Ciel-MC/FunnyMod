@@ -18,7 +18,7 @@ import java.util.Queue;
 public class CommandModule extends ToggleableModule {
 
     private static CommandModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CommandKeybind", null, () -> true, -1,()-> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CommandKeybind", null, -1,()-> instance.toggle());
 
     private static final EventHandler<PlayerChatEvent> commandHandler = new EventHandler<PlayerChatEvent>() {
         @Override
@@ -57,7 +57,7 @@ public class CommandModule extends ToggleableModule {
     };
 
     public CommandModule() {
-        super("Command", "Commands", () -> true);
+        super("Command", "Commands");
         instance = this;
         settings.add(keybind);
     }

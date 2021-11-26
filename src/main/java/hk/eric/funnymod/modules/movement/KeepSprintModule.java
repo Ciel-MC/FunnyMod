@@ -7,10 +7,10 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class KeepSprintModule extends ToggleableModule {
 
     private static KeepSprintModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KeepSprintKeybind", null, () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KeepSprintKeybind", null, -1, () -> instance.toggle());
 
     public KeepSprintModule() {
-        super("KeepSprint", "Doesn't break your sprint when hitting an entity", () -> true);
+        super("KeepSprint", "Doesn't break your sprint when hitting an entity");
         instance = this;
         settings.add(keybind);
     }

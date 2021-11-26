@@ -1,21 +1,28 @@
 package hk.eric.funnymod.modules;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.setting.IModule;
 import com.lukflug.panelstudio.setting.ISetting;
+import com.lukflug.panelstudio.setting.Savable;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
-import hk.eric.funnymod.utils.classes.Settings;
+import hk.eric.funnymod.utils.Constants;
+import hk.eric.funnymod.utils.ObjectUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class Module implements IModule {
 	public final String displayName,description;
 	public final IBoolean visible;
-	public final Settings settings= new Settings();
-	
+	public final List<ISetting<?>> settings= new ArrayList<>();
+
+	public Module(String displayName, String description) {
+		this(displayName, description, Constants.alwaysTrue);
+	}
+
 	public Module (String displayName, String description, IBoolean visible) {
 		this.displayName=displayName;
 		this.description=description;
@@ -49,15 +56,21 @@ public abstract class Module implements IModule {
 
 	@Override
 	public ObjectNode save() {
-		ObjectNode node = new ObjectMapper().createObjectNode();
-		getSettings().forEach(setting->node.set(setting.getDisplayName(),setting.save()));
+		ObjectNode node = ObjectUtil.getObjectNode();
+		getSettings().forEach(setting -> {
+			if(setting instanceof Savable<?> savable) {
+				node.set(setting.getDisplayName(), savable.save());
+			}
+		});
 		return node;
 	}
 
 	@Override
 	public void load(ObjectNode node) throws ConfigLoadingFailedException {
 		for (ISetting<?> setting : getSettings().toList()) {
-			setting.load((ObjectNode) node.get(setting.getDisplayName()));
+			if(setting instanceof Savable<?> savable) {
+				savable.load((ObjectNode) node.get(setting.getDisplayName()));
+			}
 		}
 	}
 }

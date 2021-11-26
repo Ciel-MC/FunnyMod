@@ -1,10 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Point;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -17,17 +12,19 @@ import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
 import com.lukflug.panelstudio.popup.PopupTuple;
-import com.lukflug.panelstudio.setting.IBooleanSetting;
-import com.lukflug.panelstudio.setting.IClient;
-import com.lukflug.panelstudio.setting.IEnumSetting;
-import com.lukflug.panelstudio.setting.ILabeled;
-import com.lukflug.panelstudio.setting.ISetting;
+import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.RadioButton;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.ToggleButton;
+import hk.eric.funnymod.utils.Constants;
+
+import java.awt.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Adds components in a tab-based layout.
@@ -133,11 +130,11 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		IEnumSetting catSelect;
 		if (horizontal) {
 			VerticalContainer container=new VerticalContainer(label,theme.getContainerRenderer(0,0,false));
-			catSelect=addContainer(label,client.getCategories().map(cat->cat),container,new ThemeTuple(theme,0,1),true,button->button,()->true);
+			catSelect=addContainer(label,client.getCategories().map(cat->cat),container,new ThemeTuple(theme,0,1),true,button->button);
 			container.addComponent(window);
 			gui.addComponent(title,container,new ThemeTuple(theme,0,0),position,width,animation);
 		} else {
-			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1), Math.max(columnWidth, 0),columnWidth>0?0:1),()->true);
+			catSelect=addContainer(label,client.getCategories().map(cat->cat),window,new ThemeTuple(theme,0,1),false,button->wrapColumn(button,new ThemeTuple(theme,0,1), Math.max(columnWidth, 0),columnWidth>0?0:1));
 			gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		}
 		client.getCategories().forEach(category->{
@@ -148,8 +145,28 @@ public class CSGOLayout implements ILayout,IScrollSize {
 					window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),0,weight),()-> catSelect.getValueName().equals(category.getDisplayName()) && modSelect.getValueName().equals(module.getDisplayName()));
 					if (module.isEnabled()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
 						@Override
+						public Boolean getValue() {
+							return module.isEnabled().isOn();
+						}
+
+						@Override
+						public void setValue(Boolean value) {
+							if(module.isEnabled().isOn() != value) module.isEnabled().toggle();
+						}
+
+						@Override
 						public String getDisplayName() {
 							return enabledButton;
+						}
+
+						@Override
+						public String getDescription() {
+							return module.getDescription();
+						}
+
+						@Override
+						public IBoolean isVisible() {
+							return module.isVisible();
 						}
 
 						@Override
@@ -192,22 +209,36 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
-		boolean isContainer=setting.getSubSettings()!=null;
+		boolean isContainer=setting instanceof HasSubSettings;
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
-			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
-		} else if (setting.getSubSettings()!=null) {
+			if (setting instanceof HasSubSettings<?> subSettingsSetting) subSettingsSetting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
+		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(false));
 			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,ChildMode.DOWN);
-			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
+			hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
 		} else {
 			container.addComponent(component);
 		}
 	}
-	
+
+	/**
+	 * Add a multiplexing radio button list to a parent container.
+	 * @param label the radio button label
+	 * @param labels list of items to multiplex
+	 * @param window the parent container
+	 * @param theme the theme to be used
+	 * @param horizontal whether radio button is horizontal
+	 * @param container mapping from radio button to container component type instance
+	 * @return the enum setting controlling the radio button list
+	 */
+	protected <T extends IComponent> IEnumSetting addContainer(ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, boolean horizontal, Function<RadioButton, T> container) {
+		return addContainer(label, labels, window, theme, horizontal, container, Constants.alwaysTrue);
+	}
+
 	/**
 	 * Add a multiplexing radio button list to a parent container.
 	 * @param <T> parent container component type
@@ -257,11 +288,6 @@ public class CSGOLayout implements ILayout,IScrollSize {
 			}
 
 			@Override
-			public void fromString(String value) {
-				for (int i=0;i<array.length;i++) if (array[i].getDisplayName().equals(value)) state=i;
-			}
-
-			@Override
 			public void setValueIndex (int index) {
 				state=index;
 			}
@@ -274,6 +300,21 @@ public class CSGOLayout implements ILayout,IScrollSize {
 			@Override
 			public ILabeled[] getAllowedValues() {
 				return array;
+			}
+
+			@Override
+			public Object getValue() {
+				return null;
+			}
+
+			@Override
+			public void setValue(Object value) {
+
+			}
+
+			@Override
+			public Class getSettingClass() {
+				return null;
 			}
 		};
 		RadioButton button=new RadioButton(setting,theme.getRadioRenderer(true),animation.get(),horizontal) {

@@ -7,6 +7,16 @@ public abstract class ToggleableModule extends Module implements CanToggle {
 
     private boolean enabled;
 
+    public ToggleableModule(String displayName, String description) {
+        this(displayName, description, false);
+    }
+
+    public ToggleableModule(String displayName, String description, boolean enabled) {
+        super(displayName, description);
+        this.enabled = enabled;
+        if (enabled) onEnable();
+    }
+
     public ToggleableModule(String displayName, String description, IBoolean visible) {
         this(displayName, description, visible, false);
     }

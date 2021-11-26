@@ -22,6 +22,7 @@ public abstract class LivingEntityMixin {
 
     /**
      * @author Eric
+     * @reason To implement speed option in sprint module TODO: Change implementation to be later down the pipeline
      */
     @Overwrite
     public double getAttributeValue(Attribute attribute) {

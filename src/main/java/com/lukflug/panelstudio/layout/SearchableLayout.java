@@ -1,12 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Point;
-import java.util.Comparator;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -18,18 +11,22 @@ import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.container.VerticalContainer;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
 import com.lukflug.panelstudio.popup.PopupTuple;
-import com.lukflug.panelstudio.setting.IBooleanSetting;
-import com.lukflug.panelstudio.setting.IClient;
-import com.lukflug.panelstudio.setting.IEnumSetting;
-import com.lukflug.panelstudio.setting.ILabeled;
-import com.lukflug.panelstudio.setting.IModule;
-import com.lukflug.panelstudio.setting.ISetting;
+import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.SearchableRadioButton;
+import hk.eric.funnymod.utils.Constants;
+
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Adds components in a tab-based layout, where modules are organized flat (categories bypassed), with a search bar.
@@ -121,15 +118,35 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		Button<Void> title=new Button<Void>(titleLabel,()->null,theme.getButtonRenderer(Void.class,0,0,true));
 		HorizontalContainer window=new HorizontalContainer(titleLabel,theme.getContainerRenderer(0,0,true));
 		Supplier<Stream<IModule>> modules=()->client.getCategories().flatMap(cat->cat.getModules()).sorted(comparator);
-		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),button->wrapColumn(button,new ThemeTuple(theme,0,1),1),()->true);
+		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),button->wrapColumn(button,new ThemeTuple(theme,0,1),1));
 		gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		modules.get().forEach(module->{
 			VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 			window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()-> modSelect.getValueName().equals(module.getDisplayName()));
 			if (module.isEnabled()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
 				@Override
+				public Boolean getValue() {
+					return module.isEnabled().isOn();
+				}
+
+				@Override
+				public void setValue(Boolean value) {
+					if(module.isEnabled().isOn()!=value) module.isEnabled().toggle();
+				}
+
+				@Override
 				public String getDisplayName() {
 					return enabledButton;
+				}
+
+				@Override
+				public String getDescription() {
+					return module.getDescription();
+				}
+
+				@Override
+				public IBoolean isVisible() {
+					return module.isVisible();
 				}
 
 				@Override
@@ -157,22 +174,35 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
-		boolean isContainer=setting.getSubSettings()!=null;
+		boolean isContainer=setting instanceof HasSubSettings;
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer) {
 			VerticalContainer colorContainer=(VerticalContainer)component;
 			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
-			if (setting.getSubSettings()!=null) setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
-		} else if (setting.getSubSettings()!=null) {
+			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
+		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(false));
-			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,theme,ChildMode.DOWN);
-			setting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
+			util.addContainer(setting,component,settingContainer, setting::getSettingState,setting.getSettingClass(),container,gui,theme,ChildMode.DOWN);
+			hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
 		} else {
 			container.addComponent(component);
 		}
 	}
-	
+
+
+	/**
+	 * Add a multiplexing radio button list to a parent container.
+	 * @param label the radio button label
+	 * @param labels list of items to multiplex
+	 * @param window the parent container
+	 * @param theme the theme to be used
+	 * @param container mapping from radio button to container component type instance
+	 * @return the enum setting controlling the radio button list
+	 */
+	protected <T extends IComponent> IEnumSetting addContainer(ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, Function<SearchableRadioButton, T> container) {
+		return addContainer(label, labels, window, theme, container, Constants.alwaysTrue);
+	}
 
 	/**
 	 * Add a multiplexing radio button list to a parent container.
@@ -222,11 +252,6 @@ public class SearchableLayout implements ILayout,IScrollSize {
 			}
 
 			@Override
-			public void fromString(String value) {
-				for (int i=0;i<array.length;i++) if (array[i].getDisplayName().equals(value)) state=i;
-			}
-
-			@Override
 			public void setValueIndex (int index) {
 				state=index;
 			}
@@ -239,6 +264,21 @@ public class SearchableLayout implements ILayout,IScrollSize {
 			@Override
 			public ILabeled[] getAllowedValues() {
 				return array;
+			}
+
+			@Override
+			public Object getValue() {
+				return array[state];
+			}
+
+			@Override
+			public void setValue(Object value) {
+				state= Arrays.asList(array).indexOf(value);
+			}
+
+			@Override
+			public Class getSettingClass() {
+				return Enum.class;
 			}
 		};
 		SearchableRadioButton button=new SearchableRadioButton(setting,theme,true,keys) {

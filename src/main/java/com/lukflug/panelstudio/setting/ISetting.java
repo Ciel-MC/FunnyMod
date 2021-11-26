@@ -1,49 +1,38 @@
 package com.lukflug.panelstudio.setting;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
-
-import java.util.stream.Stream;
+import com.lukflug.panelstudio.base.IBoolean;
 
 /**
  * Interface representing a single setting.
  * @author lukflug
  */
 public interface ISetting<T> extends ILabeled {
-	/**
-	 * Get the current setting value.
-	 * @return the setting state
-	 */
-	T getSettingState();
+
+	T getValue();
+
+	void setValue(T value);
+
+	default T getSettingState() {
+		return getValue();
+	}
+
+	String getDisplayName();
+
+	String getDescription();
+
+	IBoolean isVisible();
 	
 	/**
-	 * Returns the class object of corresponding to the type returned by {@link #getSettingState()}.
+	 * Returns the class object of corresponding to the type returned by {@link #getValue()}.
 	 * @return the settings class
 	 */
 	Class<T> getSettingClass();
-	
+
 	/**
-	 * Returns sub settings.
-	 * @return sub-settings
+	 * Get the current value.
+	 * @return the name of the current enum value
 	 */
-	default Stream<ISetting<?>> getSubSettings() {
-		return null;
+	default String getValueName() {
+		return getValue().toString();
 	}
-
-	default ObjectNode save() {
-		ObjectNode node = saveThis();
-		getSubSettings().forEach(setting -> node.set(setting.getDisplayName(), setting.save()));
-		return node;
-	}
-
-	default void load(ObjectNode node) throws ConfigLoadingFailedException {
-		loadThis(node);
-		for (ISetting<?> setting : getSubSettings().toList()) {
-			setting.load((ObjectNode) node.get(setting.getDisplayName()));
-		}
-	}
-
-	ObjectNode saveThis();
-
-	void loadThis(ObjectNode node) throws ConfigLoadingFailedException;
 }

@@ -16,7 +16,7 @@ import net.minecraft.world.InteractionHand;
 public class MCQPAutoClickerModule extends ToggleableModule {
 
     private static MCQPAutoClickerModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoClickerKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoClickerKeybind", "", -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> autoclicker = new EventHandler<TickEvent>() {
         @Override
@@ -30,7 +30,7 @@ public class MCQPAutoClickerModule extends ToggleableModule {
     };
 
     public MCQPAutoClickerModule() {
-        super("MCQPAutoClicker", "Automatically attacks on MCQP", () -> true);
+        super("MCQPAutoClicker", "Automatically attacks on MCQP");
         instance = this;
         settings.add(keybind);
     }

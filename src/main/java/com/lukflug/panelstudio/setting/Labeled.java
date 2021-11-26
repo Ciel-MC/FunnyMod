@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.setting;
 
 import com.lukflug.panelstudio.base.IBoolean;
+import hk.eric.funnymod.utils.Constants;
 
 /**
  * Simple implementation of the ILabeled interface.
@@ -19,6 +20,15 @@ public class Labeled implements ILabeled {
 	 * The visibility.
 	 */
 	protected final IBoolean visible;
+
+	/**
+	 * Constructor.  
+ * @param title the title of the label
+	 * @param description the description 
+	 */
+	public Labeled(String title, String description) {
+		this(title, description, Constants.alwaysTrue);
+	}
 
 	/**
 	 * Constructor.

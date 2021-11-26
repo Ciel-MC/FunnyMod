@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.container.GUI;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.theme.IDescriptionRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
+import hk.eric.funnymod.utils.Constants;
 
 /**
  * Extension of {@link GUI} to support HUD components.
@@ -47,7 +48,16 @@ public class HUDGUI extends GUI {
 	public boolean addComponent (IFixedComponent component, IBoolean visible) {
 		return container.addComponent(component,()->guiVisibility.isOn()&&visible.isOn());
 	}
-	
+
+	/**
+	 * Add a component as HUD component.
+	 * @param component the component to be added
+	 * @return whether the component was added
+	 */
+	public boolean addHUDComponent(IFixedComponent component) {
+		return addHUDComponent(component, Constants.alwaysTrue);
+	}
+
 	/**
 	 * Add a component as HUD component.
 	 * @param component the component to be added
@@ -68,7 +78,7 @@ public class HUDGUI extends GUI {
 	 * @return whether the component was added
 	 */
 	public boolean addHUDComponent (IFixedComponent component, IToggleable state, Animation animation, ITheme theme, int border) {
-		return container.addComponent(new HUDPanel<IFixedComponent>(component,state,animation,theme,hudVisibility,border),()->true);
+		return container.addComponent(new HUDPanel<IFixedComponent>(component,state,animation,theme,hudVisibility,border));
 	}
 	
 	/**

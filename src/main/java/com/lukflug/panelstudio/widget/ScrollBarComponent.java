@@ -116,10 +116,10 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 		};
 		// Populate containers
-		VerticalContainer leftContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
+		VerticalContainer leftContainer=new VerticalContainer(new Labeled(component.getTitle(),null),new IContainerRenderer(){});
 		leftContainer.addComponent(scrollComponent);
 		leftContainer.addComponent(horizontalBar);
-		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null,()->true),new IContainerRenderer(){});
+		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null),new IContainerRenderer(){});
 		rightContainer.addComponent(verticalBar);
 		rightContainer.addComponent(new EmptySpace<S>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),cornerRenderer) {
 			@Override

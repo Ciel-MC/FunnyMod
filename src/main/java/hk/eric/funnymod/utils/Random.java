@@ -8,10 +8,10 @@ public class Random {
     private static final java.util.Random random = new java.util.Random();
 
     public static Module getRandomModule() {
-        return new Module(randomString(3,10),randomString(1,10),()->true){};
+        return new Module(randomString(3,10),randomString(1,10)){};
     }
     public static Setting<?> getRandomSetting() {
-        return new StringSetting(randomString(3,10),randomString(1,10),randomString(1,20),()->true,randomString(1,10));
+        return new StringSetting(randomString(3,10),randomString(1,10),randomString(1,20),randomString(1,10));
     }
 
     public static boolean getRandomBoolean() {

@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.base.Context;
+import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.HorizontalComponent;
@@ -38,6 +39,16 @@ public class Spinner extends HorizontalContainer {
 			}
 
 			@Override
+			public String getDescription() {
+				return setting.getDescription();
+			}
+
+			@Override
+			public IBoolean isVisible() {
+				return setting.isVisible();
+			}
+
+			@Override
 			public String getValue() {
 				if (value!=null && System.currentTimeMillis()-lastTime>500) {
 					if (value.isEmpty()) value="0";
@@ -48,7 +59,7 @@ public class Spinner extends HorizontalContainer {
 					setting.setNumber(number);
 					value=null;
 				}
-				if (value==null) return setting.getSettingState();
+				if (value==null) return setting.getValueName();
 				else return value;
 			}
 
@@ -66,7 +77,7 @@ public class Spinner extends HorizontalContainer {
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		VerticalContainer buttons=new VerticalContainer(setting,new IContainerRenderer(){});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.UP,container)) {
+		buttons.addComponent(new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.UP,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
@@ -82,7 +93,7 @@ public class Spinner extends HorizontalContainer {
 				return textField.getHeight()/2;
 			}
 		});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null,()->true),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
+		buttons.addComponent(new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
