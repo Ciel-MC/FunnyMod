@@ -36,7 +36,12 @@ public class EnumSetting<E extends Enum<E>> extends Setting<E> implements IEnumS
 	public String getValueName() {
 		return getValue().toString();
 	}
-	
+
+	@Override
+	public void fromString(String value) {
+		setValue(Enum.valueOf(settingClass, value));
+	}
+
 	@Override
 	public int getValueIndex() {
 		return getValue().ordinal();

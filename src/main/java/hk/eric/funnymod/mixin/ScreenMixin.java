@@ -1,24 +1,22 @@
 package hk.eric.funnymod.mixin;
 
-import hk.eric.funnymod.FunnyModClient;
-import hk.eric.funnymod.gui.ClickGUI;
-import hk.eric.funnymod.gui.Gui;
-import hk.eric.funnymod.modules.Category;
-import net.minecraft.client.gui.components.ChatComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import hk.eric.funnymod.event.events.PlayerChatEvent;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
-    @Inject(method = "sendMessage(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
-    private void handleChatMessage(String string, CallbackInfo ci) {
-//        if(string.startsWith(";")) ci.cancel();
-//        if(string.equalsIgnoreCase(";reloadModules")) {
-//            Category.reloadModules();
-//        }
+    @Shadow public abstract void render(PoseStack poseStack, int i, int j, float f);
+
+    @Redirect(method = "sendMessage(Ljava/lang/String;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;chat(Ljava/lang/String;)V"))
+    private void handleChatMessage(LocalPlayer player, String string) {
+        if (!new PlayerChatEvent(string).call().isCancelled()) {
+            player.chat(string);
+        }
     }
 }

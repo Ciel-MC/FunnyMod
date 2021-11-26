@@ -1,6 +1,5 @@
 package hk.eric.funnymod.modules;
 
-import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.gui.Gui;
 import org.lwjgl.glfw.GLFW;
 

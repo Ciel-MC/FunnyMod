@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import hk.eric.funnymod.modules.Module;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.ColorSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
@@ -24,8 +23,6 @@ public class LogoModule extends ToggleableModule {
 	public LogoModule() {
 		super("Logo","Module that displays the PanelStudio icon on HUD.",()->true,true);
 		instance=this;
-//		toggle();
-//		enabled = true;
 		settings.add(rotation);
 		settings.add(parity);
 		settings.add(color);

@@ -1,5 +1,6 @@
 package hk.eric.funnymod.utils;
 
+import hk.eric.funnymod.utils.classes.Pair;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;

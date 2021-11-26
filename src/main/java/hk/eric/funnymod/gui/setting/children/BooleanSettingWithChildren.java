@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooleanSettingWithChildren extends BooleanSetting implements HasChildren<Boolean> {
-    List<Setting<?>> trueChildren = new ArrayList<>();
-    List<Setting<?>> falseChildren = new ArrayList<>();
+    final List<Setting<?>> trueChildren = new ArrayList<>();
+    final List<Setting<?>> falseChildren = new ArrayList<>();
 
     public BooleanSettingWithChildren(String displayName, String configName, String description, IBoolean visible, Boolean value, Setting<?>... children) {
         super(displayName, configName, description, visible, value);

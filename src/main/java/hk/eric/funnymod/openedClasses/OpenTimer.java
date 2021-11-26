@@ -2,8 +2,8 @@ package hk.eric.funnymod.openedClasses;
 
 public interface OpenTimer {
 
-    public float getTicks();
+    float getTicks();
 
-    public void setTicks(float ticks);
+    void setTicks(float ticks);
 
 }

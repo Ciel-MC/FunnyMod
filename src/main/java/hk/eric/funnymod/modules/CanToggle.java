@@ -2,8 +2,8 @@ package hk.eric.funnymod.modules;
 
 public interface CanToggle {
 
-    public void toggle();
+    void toggle();
 
-    public boolean isOn();
+    boolean isOn();
 }
 

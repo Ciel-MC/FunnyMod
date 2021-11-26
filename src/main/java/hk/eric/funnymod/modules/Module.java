@@ -1,10 +1,13 @@
 package hk.eric.funnymod.modules;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.setting.IModule;
 import com.lukflug.panelstudio.setting.ISetting;
-import hk.eric.funnymod.utils.Settings;
+import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
+import hk.eric.funnymod.utils.classes.Settings;
 
 import java.util.stream.Stream;
 
@@ -41,6 +44,20 @@ public abstract class Module implements IModule {
 
 	@Override
 	public Stream<ISetting<?>> getSettings() {
-		return settings.stream().filter(setting->setting instanceof ISetting)/*.sorted(Comparator.comparing(a -> a.displayName))*/.map(setting->(ISetting<?>)setting);
+		return settings.stream().filter(setting->setting instanceof ISetting).map(setting->(ISetting<?>)setting);
+	}
+
+	@Override
+	public ObjectNode save() {
+		ObjectNode node = new ObjectMapper().createObjectNode();
+		getSettings().forEach(setting->node.set(setting.getDisplayName(),setting.save()));
+		return node;
+	}
+
+	@Override
+	public void load(ObjectNode node) throws ConfigLoadingFailedException {
+		for (ISetting<?> setting : getSettings().toList()) {
+			setting.load((ObjectNode) node.get(setting.getDisplayName()));
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package hk.eric.funnymod.event.events;
 
-import hk.eric.funnymod.event.EventCancellable;
+import hk.eric.funnymod.event.CancellableEvent;
 
-public class KeyEvent extends EventCancellable {
+public class KeyEvent extends CancellableEvent {
 
     private final int key, action;
 

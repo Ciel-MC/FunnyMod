@@ -1,4 +1,4 @@
-package hk.eric.funnymod.utils;
+package hk.eric.funnymod.utils.classes;
 
 import hk.eric.funnymod.gui.setting.Setting;
 import hk.eric.funnymod.gui.setting.children.HasChildren;

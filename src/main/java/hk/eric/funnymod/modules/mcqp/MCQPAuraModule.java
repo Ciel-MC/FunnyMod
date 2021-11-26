@@ -12,7 +12,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.openedClasses.OpenLevel;
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.Pair;
+import hk.eric.funnymod.utils.classes.Pair;
 import hk.eric.funnymod.utils.PlayerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class MCQPAuraModule extends ToggleableModule {
 
-    static Minecraft mc = FunnyModClient.mc;
+    static final Minecraft mc = FunnyModClient.mc;
 
     private static MCQPAuraModule instance;
     public static final IntegerSetting range = new IntegerSetting("Range", "MCQPAuraRange", "The range of the aura", ()->true, 1, 20, 10);

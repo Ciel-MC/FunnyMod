@@ -7,7 +7,6 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.EntityUtil;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Predicate;
 

@@ -1,7 +1,6 @@
 package hk.eric.funnymod;
 
 import com.viaversion.fabric.mc117.ViaFabric;
-import com.viaversion.fabric.mc117.ViaFabricClient;
 import hk.eric.funnymod.gui.Gui;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
@@ -19,7 +18,7 @@ public class FunnyModClient implements ClientModInitializer {
     *  XP boost time left
     *  Stat change preview*/
 
-    public static Minecraft mc = Minecraft.getInstance();
+    public static final Minecraft mc = Minecraft.getInstance();
 
     @Override
     public void onInitializeClient() {

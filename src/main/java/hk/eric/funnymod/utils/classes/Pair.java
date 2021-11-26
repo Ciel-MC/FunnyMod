@@ -1,4 +1,4 @@
-package hk.eric.funnymod.utils;
+package hk.eric.funnymod.utils.classes;
 
 public class Pair<T, U> {
     public T first;

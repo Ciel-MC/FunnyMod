@@ -2,7 +2,6 @@ package hk.eric.funnymod.modules.world;
 
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.FunnyModClient;
-import hk.eric.funnymod.gui.setting.DoubleSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.openedClasses.OpenMinecraft;

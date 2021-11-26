@@ -1,5 +1,7 @@
 package hk.eric.funnymod.gui.setting;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.INumberSetting;
 
@@ -56,5 +58,15 @@ public class DoubleSetting extends Setting<Double> implements INumberSetting {
 
 	public double getStep() {
 		return step;
+	}
+
+	@Override
+	public ObjectNode saveThis() {
+		return new ObjectMapper().createObjectNode().put("value",getValue());
+	}
+
+	@Override
+	public void loadThis(ObjectNode node) {
+		setValue(node.get("value").asDouble());
 	}
 }

@@ -1,5 +1,7 @@
 package hk.eric.funnymod.gui.setting;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.INumberSetting;
 
@@ -42,5 +44,15 @@ public class IntegerSetting extends Setting<Integer> implements INumberSetting {
 	@Override
 	public int getPrecision() {
 		return 0;
+	}
+
+	@Override
+	public ObjectNode saveThis() {
+		return new ObjectMapper().createObjectNode().put("value", getValue());
+	}
+
+	@Override
+	public void loadThis(ObjectNode node) {
+		setValue(node.get("value").asInt());
 	}
 }

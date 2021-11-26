@@ -35,17 +35,18 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation("com.lukflug:panelstudio-mc17:${panelStudio_mc_version}:dev")
+//    modImplementation("com.lukflug:panelstudio-mc17:${panelStudio_mc_version}:dev")
 
-    include(modImplementation("com.lukflug:panelstudio:${panelStudio_version}"))
-    include("com.lukflug:panelstudio-mc17:${panelStudio_mc_version}")
+//    include(modImplementation("com.lukflug:panelstudio:${panelStudio_version}"))
+//    include("com.lukflug:panelstudio-mc17:${panelStudio_mc_version}")
     include(modImplementation("baritone:baritone-unoptimized-fabric:1.7.1"))
 
     include(modImplementation("com.viaversion.viafabric:viafabric:0.4.4+236:main"))
     include(modImplementation("com.viaversion.viafabric:viafabric-mc117:0.4.4+236:main"))
     include(modImplementation("com.viaversion.viaversion:viaversion:4.1.0-21w43a:SNAPSHOT"))
     include(modImplementation("org.yaml.snakeyml:snakeyaml:1.29"))
-//    include(modImplementation ("com.fasterxml.jackson.core:jackson-databind:2.13.+"))
+
+    include(modImplementation ("com.fasterxml.jackson.core:jackson-databind:2.13.+"))
 }
 
 processResources {

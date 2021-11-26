@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.function.Supplier;
 
-import hk.eric.funnymod.modules.Module;
 import hk.eric.funnymod.modules.ToggleableModule;
 import org.lwjgl.glfw.GLFW;
 

@@ -18,7 +18,6 @@ import hk.eric.funnymod.modules.visual.EspModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
 import hk.eric.funnymod.modules.visual.TabGUIModule;
 import hk.eric.funnymod.modules.world.TimerModule;
-import hk.eric.funnymod.utils.Random;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -86,6 +85,10 @@ public enum Category implements ICategory {
 	@Override
 	public Stream<IModule> getModules() {
 		return modules.stream().map(module->module);
+	}
+
+	public static Stream<IModule> getAllModules() {
+		return Stream.of(values()).flatMap(Category::getModules);
 	}
 
 	public static void reloadModules() {

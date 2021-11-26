@@ -1,7 +1,8 @@
 package hk.eric.funnymod.gui.setting;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -38,5 +39,15 @@ public class KeybindSetting extends Setting<Integer> implements IKeybindSetting 
 
 	public Runnable getAction() {
 		return trigger;
+	}
+
+	@Override
+	public ObjectNode saveThis() {
+		return new ObjectMapper().createObjectNode().put("key", getKey());
+	}
+
+	@Override
+	public void loadThis(ObjectNode node) {
+		setKey(node.get("key").asInt());
 	}
 }

@@ -1,15 +1,17 @@
 package hk.eric.funnymod.gui.setting;
 
-import java.awt.Color;
-
-import hk.eric.funnymod.modules.ClickGUIModule;
-import hk.eric.funnymod.modules.ClickGUIModule.ColorModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.ITheme;
+import hk.eric.funnymod.modules.ClickGUIModule;
+import hk.eric.funnymod.modules.ClickGUIModule.ColorModel;
+
+import java.awt.*;
 
 public class ColorSetting extends Setting<Color> implements IColorSetting {
-	public final boolean hasAlpha,allowsRainbow;
+	private boolean hasAlpha,allowsRainbow;
 	private boolean rainbow;
 	
 	public ColorSetting (String displayName, String configName, String description, IBoolean visible, boolean hasAlpha, boolean allowsRainbow, Color value, boolean rainbow) {
@@ -56,5 +58,27 @@ public class ColorSetting extends Setting<Color> implements IColorSetting {
 	@Override
 	public boolean hasHSBModel() {
 		return ClickGUIModule.colorModel.getValue()==ColorModel.HSB;
+	}
+
+	@Override
+	public ObjectNode saveThis() {
+		return new ObjectMapper().createObjectNode().put("value", getValue().getRGB()).put("rainbow",rainbow).put("allowsRainbow",allowsRainbow).put("hasAlpha",hasAlpha);
+	}
+
+	@Override
+	public void loadThis(ObjectNode node) {
+		if (node.has("value")) {
+			int rgb=node.get("value").asInt();
+			setValue(new Color(rgb));
+		}
+		if (node.has("rainbow")) {
+			rainbow=node.get("rainbow").asBoolean();
+		}
+		if (node.has("allowsRainbow")) {
+			allowsRainbow=node.get("allowsRainbow").asBoolean();
+		}
+		if (node.has("hasAlpha")) {
+			hasAlpha=node.get("hasAlpha").asBoolean();
+		}
 	}
 }

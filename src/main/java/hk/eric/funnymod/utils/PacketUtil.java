@@ -2,8 +2,6 @@ package hk.eric.funnymod.utils;
 
 import hk.eric.funnymod.FunnyModClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 
 import java.util.Objects;

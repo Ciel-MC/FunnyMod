@@ -1,8 +1,9 @@
 package hk.eric.funnymod.event;
 
 public class Event{
-    public void call(){
+    public <T extends Event> T call(){
         EventManager.getInstance().callEvent(this);
+        return (T) this;
     }
 }
 
