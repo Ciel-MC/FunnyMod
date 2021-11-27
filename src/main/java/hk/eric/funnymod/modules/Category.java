@@ -4,10 +4,7 @@ import com.lukflug.panelstudio.setting.ICategory;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
 import hk.eric.funnymod.modules.combat.VelocityModule;
-import hk.eric.funnymod.modules.mcqp.MCQPAuraModule;
-import hk.eric.funnymod.modules.mcqp.MCQPAutoClickerModule;
-import hk.eric.funnymod.modules.mcqp.MCQPFastReviveModule;
-import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
+import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
@@ -69,6 +66,7 @@ public enum Category implements ICategory {
 		addModule(MCQP,
 				new MCQPAuraModule(),
 				new MCQPAutoClickerModule(),
+				new MCQPAutoFarmModule(),
 				new MCQPFastReviveModule(),
 				new MCQPPreventDropModule()
 		);

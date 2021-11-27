@@ -6,7 +6,6 @@ import baritone.api.event.events.ChatEvent;
 import baritone.api.event.events.PlayerUpdateEvent;
 import baritone.api.event.events.SprintStateEvent;
 import baritone.api.event.events.type.EventState;
-import baritone.behavior.LookBehavior;
 import com.mojang.authlib.GameProfile;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.gui.Gui;
@@ -175,18 +174,19 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         return !baritone.getPathingBehavior().isPathing() && capabilities.mayfly;
     }
 
-    @Inject(
-            method = "rideTick",
-            at = @At(
-                    value = "HEAD"
-            )
-    )
-    private void updateRidden(CallbackInfo cb) {
-        IBaritone baritone = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
-        if (baritone != null) {
-            ((LookBehavior) baritone.getLookBehavior()).pig();
-        }
-    }
+//    @Inject(
+//            method = "rideTick",
+//            at = @At(
+//                    value = "HEAD"
+//            )
+//    )
+//    private void updateRidden(CallbackInfo cb) {
+//        IBaritone baritone = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
+//        if (baritone != null) {
+//            ((LookBehavior) baritone.getLookBehavior()).pig();
+//            ((LookBehavior) baritone.getLookBehavior());
+//        }
+//    }
 
     @Redirect(method = "clientSideCloseContainer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;closeContainer()V"))
     public void redirectCloseContainer(AbstractClientPlayer instance) {

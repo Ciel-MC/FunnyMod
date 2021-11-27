@@ -11,7 +11,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.chat.TextComponent;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Base64;
 
 public class ConfigManager {
 
@@ -50,7 +52,8 @@ public class ConfigManager {
             File configFile = getConfigFile(configName);
 
             FileWriter writer = new FileWriter(configFile);
-            writer.write(node.toPrettyString()); //TODO: Dont pretty print
+            String result = Base64.getEncoder().encodeToString(node.toString().getBytes());
+            writer.write(result);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,8 +62,9 @@ public class ConfigManager {
 
     private static ObjectNode loadFromFile(String configName) throws IOException {
         File configFile = getConfigFile(configName);
-        FileReader reader = new FileReader(configFile);
-        return (ObjectNode) mapper.readTree(reader);
+//        FileReader reader = new FileReader(configFile);
+        String config = new String(Base64.getDecoder().decode(Files.readAllBytes(configFile.toPath())));
+        return (ObjectNode) mapper.readTree(config);
     }
 
     private static Path getConfigPath() {
@@ -75,7 +79,6 @@ public class ConfigManager {
             file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
         return file;
     }
