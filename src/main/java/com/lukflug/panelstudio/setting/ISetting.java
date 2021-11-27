@@ -35,4 +35,6 @@ public interface ISetting<T> extends ILabeled {
 	default String getValueName() {
 		return getValue().toString();
 	}
+
+
 }

@@ -16,7 +16,7 @@ public class OldHeightModule extends ToggleableModule {
             new TypedPairList<>(Version.OLDER, HeightType.NORMAL_HITBOX, 1.8F, HeightType.NORMAL_EYE_HEIGHT, 1.62F, HeightType.SNEAKING_HITBOX, 1.8F, HeightType.SNEAKING_EYE_HEIGHT, 1.62F - 0.08F)
     );
 
-    private static OldHeightModule instance;
+    private static OldHeightModule instance;;
     public static final EnumSetting<Version> normal_hitbox = new EnumSetting<>("Normal hitbox version", "OldHeightNormalHitbox", "The size of your hitbox normally", Version.CURRENT, Version.class);
     public static final EnumSetting<Version> sneaking_hitbox = new EnumSetting<>("Sneaking hitbox version", "OldHeightSneakingHitbox", "The size of your hitbox when you sneak", Version.CURRENT, Version.class);
     public static final BooleanSettingWithSubSetting advancedSettings = new BooleanSettingWithSubSetting("Advanced settings", "OldHeightAdvancedSettings", "Advanced settings",false);
@@ -27,8 +27,18 @@ public class OldHeightModule extends ToggleableModule {
     public OldHeightModule() {
         super("Old heights", "Changes your hitbox and eye heights to previous versions");
         instance = this;
+        normal_hitbox.setOnChange(version -> {
+            if(!advancedSettings.isOn()) {
+                normal_eye.setValue(version);
+            }
+        });
+        sneaking_hitbox.setOnChange(version -> {
+            if(!advancedSettings.isOn()) {
+                sneaking_eye.setValue(version);
+            }
+        });
         settings.add(normal_hitbox);
-        settings.add(normal_eye);
+        settings.add(sneaking_hitbox);
         settings.add(advancedSettings);
         advancedSettings.addSubSettings(true,normal_eye);
         advancedSettings.addSubSettings(true,sneaking_eye);

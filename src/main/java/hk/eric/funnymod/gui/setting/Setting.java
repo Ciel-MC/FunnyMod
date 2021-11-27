@@ -10,7 +10,7 @@ public abstract class Setting<T> implements ISetting<T> {
 	public final String displayName,description;
 	public IBoolean visible;
 	protected T value;
-	protected final Consumer<T> onChange;
+	protected Consumer<T> onChange;
 
 	public Setting(String displayName, String description, T value) {
 		this(displayName, description, Constants.alwaysTrue , value);
@@ -56,5 +56,13 @@ public abstract class Setting<T> implements ISetting<T> {
 	@Override
 	public IBoolean isVisible() {
 		return visible;
+	}
+
+	public Consumer<T> getOnChange() {
+		return onChange;
+	}
+
+	public void setOnChange(Consumer<T> onChange) {
+		this.onChange = onChange;
 	}
 }
