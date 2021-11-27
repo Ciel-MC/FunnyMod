@@ -3,11 +3,13 @@ package hk.eric.funnymod.gui.setting;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
 import com.mojang.blaze3d.platform.InputConstants;
+import hk.eric.funnymod.utils.classes.Converters;
+import hk.eric.funnymod.utils.classes.TwoWayFunction;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Consumer;
 
-public class KeybindSetting extends Setting<Integer> implements IKeybindSetting {
+public class KeybindSetting extends SavableSetting<Integer> implements IKeybindSetting {
 	private final Runnable trigger;
 
 	public KeybindSetting(String displayName, String configName, String description, Integer value) {
@@ -72,5 +74,10 @@ public class KeybindSetting extends Setting<Integer> implements IKeybindSetting 
 	@Override
 	public String getValueName() {
 		return getKeyName();
+	}
+
+	@Override
+	public TwoWayFunction<Integer, String> getConverter() {
+		return Converters.INTEGER_CONVERTER;
 	}
 }

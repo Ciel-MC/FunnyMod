@@ -15,6 +15,7 @@ public class FunnyModClient implements ClientModInitializer {
     public static final String MOD_NAME = "Funny Mod";
 
     /*TODO:
+    *  Auto farm
     *  Mob ESP
     *  Freecam
     *  Slot locking

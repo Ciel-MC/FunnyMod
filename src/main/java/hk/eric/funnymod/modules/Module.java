@@ -12,6 +12,7 @@ import hk.eric.funnymod.utils.ObjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public abstract class Module implements IModule {
@@ -51,7 +52,7 @@ public abstract class Module implements IModule {
 
 	@Override
 	public Stream<ISetting<?>> getSettings() {
-		return settings.stream().filter(setting->setting instanceof ISetting).map(setting->(ISetting<?>)setting);
+		return settings.stream().filter(Objects::nonNull);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public abstract class Module implements IModule {
 		ObjectNode node = ObjectUtil.getObjectNode();
 		getSettings().forEach(setting -> {
 			if(setting instanceof Savable<?> savable) {
-				node.set(setting.getDisplayName(), savable.save());
+				node.set(savable.getConfigName(), savable.save());
 			}
 		});
 		return node;
@@ -69,7 +70,7 @@ public abstract class Module implements IModule {
 	public void load(ObjectNode node) throws ConfigLoadingFailedException {
 		for (ISetting<?> setting : getSettings().toList()) {
 			if(setting instanceof Savable<?> savable) {
-				savable.load((ObjectNode) node.get(setting.getDisplayName()));
+				savable.load((ObjectNode) node.get(savable.getConfigName()));
 			}
 		}
 	}

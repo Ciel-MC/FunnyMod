@@ -6,12 +6,14 @@ import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.ISetting;
 import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class EnumSetting<E extends Enum<E>> extends SavableSettingWithChild<E> implements IEnumSetting<E> {
+public class EnumSetting<E extends Enum<E>> extends SavableSetting<E> implements IEnumSetting<E> {
 	private final Class<E> settingClass;
 	private final ILabeled[] array;
 
@@ -83,11 +85,11 @@ public class EnumSetting<E extends Enum<E>> extends SavableSettingWithChild<E> i
 		if (index<0) index=array.length-1;
 		setValue(array[index]);
 	}
-
-	@Override
-	public E fromString(String value) {
-		return Enum.valueOf(settingClass, value);
-	}
+//
+//	@Override
+//	public E fromString(String value) {
+//		return Enum.valueOf(settingClass, value);
+//	}
 
 	@Override
 	public TwoWayFunction<E, String> getConverter() {
@@ -125,60 +127,13 @@ public class EnumSetting<E extends Enum<E>> extends SavableSettingWithChild<E> i
 	}
 
 	@Override
+	public void setValue(E value) {
+		super.setValue(value);
+		this.value = value.ordinal();
+	}
+
+	@Override
 	public Class<E> getSettingClass() {
 		return settingClass;
-	}
-
-	@Override
-	public void addGlobalSubSetting(ISetting<?> subSetting) {
-		globalSubSettings.add(subSetting);
-	}
-
-	@Override
-	public void removeGlobalSubSetting(ISetting<?> subSetting) {
-		globalSubSettings.remove(subSetting);
-	}
-
-	@Override
-	public Stream<ISetting<?>> geGlobalSubSettings() {
-		return globalSubSettings.stream();
-	}
-
-	@Override
-	public void addSubSetting(E state, ISetting<?> subSetting) {
-		subSettings.computeIfAbsent(state, e -> new ArrayList<>()).add(subSetting);
-	}
-
-	@Override
-	public Stream<ISetting<?>> getSubSettings(E state) {
-		return subSettings.get(state).stream();
-	}
-
-	@Override
-	public Stream<ISetting<?>> getCurrentSubSettings() {
-		return getSubSettings(getValue());
-	}
-
-	@Override
-	public Stream<ISetting<?>> getAllSubSettings() {
-		return subSettings.values().stream().flatMap(Collection::stream);
-	}
-
-	@Override
-	public void removeSubSetting(E state, ISetting<?> subSetting) {
-		subSettings.computeIfPresent(state, (e, list) -> {
-			list.remove(subSetting);
-			return list.isEmpty() ? null : list;
-		});
-	}
-
-	@Override
-	public void removeAllSubSettings(E state) {
-		subSettings.remove(state);
-	}
-
-	@Override
-	public void removeAllSubSettings() {
- 		subSettings.clear();
 	}
 }

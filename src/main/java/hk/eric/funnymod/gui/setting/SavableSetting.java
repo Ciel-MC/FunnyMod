@@ -3,42 +3,42 @@ package hk.eric.funnymod.gui.setting;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.Savable;
-import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.utils.ObjectUtil;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 import java.util.function.Consumer;
 
 public abstract class SavableSetting<T> extends Setting<T> implements Savable<T> {
+
+    private final String configName;
+
     public SavableSetting(String displayName, String configName, String description, T value) {
-        super(displayName, configName, description, value);
+        super(displayName, description, value);
+        this.configName = configName;
     }
 
     public SavableSetting(String displayName, String configName, String description, IBoolean visible, T value) {
-        super(displayName, configName, description, visible, value);
+        super(displayName, description, visible, value);
+        this.configName = configName;
     }
 
     public SavableSetting(String displayName, String configName, String description, T value, Consumer<T> onChange) {
-        super(displayName, configName, description, value, onChange);
+        super(displayName, description, value, onChange);
+        this.configName = configName;
     }
 
     public SavableSetting(String displayName, String configName, String description, IBoolean visible, T value, Consumer<T> onChange) {
-        super(displayName, configName, description, visible, value, onChange);
-    }
-
-    @Override
-    public TwoWayFunction<T, String> getConverter() {
-        return null;
+        super(displayName, description, visible, value, onChange);
+        this.configName = configName;
     }
 
     @Override
     public ObjectNode save() {
-        return ObjectUtil.getObjectNode().put("value", getConverter().convert(getValue()));
+        return saveThis();
     }
 
     @Override
-    public void load(ObjectNode node) throws ConfigLoadingFailedException {
-        setValue(getConverter().revert(node.get("value").asText()));
+    public void load(ObjectNode node) {
+        loadThis(node);
     }
 
     @Override
@@ -52,7 +52,12 @@ public abstract class SavableSetting<T> extends Setting<T> implements Savable<T>
     }
 
     @Override
-    public void loadThis(ObjectNode node) throws ConfigLoadingFailedException {
+    public void loadThis(ObjectNode node) {
         setValue(getConverter().revert(node.get("value").asText()));
+    }
+
+    @Override
+    public String getConfigName() {
+        return configName;
     }
 }

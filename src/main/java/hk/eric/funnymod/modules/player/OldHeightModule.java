@@ -1,9 +1,9 @@
 package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
-import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.EnumSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.classes.TwoDimensionalEnumMap;
 import hk.eric.funnymod.utils.classes.TypedPairList;
@@ -19,7 +19,7 @@ public class OldHeightModule extends ToggleableModule {
     private static OldHeightModule instance;
     public static final EnumSetting<Version> normal_hitbox = new EnumSetting<>("Normal hitbox version", "OldHeightNormalHitbox", "The size of your hitbox normally", Version.CURRENT, Version.class);
     public static final EnumSetting<Version> sneaking_hitbox = new EnumSetting<>("Sneaking hitbox version", "OldHeightSneakingHitbox", "The size of your hitbox when you sneak", Version.CURRENT, Version.class);
-    public static final BooleanSetting advancedSettings = new BooleanSetting("Advanced settings", "OldHeightAdvancedSettings", "Advanced settings",false);
+    public static final BooleanSettingWithSubSetting advancedSettings = new BooleanSettingWithSubSetting("Advanced settings", "OldHeightAdvancedSettings", "Advanced settings",false);
     public static final EnumSetting<Version> normal_eye = new EnumSetting<>("Normal eye height version", "OldHeightNormalEye", "The height of your eye when you sneak", Version.CURRENT, Version.class);
     public static final EnumSetting<Version> sneaking_eye = new EnumSetting<>("Sneaking eye height version", "OldHeightSneakingEye", "The height of your eye when you sneak", Version.CURRENT, Version.class);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "OldHeightHeightKeybind", "", -1, () -> instance.toggle());

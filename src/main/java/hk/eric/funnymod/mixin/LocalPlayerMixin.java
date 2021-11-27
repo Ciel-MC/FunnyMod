@@ -13,6 +13,7 @@ import hk.eric.funnymod.gui.Gui;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
+import hk.eric.funnymod.utils.MathUtil;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -94,8 +95,8 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/Input;hasForwardImpulse()Z"))
-    public boolean onTick(Input instance) {
-        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? this.input.getMoveVector() != Vec2.ZERO : instance.hasForwardImpulse();
+    public boolean redirectHasForwardImpulse(Input instance) {
+        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? MathUtil.compare_force(instance.getMoveVector(),1.0E-5) == 1 : instance.hasForwardImpulse();
     }
 
     /**
@@ -106,8 +107,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     private boolean hasEnoughImpulseToStartSprinting() {
         double threshold = .8;
         Vec2 moveVector = this.input.getMoveVector();
-        float x = moveVector.x,y = moveVector.y;
-        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? x * x + y * y >= threshold * threshold : this.isUnderWater() ? this.input.hasForwardImpulse() : (double)this.input.forwardImpulse >= threshold;
+        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? (this.isUnderWater() ? input.hasForwardImpulse() : MathUtil.compare_force(moveVector,.8) == 1) : (this.isUnderWater() ? this.input.hasForwardImpulse() : (double)this.input.forwardImpulse >= threshold);
     }
 
     //Baritone integration

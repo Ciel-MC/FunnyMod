@@ -7,6 +7,7 @@ import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -29,13 +30,13 @@ import java.util.Set;
 public class InventoryManagerModule extends ToggleableModule {
 
     private final Set<String> autoThrow = new HashSet<>();
-    private static final List<String> MCQPList = List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸");
-    private static final Set<String> MCQPEnabled = new HashSet<>();
+    private static List<String> MCQPList = List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸");
+    private static Set<String> MCQPEnabled = new HashSet<>();
 
     private static InventoryManagerModule instance;
-    public static final BooleanSetting MCQPDropEnabled = new BooleanSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
+    public static final BooleanSettingWithSubSetting MCQPDropEnabled = new BooleanSettingWithSubSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
     public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InventoryManKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", "", -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override

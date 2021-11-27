@@ -7,26 +7,25 @@ import hk.eric.funnymod.utils.Constants;
 import java.util.function.Consumer;
 
 public abstract class Setting<T> implements ISetting<T> {
-	public final String displayName,configName,description;
+	public final String displayName,description;
 	public IBoolean visible;
-	private T value;
-	private final Consumer<T> onChange;
+	protected T value;
+	protected final Consumer<T> onChange;
 
-	public Setting(String displayName, String configName, String description, T value) {
-		this(displayName, configName, description, Constants.alwaysTrue , value);
+	public Setting(String displayName, String description, T value) {
+		this(displayName, description, Constants.alwaysTrue , value);
 	}
 
-	public Setting(String displayName, String configName, String description, IBoolean visible, T value) {
-		this(displayName, configName, description, visible, value, null);
+	public Setting(String displayName, String description, IBoolean visible, T value) {
+		this(displayName, description, visible, value, null);
 	}
 
-	public Setting(String displayName, String configName, String description, T value, Consumer<T> onChange) {
-		this(displayName, configName, description, Constants.alwaysTrue, value, onChange);
+	public Setting(String displayName, String description, T value, Consumer<T> onChange) {
+		this(displayName, description, Constants.alwaysTrue, value, onChange);
 	}
 
-	public Setting (String displayName, String configName, String description, IBoolean visible, T value, Consumer<T> onChange) {
+	public Setting (String displayName, String description, IBoolean visible, T value, Consumer<T> onChange) {
 		this.displayName=displayName;
-		this.configName=configName;
 		this.description=description;
 		this.visible=visible;
 		this.value=value;
@@ -57,9 +56,5 @@ public abstract class Setting<T> implements ISetting<T> {
 	@Override
 	public IBoolean isVisible() {
 		return visible;
-	}
-
-	public String getConfigName() {
-		return configName;
 	}
 }

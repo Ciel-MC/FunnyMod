@@ -1,15 +1,14 @@
 package hk.eric.funnymod.gui.setting;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.INumberSetting;
 import hk.eric.funnymod.utils.Constants;
-import hk.eric.funnymod.utils.ObjectUtil;
+import hk.eric.funnymod.utils.classes.Converters;
 import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 import java.util.function.Consumer;
 
-public class DoubleSetting extends SavableSettingWithChild<Double> implements INumberSetting<Double> {
+public class DoubleSetting extends SavableSetting<Double> implements INumberSetting<Double> {
 	public final double min,max,step;
 
 	public DoubleSetting(String displayName, String configName, String description, double min, double max, double value) {
@@ -79,27 +78,12 @@ public class DoubleSetting extends SavableSettingWithChild<Double> implements IN
 	}
 
 	@Override
-	public void setValue(Double value) {
-
-	}
-
-	@Override
 	public Class<Double> getSettingClass() {
-		return null;
+		return Double.class;
 	}
 
 	@Override
 	public TwoWayFunction<Double, String> getConverter() {
-		return null;
-	}
-
-	@Override
-	public ObjectNode saveThis() {
-		return ObjectUtil.getObjectNode().put("value",getValue());
-	}
-
-	@Override
-	public void loadThis(ObjectNode node) {
-		setValue(node.get("value").asDouble());
+		return Converters.DOUBLE_CONVERTER;
 	}
 }

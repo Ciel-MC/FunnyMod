@@ -4,11 +4,13 @@ import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.config.ConfigManager;
 import hk.eric.funnymod.event.EventHandler;
+import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.PlayerChatEvent;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ToggleableModule;
+import hk.eric.funnymod.utils.StringUtil;
 import net.minecraft.network.chat.TextComponent;
 
 import java.util.LinkedList;
@@ -23,47 +25,64 @@ public class CommandModule extends ToggleableModule {
     private static final EventHandler<PlayerChatEvent> commandHandler = new EventHandler<PlayerChatEvent>() {
         @Override
         public void handle(PlayerChatEvent event) {
-            String message = event.getMessage();
-            if (message.startsWith(";")) {
-                event.setCancelled(true);
-                Queue<String> strings = new LinkedList<>(List.of(message.substring(1).split(" ")));
-                String command = strings.remove();
-                switch (command) {
-                    case "config","cfg","c" -> {
-                        switch (strings.remove()) {
-                            case "save" -> {
-                                ConfigManager.save(strings.remove());
-                            }
-                            case "load" -> {
-                                try {
-                                    ConfigManager.load(strings.remove());
-                                } catch (ConfigLoadingFailedException e) {
-                                    FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Some of all of the settings failed to load."));
-                                }
-                            }
-                        }
-                    }
-                    case "toggle" -> Category.getAllModules().forEach(module -> {
-                        if(command.equalsIgnoreCase(module.getDisplayName())) {
-                            if(module instanceof IToggleable) {
-                                ((IToggleable) module).toggle();
-                            }
-                        }
-                    });
-                    default -> FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Unknown command."));
-                }
-            }
+            handleCommand(event);
         }
     };
 
     public CommandModule() {
-        super("Command", "Commands");
+        super("Command", "Commands", true);
         instance = this;
         settings.add(keybind);
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        EventManager.getInstance().register(commandHandler);
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        EventManager.getInstance().unregister(commandHandler);
     }
 
     public static IToggleable getToggle() {
         return instance.isEnabled();
     }
 
+    public static void handleCommand(PlayerChatEvent event) {
+        String message = event.getMessage();
+        if (message.startsWith(";")) {
+            event.setCancelled(true);
+            Queue<String> strings = new LinkedList<>(List.of(message.substring(1).split(" ")));
+            String command = StringUtil.getString(strings);
+            switch (command) {
+                case "config","cfg","c" -> {
+                    String subCommand = StringUtil.getString(strings);
+                    switch (subCommand) {
+                        case "save" -> {
+                            ConfigManager.save(strings.poll());
+                        }
+                        case "load" -> {
+                            try {
+                                ConfigManager.load(strings.poll());
+                            } catch (ConfigLoadingFailedException e) {
+                                FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Some of all of the settings failed to load."));
+                            }
+                        }
+                        default -> FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Available options: save, load"));
+                    }
+                }
+                case "toggle" -> Category.getAllModules().forEach(module -> {
+                    if(command.equalsIgnoreCase(module.getDisplayName())) {
+                        if(module instanceof IToggleable) {
+                            ((IToggleable) module).toggle();
+                        }
+                    }
+                });
+                default -> FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Unknown command."));
+            }
+        }
+    }
 }

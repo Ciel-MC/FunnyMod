@@ -1,5 +1,7 @@
 package hk.eric.funnymod.event;
 
+import org.apache.logging.log4j.LogManager;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -42,9 +44,17 @@ public class EventManager {
 
     public <E extends Event> void register(EventHandler<E> handler) {
         Class<E> eventClass = getEventClassOfEventHandler(handler);
-        Method method = handler.getClass().getDeclaredMethods()[0];
-        method.setAccessible(true);
-        registry.computeIfAbsent(eventClass, k -> new HashSet<>()).add(new ListeningMethod(handler, method));
+        try {
+            Method method = handler.getClass().getMethod("handle", eventClass);
+            method.setAccessible(true);
+//            System.out.println("Methods: ");
+//            for (Method declaredMethod : handler.getClass().getDeclaredMethods()) {
+//                System.out.println(declaredMethod.getName() + " " + Arrays.toString(declaredMethod.getParameterTypes()));
+//            }
+            registry.computeIfAbsent(eventClass, k -> new HashSet<>()).add(new ListeningMethod(handler, method));
+        } catch (NoSuchMethodException e) {
+            LogManager.getLogger().error("Failed to register event handler " + handler.getClass().getSimpleName() + ": No method handle(" + eventClass.getSimpleName() + ") found");
+        }
     }
 
     public void unregister(Object handler) {
@@ -69,9 +79,5 @@ public class EventManager {
 
     public < E extends Event > Class<E> getEventClassOfEventHandler(EventHandler<E> handler) {
         return (Class<E>) ((ParameterizedType) handler.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-
-    public int dothing() {
-        return 0;
     }
 }

@@ -2,10 +2,12 @@ package hk.eric.funnymod.gui.setting;
 
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
+import hk.eric.funnymod.utils.classes.Converters;
+import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 import java.util.function.Consumer;
 
-public class BooleanSetting extends SavableSettingWithChild<Boolean> implements IBooleanSetting {
+public class BooleanSetting extends SavableSetting<Boolean> implements IBooleanSetting {
 
 	public BooleanSetting(String displayName, String configName, String description, Boolean value) {
 		super(displayName, configName, description, value);
@@ -31,5 +33,10 @@ public class BooleanSetting extends SavableSettingWithChild<Boolean> implements 
 	@Override
 	public boolean isOn() {
 		return getValue();
+	}
+
+	@Override
+	public TwoWayFunction<Boolean, String> getConverter() {
+		return Converters.BOOLEAN_CONVERTER;
 	}
 }

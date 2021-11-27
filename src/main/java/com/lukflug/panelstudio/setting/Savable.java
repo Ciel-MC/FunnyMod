@@ -10,14 +10,11 @@ public interface Savable<T> {
 
     ObjectNode save();
 
-    void load(ObjectNode node) throws ConfigLoadingFailedException;
-
-    default T fromString(String value) {
-        return getConverter().revert(value);
-    }
-
+    void load(ObjectNode node);
 
     ObjectNode saveThis();
 
     void loadThis(ObjectNode node) throws ConfigLoadingFailedException;
+
+    String getConfigName();
 }

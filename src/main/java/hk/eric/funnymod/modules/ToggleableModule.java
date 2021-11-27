@@ -1,7 +1,9 @@
 package hk.eric.funnymod.modules;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 
 public abstract class ToggleableModule extends Module implements CanToggle {
 
@@ -70,4 +72,15 @@ public abstract class ToggleableModule extends Module implements CanToggle {
     public void onEnable(){}
 
     public void onDisable(){}
+
+    @Override
+    public ObjectNode save() {
+        return super.save().put("enabled", getEnabled());
+    }
+
+    @Override
+    public void load(ObjectNode node) throws ConfigLoadingFailedException {
+        setEnabled(node.get("enabled").asBoolean());
+        super.load(node);
+    }
 }

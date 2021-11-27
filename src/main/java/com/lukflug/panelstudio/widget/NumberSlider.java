@@ -35,6 +35,6 @@ public class NumberSlider extends Slider {
 
 	@Override
 	protected String getDisplayState() {
-		return "TODO: Figure out what should go here";
+		return Double.toString(setting.getNumber());
 	}
 }

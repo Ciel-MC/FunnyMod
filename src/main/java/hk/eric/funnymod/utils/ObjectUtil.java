@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class ObjectUtil {
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static < T, T2 > T2 nullOrMethod(T object, Function<T, T2> function) {
         if(object == null) {
@@ -19,5 +19,9 @@ public class ObjectUtil {
 
     public static ObjectNode getObjectNode() {
         return mapper.createObjectNode();
+    }
+
+    public static ObjectMapper getMapper() {
+        return mapper;
     }
 }

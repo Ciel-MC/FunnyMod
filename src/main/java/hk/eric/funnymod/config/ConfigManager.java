@@ -3,16 +3,19 @@ package hk.eric.funnymod.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.setting.IModule;
+import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.modules.Category;
+import hk.eric.funnymod.utils.ObjectUtil;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.chat.TextComponent;
 
 import java.io.*;
 import java.nio.file.Path;
 
 public class ConfigManager {
 
-    private static ObjectMapper mapper;
+    private static ObjectMapper mapper = ObjectUtil.getMapper();
 
     public static void save(String configName) {
         ObjectNode root = mapper.createObjectNode();
@@ -20,16 +23,18 @@ public class ConfigManager {
             root.set(module.getDisplayName(), module.save());
         });
         saveToFile(configName, root);
+        FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("FunnyMod: Config saved: " + configName));
     }
 
     public static void load(String configName) throws ConfigLoadingFailedException {
+        FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("FunnyMod: Loading config " + configName));
         mapper = new ObjectMapper();
         ObjectNode root = null;
         try {
             root = loadFromFile(configName);
         } catch (IOException e) {
             if(e instanceof FileNotFoundException fileNotFoundException) {
-                //TODO: Send Chat message
+                FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("FunnyMod: Config file not found"));
             }else {
                 e.printStackTrace();
             }
@@ -65,8 +70,13 @@ public class ConfigManager {
     }
 
     private static File getConfigFile(String configName) {
-        File file = getConfigPath().resolve(configName).toFile();
-        file.mkdirs();
+        File file = new File(getConfigPath().toFile(), configName + ".json");
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
         return file;
     }
 }

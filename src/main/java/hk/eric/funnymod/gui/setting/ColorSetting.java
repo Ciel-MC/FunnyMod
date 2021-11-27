@@ -12,7 +12,7 @@ import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 import java.awt.*;
 
-public class ColorSetting extends SavableSettingWithChild<Color> implements IColorSetting {
+public class ColorSetting extends SavableSetting<Color> implements IColorSetting {
 	private boolean hasAlpha,allowsRainbow;
 	private boolean rainbow;
 
@@ -38,7 +38,7 @@ public class ColorSetting extends SavableSettingWithChild<Color> implements ICol
 
 	@Override
 	public TwoWayFunction<Color, String> getConverter() {
-		return new TwoWayFunction<Color, String>() {
+		return new TwoWayFunction<>() {
 			@Override
 			public String convert(Color color) {
 				return String.valueOf(color.getRGB());
@@ -46,7 +46,7 @@ public class ColorSetting extends SavableSettingWithChild<Color> implements ICol
 
 			@Override
 			public Color revert(String s) {
-				return Color.getColor(s);
+				return new Color(Integer.parseInt(s));
 			}
 		};
 	}

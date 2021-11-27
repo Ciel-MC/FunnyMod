@@ -11,7 +11,6 @@ import com.lukflug.panelstudio.tabgui.TabGUI;
 import com.lukflug.panelstudio.theme.IColorScheme;
 import com.lukflug.panelstudio.theme.ITheme;
 import hk.eric.funnymod.gui.setting.ColorSetting;
-import hk.eric.funnymod.gui.setting.Setting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import org.lwjgl.glfw.GLFW;
 
@@ -34,7 +33,7 @@ public class TabGUIModule extends ToggleableModule {
 
 			@Override
 			public Color getColor (String name) {
-				return (Color)instance.settings.stream().filter(setting->((Setting) setting).getConfigName().equals(name)).findFirst().orElse(null).getValue();
+				return (Color) instance.settings.stream().filter(setting -> setting.getDisplayName().equals(name)).findFirst().get().getValue();
 			}
 		},75,9,2,10);
 	}

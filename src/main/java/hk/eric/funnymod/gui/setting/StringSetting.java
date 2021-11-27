@@ -3,8 +3,10 @@ package hk.eric.funnymod.gui.setting;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import hk.eric.funnymod.utils.Constants;
+import hk.eric.funnymod.utils.classes.Converters;
+import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
-public class StringSetting extends Setting<String> implements IStringSetting {
+public class StringSetting extends SavableSetting<String> implements IStringSetting {
 	public StringSetting(String displayName, String configName, String description, String value) {
 		this(displayName, configName, description, Constants.alwaysTrue, value);
 	}
@@ -16,5 +18,10 @@ public class StringSetting extends Setting<String> implements IStringSetting {
 	@Override
 	public String getValueName() {
 		return getValue();
+	}
+
+	@Override
+	public TwoWayFunction<String, String> getConverter() {
+		return Converters.STRING_CONVERTER;
 	}
 }

@@ -447,7 +447,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 			@Override
 			public Color getColor (String name) {
 				return ((ColorSetting)ClickGUIModule.theme.getAllSubSettings().filter(setting-> {
-					if(setting instanceof Setting<?> setting1) {
+					if(setting instanceof ColorSetting setting1) {
 						return setting1.getConfigName().equals(themeName + "-" + name);
 					}else {
 						return false;
