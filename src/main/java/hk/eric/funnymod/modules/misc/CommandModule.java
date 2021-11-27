@@ -1,7 +1,7 @@
 package hk.eric.funnymod.modules.misc;
 
 import com.lukflug.panelstudio.base.IToggleable;
-import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.config.ConfigManager;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
@@ -11,7 +11,6 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.StringUtil;
-import net.minecraft.network.chat.TextComponent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -68,10 +67,10 @@ public class CommandModule extends ToggleableModule {
                             try {
                                 ConfigManager.load(strings.poll());
                             } catch (ConfigLoadingFailedException e) {
-                                FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Some of all of the settings failed to load."));
+                                ChatManager.sendMessage("Some of all of the settings failed to load.");
                             }
                         }
-                        default -> FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Available options: save, load"));
+                        default -> ChatManager.sendMessage("Available options: save, load");
                     }
                 }
                 case "toggle" -> Category.getAllModules().forEach(module -> {
@@ -81,7 +80,7 @@ public class CommandModule extends ToggleableModule {
                         }
                     }
                 });
-                default -> FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("Unknown command."));
+                default -> ChatManager.sendMessage("Unknown command.");
             }
         }
     }

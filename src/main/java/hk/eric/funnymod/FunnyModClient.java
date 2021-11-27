@@ -21,7 +21,7 @@ public class FunnyModClient implements ClientModInitializer {
 
     /*TODO:
     *  Auto farm
-    *  Mob ESP
+    *  Mob ESP - Semi done
     *  Freecam
     *  Slot locking
     *  XP boost time left
@@ -40,6 +40,8 @@ public class FunnyModClient implements ClientModInitializer {
             }
         });
     }
+
+
 
     public static IBaritone getBaritone() {
         return baritone;

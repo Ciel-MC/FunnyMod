@@ -7,8 +7,9 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Minecraft.class)
-public interface MinecraftMixin {
+public interface MinecraftMixin /*extends OpenMinecraft*/ {
     @Accessor("timer")
     @Mutable
     Timer getTimer();
+
 }

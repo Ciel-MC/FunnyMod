@@ -10,7 +10,7 @@ public class MCQPPreventDropModule extends ToggleableModule {
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPPreventDropKeybind", "", -1, () -> instance.toggle());
 
     public MCQPPreventDropModule() {
-        super("MCQPPreventDrop", "Prevents you from dropping books and unstackable items");
+        super("MCQPPreventDrop", "Prevents you from dropping hotbar items");
         instance = this;
         settings.add(keybind);
     }

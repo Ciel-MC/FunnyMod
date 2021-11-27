@@ -7,21 +7,21 @@ import baritone.api.event.events.PlayerUpdateEvent;
 import baritone.api.event.events.SprintStateEvent;
 import baritone.api.event.events.type.EventState;
 import com.mojang.authlib.GameProfile;
-import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.gui.Gui;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
 import hk.eric.funnymod.utils.MathUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.client.ClientRecipeBook;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Abilities;
-import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import org.spongepowered.asm.mixin.Final;
@@ -56,11 +56,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         if(MCQPPreventDropModule.getToggle().isOn()) {
             ItemStack item;
             if((item = this.getInventory().getSelected()) != null) {
-                if(item.getMaxStackSize() == 1 || item.getItem() instanceof BookItem) {
-                    FunnyModClient.mc.gui.getChat().addMessage(new TextComponent("§7[§bFunnyMod§7] §cA feature has stopped you from dropping this \"rare\" item or tool from your hotbar."));
-                    cir.cancel();
-                    cir.setReturnValue(false);
-                }
+                ChatManager.sendMessage(Component.text("A feature has stopped you from dropping this \"rare\" item or tool from your hotbar.").color(TextColor.color(0x00FFFF)));
+                cir.cancel();
+                cir.setReturnValue(false);
             }
         }
     }
