@@ -28,13 +28,11 @@ public interface INumberSetting<E extends Number> extends ISetting<E> {
 	 * @return minimum value
 	 */
     double getMinimumValue();
-	
 
-	/**
-	 * Get the setting's precision.
-	 * @return decimal precision
-	 */
-    int getPrecision();
+
+	E getStep();
+
+	double getStepAsDouble();
 	
 	@Override
     Class<E> getSettingClass();

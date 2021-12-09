@@ -83,7 +83,7 @@ public class Spinner extends HorizontalContainer {
 				super.handleButton(context,button);
 				if (button==IInterface.LBUTTON && context.isClicked(button)) {
 					double number=setting.getNumber();
-					number+=Math.pow(10,-setting.getPrecision());
+					number+=setting.getStepAsDouble();
 					if (number<=setting.getMaximumValue()) setting.setNumber(number);
 				}
 			}
@@ -99,7 +99,7 @@ public class Spinner extends HorizontalContainer {
 				super.handleButton(context,button);
 				if (button==IInterface.LBUTTON && context.isClicked(button)) {
 					double number=setting.getNumber();
-					number-=Math.pow(10,-setting.getPrecision());
+					number-=setting.getStepAsDouble();
 					if (number>=setting.getMinimumValue()) setting.setNumber(number);
 				}
 			}

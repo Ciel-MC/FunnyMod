@@ -61,6 +61,17 @@ public class MathUtil {
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
     }
 
+    public static int compareDistance3D(Vec3 a, Vec3 b, double threshold) {
+        return compareDistance3D(a.x, a.y, a.z, b.x, b.y, b.z, threshold);
+    }
+
+    public static int compareDistance3D(double x1, double y1, double z1, double x2, double y2, double z2, double threshold) {
+        double x = x2 - x1;
+        double y = y2 - y1;
+        double z = z2 - z1;
+        return doubleComparator.compare(x * x + y * y + z * z, threshold * threshold);
+    }
+
     /**
      * Gets the angle between two {@link Vec2}.
      * @param a First coordinate

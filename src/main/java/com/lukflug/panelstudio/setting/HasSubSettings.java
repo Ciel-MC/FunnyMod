@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.setting;
 
-import hk.eric.funnymod.gui.setting.Setting;
-
 import java.util.stream.Stream;
 
 public interface HasSubSettings<T> {
@@ -13,8 +11,8 @@ public interface HasSubSettings<T> {
         return getAllSubSettings();
     }
 
-    default void addSubSettings(T state, Setting<?>... children) {
-        for (Setting<?> child : children) {
+    default void addSubSettings(T state, ISetting<?>... children) {
+        for (ISetting<?> child : children) {
             addSubSetting(state, child);
         }
     }

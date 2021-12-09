@@ -11,61 +11,62 @@ import java.util.stream.Stream;
 
 public interface HasSubSettingsImpl<T> extends HasSubSettings<T> {
 
-    public T getValue();
+    T getValue();
     
     List<ISetting<?>> getGlobalSubSettings();
     
     Map<T, List<ISetting<?>>> getSubSettingsMap();
     
     @Override
-    public default void addSubSetting(T state, ISetting<?> subSetting) {
+    default void addSubSetting(T state, ISetting<?> subSetting) {
+        subSetting.setIsVisible(() -> getValue() == state);
         getSubSettingsMap().computeIfAbsent(state, k -> new ArrayList<>()).add(subSetting);
     }
 
     @Override
-    public default Stream<ISetting<?>> getSubSettings(T state) {
+    default Stream<ISetting<?>> getSubSettings(T state) {
         return ArrayUtil.combineAndStream(getGlobalSubSettings(), getSubSettingsMap().get(state));
     }
 
     @Override
-    public default Stream<ISetting<?>> getCurrentSubSettings() {
+    default Stream<ISetting<?>> getCurrentSubSettings() {
         return getSubSettings(getValue());
     }
 
     @Override
-    public default Stream<ISetting<?>> getAllSubSettings() {
+    default Stream<ISetting<?>> getAllSubSettings() {
         return ArrayUtil.combineAndStream(getGlobalSubSettings(), getSubSettingsMap().values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
     }
 
     @Override
-    public default void removeSubSetting(T state, ISetting<?> subSetting) {
+    default void removeSubSetting(T state, ISetting<?> subSetting) {
         getSubSettingsMap().get(state).remove(subSetting);
     }
 
     @Override
-    public default void removeAllSubSettings(T state) {
+    default void removeAllSubSettings(T state) {
         getSubSettingsMap().remove(state);
     }
 
     @Override
-    public default void removeAllSubSettings() {
+    default void removeAllSubSettings() {
         if(getSubSettingsMap() != null) {
             getSubSettingsMap().clear();
         }
     }
 
     @Override
-    public default void addGlobalSubSetting(ISetting<?> subSetting) {
+    default void addGlobalSubSetting(ISetting<?> subSetting) {
         getGlobalSubSettings().add(subSetting);
     }
 
     @Override
-    public default void removeGlobalSubSetting(ISetting<?> subSetting) {
+    default void removeGlobalSubSetting(ISetting<?> subSetting) {
         getGlobalSubSettings().remove(subSetting);
     }
 
     @Override
-    public default Stream<ISetting<?>> geGlobalSubSettings() {
+    default Stream<ISetting<?>> geGlobalSubSettings() {
         return getGlobalSubSettings().stream();
     }
 }

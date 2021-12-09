@@ -20,20 +20,24 @@ public class BooleanSettingWithSubSetting extends BooleanSetting implements HasS
     private final Map<Boolean, List<ISetting<?>>> subSettings = new HashMap<>();
     private final List<ISetting<?>> globalSubSettings = new ArrayList<>();
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value) {
+    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value, ISetting<?>... subSettings) {
         super(displayName, configName, description, value);
+        addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value) {
+    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value, ISetting<?>... subSettings) {
         super(displayName, configName, description, visible, value);
+        addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value, Consumer<Boolean> onChange) {
+    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
         super(displayName, configName, description, value, onChange);
+        addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value, Consumer<Boolean> onChange) {
+    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
         super(displayName, configName, description, visible, value, onChange);
+        addSubSettings(true, subSettings);
     }
 
     @Override

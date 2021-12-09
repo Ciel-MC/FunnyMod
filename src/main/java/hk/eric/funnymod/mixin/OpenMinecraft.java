@@ -1,17 +1,15 @@
 package hk.eric.funnymod.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.Timer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(Timer.class)
-public interface TimerMixin {
-    @Accessor("msPerTick")
+@Mixin(Minecraft.class)
+public interface OpenMinecraft /*extends OpenMinecraft*/ {
+    @Accessor("timer")
     @Mutable
-    float getMsPerTick();
+    Timer getTimer();
 
-    @Accessor("msPerTick")
-    @Mutable
-    void setMsPerTick(float msPerTick);
 }

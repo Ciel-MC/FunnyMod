@@ -1,7 +1,6 @@
 package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
-import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
@@ -30,8 +29,8 @@ import java.util.Set;
 public class InventoryManagerModule extends ToggleableModule {
 
     private final Set<String> autoThrow = new HashSet<>();
-    private static List<String> MCQPList = List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸");
-    private static Set<String> MCQPEnabled = new HashSet<>();
+    private static final List<String> MCQPList = List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸");
+    private static final Set<String> MCQPEnabled = new HashSet<>();
 
     private static InventoryManagerModule instance;
     public static final BooleanSettingWithSubSetting MCQPDropEnabled = new BooleanSettingWithSubSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
@@ -41,14 +40,13 @@ public class InventoryManagerModule extends ToggleableModule {
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override
         public void handle(TickEvent tickEvent) {
-            Player p = FunnyModClient.mc.player;
-            if (p == null) return;
-            Inventory inventory = p.getInventory();
+            if(getPlayer() == null) return;
+            Inventory inventory = getPlayer().getInventory();
             if (inventory == null) return;
             NonNullList<ItemStack> items = inventory.items;
             for (int i = 0; i < items.size(); i++) {
                 if(shouldThrow(items.get(i))) {
-                    dropItem(p, i);
+                    dropItem(getPlayer(), i);
                 }
             }
         }

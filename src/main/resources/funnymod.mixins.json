@@ -6,19 +6,23 @@
   "injectors": {
     "defaultRequire": 1
   },
+  "plugin": "hk.eric.funnymod.mixin.MixinConfigPlugin",
   "mixins": [
     "CameraMixin",
     "ClientPacketListenerMixin",
     "ConnectionMixin",
-    "GuiMixin",
     "InventoryScreenMixin",
     "KeyboardMixin",
-    "LevelMixin",
     "LivingEntityMixin",
     "LocalPlayerMixin",
-    "MinecraftMixin",
+    "MultiPlayerGameModeMixin",
+    "OpenGui",
+    "OpenLevel",
+    "OpenLivingEntity",
+    "OpenMinecraft",
+    "OpenTimer",
+    "OpenVec3",
     "PlayerMixin",
-    "ScreenMixin",
-    "TimerMixin"
+    "ScreenMixin"
   ]
 }

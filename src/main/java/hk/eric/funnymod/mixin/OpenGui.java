@@ -6,10 +6,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Gui.class)
-public interface GuiMixin {
+public interface OpenGui {
     @Accessor("title")
-    public Component getTitle();
+    Component getTitle();
 
     @Accessor("title")
-    public void setTitle(Component title);
+    void setTitle(Component title);
 }

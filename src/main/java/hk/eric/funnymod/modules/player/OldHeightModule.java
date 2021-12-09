@@ -16,7 +16,7 @@ public class OldHeightModule extends ToggleableModule {
             new TypedPairList<>(Version.OLDER, HeightType.NORMAL_HITBOX, 1.8F, HeightType.NORMAL_EYE_HEIGHT, 1.62F, HeightType.SNEAKING_HITBOX, 1.8F, HeightType.SNEAKING_EYE_HEIGHT, 1.62F - 0.08F)
     );
 
-    private static OldHeightModule instance;;
+    private static OldHeightModule instance;
     public static final EnumSetting<Version> normal_hitbox = new EnumSetting<>("Normal hitbox version", "OldHeightNormalHitbox", "The size of your hitbox normally", Version.CURRENT, Version.class);
     public static final EnumSetting<Version> sneaking_hitbox = new EnumSetting<>("Sneaking hitbox version", "OldHeightSneakingHitbox", "The size of your hitbox when you sneak", Version.CURRENT, Version.class);
     public static final BooleanSettingWithSubSetting advancedSettings = new BooleanSettingWithSubSetting("Advanced settings", "OldHeightAdvancedSettings", "Advanced settings",false);

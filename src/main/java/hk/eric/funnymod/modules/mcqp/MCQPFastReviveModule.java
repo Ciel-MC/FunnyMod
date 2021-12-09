@@ -2,7 +2,6 @@ package hk.eric.funnymod.modules.mcqp;
 
 import baritone.api.event.events.type.EventState;
 import com.lukflug.panelstudio.base.IToggleable;
-import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
@@ -21,7 +20,6 @@ public class MCQPFastReviveModule extends ToggleableModule {
         @Override
         public void handle(TickEvent e) {
             if (e.getState() == EventState.POST) {
-                assert FunnyModClient.mc.player != null;
                 PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
         }

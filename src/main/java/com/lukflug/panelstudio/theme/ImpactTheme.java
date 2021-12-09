@@ -1,13 +1,10 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
+
+import java.awt.*;
 
 /**
  * Theme replicating the look of Impact 4.9.1 for 1.12.2.
@@ -595,27 +592,27 @@ public class ImpactTheme extends ThemeBase {
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
 		return new ISwitchRenderer<Boolean>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, Boolean state) {
-				boolean effFocus=container?context.hasFocus():focus;
-				if (graphicalLevel<=0) {
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				boolean effFocus = container ? context.hasFocus() : focus;
+				if (graphicalLevel <= 0) {
 					if (container) {
-						Color color=scheme.getColor("Title Color");
-						context.getInterface().fillRect(context.getRect(),color,color,color,color);
-					} else renderBackground(context,effFocus);
+						Color color = scheme.getColor("Title Color");
+						context.getInterface().fillRect(context.getRect(), color, color, color, color);
+					} else renderBackground(context, effFocus);
 				}
 				if (!container) {
-					Color color=graphicalLevel<=0?scheme.getColor("Panel Outline Color"):scheme.getColor("Component Outline Color");
-					ITheme.drawRect(context.getInterface(),context.getRect(),color);
+					Color color = graphicalLevel <= 0 ? scheme.getColor("Panel Outline Color") : scheme.getColor("Component Outline Color");
+					ITheme.drawRect(context.getInterface(), context.getRect(), color);
 					renderOverlay(context);
 				}
 				renderOverlay(context);
-				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title,getFontColor(focus));
-				Color fillColor=getMainColor(focus,state);
-				Rectangle rect=state?getOnField(context):getOffField(context);
-				context.getInterface().fillRect(rect,fillColor,fillColor,fillColor,fillColor);
-				rect=context.getRect();
-				rect=new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,2*rect.height-4*padding,rect.height-2*padding);
-				ITheme.drawRect(context.getInterface(),rect,scheme.getColor("Component Outline Color"));
+				context.getInterface().drawString(new Point(context.getPos().x + padding /*Eric start - So boolean subsetting button doesn't clip*/ + 10 /*Eric end*/, context.getPos().y + padding), height, title, getFontColor(focus));
+				Color fillColor = getMainColor(focus, state);
+				Rectangle rect = state ? getOnDraw(context) : getOffDraw(context);
+				context.getInterface().fillRect(rect, fillColor, fillColor, fillColor, fillColor);
+				rect = context.getRect();
+				rect = new Rectangle(rect.x + rect.width - 2 * rect.height + 3 * padding, rect.y + padding, 2 * rect.height - 4 * padding, rect.height - 2 * padding);
+				ITheme.drawRect(context.getInterface(), rect, scheme.getColor("Component Outline Color"));
 			}
 
 			@Override
@@ -623,16 +620,28 @@ public class ImpactTheme extends ThemeBase {
 				return getBaseHeight();
 			}
 
-			@Override
-			public Rectangle getOnField (Context context) {
-				Rectangle rect=context.getRect();
+			public Rectangle getOnDraw(Context context) {
+				Rectangle rect = context.getRect();
 				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
 			}
 
+			public Rectangle getOffDraw(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - 2 * rect.height + 3 * padding, rect.y + padding, rect.height - 2 * padding, rect.height - 2 * padding);
+			}
+
 			@Override
-			public Rectangle getOffField (Context context) {
-				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-2*rect.height+3*padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
+			public Rectangle getOnField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - 2 * rect.height + 3 * padding, rect.y + padding, rect.height, rect.height - 2*padding);
+//				return new Rectangle(rect.x+rect.width-rect.height+padding,rect.y+padding,rect.height-2*padding,rect.height-2*padding);
+			}
+
+			@Override
+			public Rectangle getOffField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - 2 * rect.height + 3 * padding, rect.y + padding, rect.height, rect.height - 2*padding);
+//				return new Rectangle(rect.x + rect.width - 2 * rect.height + 3 * padding, rect.y + padding, rect.height - 2 * padding, rect.height - 2 * padding);
 			}
 		};
 	}

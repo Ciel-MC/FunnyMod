@@ -219,9 +219,15 @@ public abstract class ColorComponent extends VerticalContainer {
 		}
 
 		@Override
-		public int getPrecision() {
+		public Integer getStep() {
 			return 0;
 		}
+
+		@Override
+		public double getStepAsDouble() {
+			return 0;
+		}
+
 
 		@Override
 		public Class getSettingClass() {

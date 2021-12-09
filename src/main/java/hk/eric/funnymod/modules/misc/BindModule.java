@@ -1,7 +1,6 @@
 package hk.eric.funnymod.modules.misc;
 
 import com.lukflug.panelstudio.base.IToggleable;
-import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.KeyEvent;
@@ -18,7 +17,8 @@ public class BindModule extends Module{
         @Override
         public void handle(KeyEvent keyEvent) {
             if (keyEvent.getAction() != GLFW.GLFW_PRESS) return;
-            if (FunnyModClient.mc.screen != null) return;
+            if (mc.screen != null) return;
+            if (getPlayer() == null) return;
             if (!Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
                 for (Category value : Category.values()) {
                     value.modules.forEach(module -> module.settings.forEach(setting -> {

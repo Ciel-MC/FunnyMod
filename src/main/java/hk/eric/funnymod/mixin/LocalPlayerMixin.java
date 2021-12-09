@@ -8,7 +8,7 @@ import baritone.api.event.events.SprintStateEvent;
 import baritone.api.event.events.type.EventState;
 import com.mojang.authlib.GameProfile;
 import hk.eric.funnymod.chat.ChatManager;
-import hk.eric.funnymod.gui.Gui;
+import hk.eric.funnymod.event.events.PlayerMoveEvent;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
@@ -21,9 +21,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -90,6 +92,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         return SprintModule.getToggle().isOn() || instance.isDown();
 
     }
+
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/Input;hasForwardImpulse()Z"))
     public boolean redirectHasForwardImpulse(Input instance) {
@@ -172,25 +175,8 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         return !baritone.getPathingBehavior().isPathing() && capabilities.mayfly;
     }
 
-//    @Inject(
-//            method = "rideTick",
-//            at = @At(
-//                    value = "HEAD"
-//            )
-//    )
-//    private void updateRidden(CallbackInfo cb) {
-//        IBaritone baritone = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
-//        if (baritone != null) {
-//            ((LookBehavior) baritone.getLookBehavior()).pig();
-//            ((LookBehavior) baritone.getLookBehavior());
-//        }
-//    }
-
-    @Redirect(method = "clientSideCloseContainer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;closeContainer()V"))
-    public void redirectCloseContainer(AbstractClientPlayer instance) {
-        if(Gui.getGUI().getGUI().getGUIVisibility().isOn()) {
-//            Gui.getGUI().getGUI().getGUIVisibility().toggle();
-        }
-        super.closeContainer();
+    @Inject(method = "move", at = @At("HEAD"))
+    private void hookMove(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
+        new PlayerMoveEvent(moverType, vec3).call();
     }
 }

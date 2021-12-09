@@ -1,12 +1,11 @@
 package hk.eric.funnymod.modules;
 
 import hk.eric.funnymod.gui.Gui;
-import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
-import org.lwjgl.glfw.GLFW;
-
 import hk.eric.funnymod.gui.setting.EnumSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
+import org.lwjgl.glfw.GLFW;
 
 public class ClickGUIModule extends Module {
 	public static final EnumSetting<ColorModel> colorModel= new EnumSetting<>("Color Model", "colorModel", "Whether to use RGB or HSB.", ColorModel.RGB, ColorModel.class);
@@ -38,5 +37,9 @@ public class ClickGUIModule extends Module {
 	
 	public enum Layout {
 		ClassicPanel,PopupPanel,DraggablePanel,SinglePanel,PanelMenu,ColorPanel,CSGOHorizontal,CSGOVertical,CSGOCategory,SearchableCSGO
+	}
+
+	public enum Test {
+		test
 	}
 }

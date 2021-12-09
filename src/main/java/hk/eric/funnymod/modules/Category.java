@@ -5,12 +5,12 @@ import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
 import hk.eric.funnymod.modules.combat.VelocityModule;
 import hk.eric.funnymod.modules.mcqp.*;
+import hk.eric.funnymod.modules.mcqp.MCQPAura.MCQPAuraModule;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
-import hk.eric.funnymod.modules.movement.KeepSprintModule;
-import hk.eric.funnymod.modules.movement.NoSlowModule;
-import hk.eric.funnymod.modules.movement.SprintModule;
+import hk.eric.funnymod.modules.movement.*;
 import hk.eric.funnymod.modules.player.InventoryManagerModule;
+import hk.eric.funnymod.modules.player.NoJumpDelayModule;
 import hk.eric.funnymod.modules.player.OldHeightModule;
 import hk.eric.funnymod.modules.visual.AnimationModule;
 import hk.eric.funnymod.modules.visual.EspModule;
@@ -41,13 +41,16 @@ public enum Category implements ICategory {
 				new VelocityModule()
 		);
 		addModule(MOVEMENT,
+				new AntiVineModule(),
 				new SprintModule(),
 				new NoSlowModule(),
-				new KeepSprintModule()
+				new KeepSprintModule(),
+				new StrafeModule()
 		);
 		addModule(PLAYER,
 				new InventoryManagerModule(),
-				new OldHeightModule()
+				new OldHeightModule(),
+				new NoJumpDelayModule()
 		);
 		addModule(VISUAL,
 				new EspModule(),
@@ -68,6 +71,7 @@ public enum Category implements ICategory {
 				new MCQPAutoClickerModule(),
 				new MCQPAutoFarmModule(),
 				new MCQPFastReviveModule(),
+				new MCQPNoGhostHitModule(),
 				new MCQPPreventDropModule()
 		);
 		for (Category value : values()) {

@@ -21,6 +21,10 @@ public interface ISetting<T> extends ILabeled {
 	String getDescription();
 
 	IBoolean isVisible();
+
+	default void setIsVisible(IBoolean isVisible) {
+		throw new UnsupportedOperationException("Not supported for this module.");
+	}
 	
 	/**
 	 * Returns the class object of corresponding to the type returned by {@link #getValue()}.

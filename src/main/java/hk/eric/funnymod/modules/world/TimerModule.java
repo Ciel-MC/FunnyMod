@@ -4,14 +4,14 @@ import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.gui.setting.DoubleSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
-import hk.eric.funnymod.mixin.MinecraftMixin;
-import hk.eric.funnymod.mixin.TimerMixin;
+import hk.eric.funnymod.mixin.OpenMinecraft;
+import hk.eric.funnymod.mixin.OpenTimer;
 import hk.eric.funnymod.modules.ToggleableModule;
 
 public class TimerModule extends ToggleableModule {
 
     private static TimerModule instance;
-    public static final DoubleSetting speed = new DoubleSetting("Speed","TimerSpeed","Multipler of timer",.1,10,1,(speed)->{
+    public static final DoubleSetting speed = new DoubleSetting("Speed","TimerSpeed","Multipler of timer",.1,10,1, .1, (speed)->{
         if(getToggle().isOn()) {
             setSpeed(speed);
         }
@@ -25,8 +25,8 @@ public class TimerModule extends ToggleableModule {
         settings.add(keybind);
     }
 
-    private static TimerMixin getOpenTimer() {
-        return ((TimerMixin)(((MinecraftMixin) FunnyModClient.mc).getTimer()));
+    private static OpenTimer getOpenTimer() {
+        return ((OpenTimer)(((OpenMinecraft) FunnyModClient.mc).getTimer()));
     }
 
     public static IToggleable getToggle() {

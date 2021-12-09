@@ -53,9 +53,7 @@ public class DoubleSetting extends SavableSetting<Double> implements INumberSett
 
 	@Override
 	public void setNumber (double value) {
-		double originalValue = getNumber();
-		double change = value - originalValue;
-		setValue(originalValue + (change - change%step));
+		setValue(Math.round(value/step)*step);
 	}
 
 	@Override
@@ -69,11 +67,12 @@ public class DoubleSetting extends SavableSetting<Double> implements INumberSett
 	}
 
 	@Override
-	public int getPrecision() {
-		return 2;
+	public Double getStep() {
+		return step;
 	}
 
-	public double getStep() {
+	@Override
+	public double getStepAsDouble() {
 		return step;
 	}
 

@@ -37,6 +37,7 @@ public class EntityUtil {
             entity instanceof Slime ||
             entity instanceof Spider ||
             entity instanceof Stray ||
+            entity instanceof Vex ||
             entity instanceof Witch ||
             entity instanceof WitherSkeleton ||
             entity instanceof Zombie ||

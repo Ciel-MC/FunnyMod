@@ -9,22 +9,27 @@ import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class MCQPAutoClickerModule extends ToggleableModule {
 
     private static MCQPAutoClickerModule instance;
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoClickerKeybind", "", -1, () -> instance.toggle());
 
-    private static final EventHandler<TickEvent> autoclicker = new EventHandler<TickEvent>() {
+    private static final EventHandler<TickEvent> autoclicker = new EventHandler<>() {
         @Override
         public void handle(TickEvent e) {
-            if (e.getState() == EventState.POST) {
-                LocalPlayer p = FunnyModClient.mc.player;
-                if(p == null) return;
-                PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+            if (e.getState() == EventState.PRE) {
+                if(getPlayer() == null) return;
+                if(FunnyModClient.mc.hitResult.getType() == HitResult.Type.BLOCK) {
+                    PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, ((BlockHitResult) mc.hitResult).getBlockPos(), getPlayer().getDirection()));
+                }else {
+                    PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                }
             }
         }
     };

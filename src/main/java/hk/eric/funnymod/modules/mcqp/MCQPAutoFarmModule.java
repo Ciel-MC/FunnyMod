@@ -8,10 +8,9 @@ import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventListener;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
-import hk.eric.funnymod.mixin.GuiMixin;
+import hk.eric.funnymod.mixin.OpenGui;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Blocks;
@@ -49,16 +48,15 @@ public class MCQPAutoFarmModule extends ToggleableModule {
         if(ticks == 0) {
             ticks = 3;
 
-            if(((GuiMixin) FunnyModClient.mc.gui).getTitle() == null) return;
+            if(((OpenGui) mc.gui).getTitle() == null) return;
 
             if (getBaritone().getPathingBehavior().isPathing() && !wasPathing) {
                 target = getBaritone().getPathingBehavior().getCurrent().getPath().getDest();
             }
 
             if (!getBaritone().getPathingBehavior().isPathing() && wasPathing) {
-                LocalPlayer p = FunnyModClient.mc.player;
-                if (p == null) return;
-                PacketUtil.sendPacket(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(p.position(), p.getDirection(), target, false)));
+                if(getPlayer() == null) return;
+                PacketUtil.sendPacket(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
                 ticks = 20;
             }
 

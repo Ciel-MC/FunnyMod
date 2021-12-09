@@ -58,6 +58,11 @@ public abstract class Setting<T> implements ISetting<T> {
 		return visible;
 	}
 
+	@Override
+	public void setIsVisible(IBoolean isVisible) {
+		visible = isVisible;
+	}
+
 	public Consumer<T> getOnChange() {
 		return onChange;
 	}

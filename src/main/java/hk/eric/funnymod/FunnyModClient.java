@@ -4,6 +4,8 @@ import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
 import com.viaversion.fabric.mc117.ViaFabric;
 import hk.eric.funnymod.gui.Gui;
+import hk.eric.funnymod.mixin.MixinConfigPlugin;
+import hk.eric.simpleTCP.client.TCPClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -24,6 +26,7 @@ public class FunnyModClient implements ClientModInitializer {
     *  Mob ESP - Semi done
     *  Freecam
     *  Slot locking
+    *  Speed module
     *  XP boost time left
     *  Stat change preview*/
 
@@ -31,6 +34,7 @@ public class FunnyModClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        if (!MixinConfigPlugin.isEnabled) return;
         ViaFabric.config.setClientSideEnabled(true);
         new Gui().init();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -41,7 +45,9 @@ public class FunnyModClient implements ClientModInitializer {
         });
     }
 
-
+    public static TCPClient getTcpClient() {
+        return MixinConfigPlugin.client;
+    }
 
     public static IBaritone getBaritone() {
         return baritone;
