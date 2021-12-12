@@ -30,7 +30,7 @@ public class MCQPAuraModule extends ToggleableModule {
     //Rage settings
     public static final DoubleSetting rageRange = new DoubleSetting("Rage Range", "MCQPAuraRageRange", "The range of rage", 1, 50, 10, .1);
     public static final BooleanSetting inGui = new BooleanSetting("In GUI", "MCQPAuraInGui", "Whether to attack in GUI(May cause inability to revive)", true);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", null, -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> killaura = new EventHandler<>() {
         @Override

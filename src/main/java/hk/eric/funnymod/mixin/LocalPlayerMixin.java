@@ -53,6 +53,11 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
     @Shadow public abstract void tick();
 
+    @Override
+    public float getSpeed() {
+        return SprintModule.getToggle().isOn()? (float) (super.getSpeed() * SprintModule.speed.getNumber()) : super.getSpeed();
+    }
+
     @Inject(method = "drop", at = @At("HEAD"), cancellable = true)
     public void onDrop(boolean bl, CallbackInfoReturnable<Boolean> cir) {
         if(MCQPPreventDropModule.getToggle().isOn()) {

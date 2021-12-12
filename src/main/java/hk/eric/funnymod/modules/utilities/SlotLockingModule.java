@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class SlotLockingModule extends ToggleableModule {
 
     private static SlotLockingModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "SlotLockingKeybind", "", -1, () -> {
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "SlotLockingKeybind", null, -1, () -> {
         /*TODO:
         *  Actually implement slot locking*/
     });

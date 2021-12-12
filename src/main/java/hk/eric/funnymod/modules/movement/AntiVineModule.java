@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class AntiVineModule extends ToggleableModule {
 
     private static AntiVineModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "AntiVineKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "AntiVineKeybind", null, () -> true, -1, () -> instance.toggle());
 
     public AntiVineModule() {
         super("AntiVine", "Prevents vines from slowing you down", () -> true);

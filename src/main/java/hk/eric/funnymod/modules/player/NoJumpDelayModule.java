@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class NoJumpDelayModule extends ToggleableModule {
 
     private static NoJumpDelayModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoJumpDelayKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoJumpDelayKeybind", null, () -> true, -1, () -> instance.toggle());
 
     public NoJumpDelayModule() {
         super("NoJumpDelay", "Removes jump delay", () -> true);

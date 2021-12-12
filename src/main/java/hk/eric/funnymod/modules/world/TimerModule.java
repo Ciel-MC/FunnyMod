@@ -16,7 +16,7 @@ public class TimerModule extends ToggleableModule {
             setSpeed(speed);
         }
     });
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TimerKeybind", "", -1, () -> getToggle().toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TimerKeybind", null, -1, () -> getToggle().toggle());
 
     public TimerModule() {
         super("Timer", "Changes game speed");

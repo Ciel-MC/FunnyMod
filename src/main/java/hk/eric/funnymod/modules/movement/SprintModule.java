@@ -11,7 +11,7 @@ public class SprintModule extends ToggleableModule {
     private static SprintModule instance;
     public static final BooleanSetting omnidirectional = new BooleanSetting("Omnidirectional", "OmnidirectionalSprint", null, false);
     public static final DoubleSetting speed = new DoubleSetting("Speed", "SprintSpeed", null, 1.0, 3.0, 1.0, 0.1);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "SprintKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "SprintKeybind", null, -1, () -> instance.toggle());
 
     public SprintModule() {
         super("Sprint", "Automatically sprints for you.");

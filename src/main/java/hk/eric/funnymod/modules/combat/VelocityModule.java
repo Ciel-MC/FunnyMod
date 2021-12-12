@@ -12,7 +12,7 @@ public class VelocityModule extends ToggleableModule {
     public static final EnumSettingWithSubSettings<Mode> velocityMode = new EnumSettingWithSubSettings<>("Mode", "velocityMode", "Velocity mode", Mode.CANCEL, Mode.class);
     public static final IntegerSetting horizontal = new IntegerSetting("Horizontal","KBHorizontal","Horizontal knockback modifier",-100, 100, 100);
     public static final IntegerSetting vertical = new IntegerSetting("Vertical","KBVertical","Vertical knockback modifier",-100, 100, 100);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "VelocityKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "VelocityKeybind", null, -1, () -> instance.toggle());
 
     public VelocityModule() {
         super("Velocity", "Modifies your knockback");

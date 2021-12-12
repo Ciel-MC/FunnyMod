@@ -35,7 +35,7 @@ public class InventoryManagerModule extends ToggleableModule {
     private static InventoryManagerModule instance;
     public static final BooleanSettingWithSubSetting MCQPDropEnabled = new BooleanSettingWithSubSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
     public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", null, -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override

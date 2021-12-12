@@ -22,7 +22,7 @@ public class OldHeightModule extends ToggleableModule {
     public static final BooleanSettingWithSubSetting advancedSettings = new BooleanSettingWithSubSetting("Advanced settings", "OldHeightAdvancedSettings", "Advanced settings",false);
     public static final EnumSetting<Version> normal_eye = new EnumSetting<>("Normal eye height version", "OldHeightNormalEye", "The height of your eye when you sneak", Version.CURRENT, Version.class);
     public static final EnumSetting<Version> sneaking_eye = new EnumSetting<>("Sneaking eye height version", "OldHeightSneakingEye", "The height of your eye when you sneak", Version.CURRENT, Version.class);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "OldHeightHeightKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "OldHeightHeightKeybind", null, -1, () -> instance.toggle());
 
     public OldHeightModule() {
         super("Old heights", "Changes your hitbox and eye heights to previous versions");

@@ -44,8 +44,7 @@ public enum Category implements ICategory {
 				new AntiVineModule(),
 				new SprintModule(),
 				new NoSlowModule(),
-				new KeepSprintModule(),
-				new StrafeModule()
+				new KeepSprintModule()
 		);
 		addModule(PLAYER,
 				new InventoryManagerModule(),
@@ -67,6 +66,7 @@ public enum Category implements ICategory {
 				new CommandModule()
 		);
 		addModule(MCQP,
+				new MCQPAutoForgeModule(),
 				new MCQPAuraModule(),
 				new MCQPAutoClickerModule(),
 				new MCQPAutoFarmModule(),

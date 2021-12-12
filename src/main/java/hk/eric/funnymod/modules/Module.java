@@ -78,6 +78,9 @@ public abstract class Module implements IModule {
 
 	@Override
 	public void load(ObjectNode node) throws ConfigLoadingFailedException {
+		if (node == null) {
+			throw new ConfigLoadingFailedException();
+		}
 		for (ISetting<?> setting : getSettings().toList()) {
 			if(setting instanceof Savable<?> savable) {
 				savable.load((ObjectNode) node.get(savable.getConfigName()));

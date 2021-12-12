@@ -80,7 +80,7 @@ public abstract class ToggleableModule extends Module implements CanToggle {
 
     @Override
     public void load(ObjectNode node) throws ConfigLoadingFailedException {
-        setEnabled(node.get("enabled").asBoolean());
         super.load(node);
+        setEnabled(node.get("enabled").asBoolean());
     }
 }

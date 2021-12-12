@@ -18,7 +18,7 @@ import net.minecraft.world.phys.HitResult;
 public class MCQPAutoClickerModule extends ToggleableModule {
 
     private static MCQPAutoClickerModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoClickerKeybind", "", -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoClickerKeybind", null, -1, () -> instance.toggle());
 
     private static final EventHandler<TickEvent> autoclicker = new EventHandler<>() {
         @Override
