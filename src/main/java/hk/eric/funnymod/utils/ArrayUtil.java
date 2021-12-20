@@ -9,7 +9,7 @@ public class ArrayUtil {
     public static <T> List<T> combine(List<T>... lists) {
         List<T> result = new ArrayList<>();
         for (List<T> list : lists) {
-            if(!list.isEmpty()) {
+            if (!list.isEmpty()) {
                 result.addAll(list);
             }
         }
@@ -20,7 +20,7 @@ public class ArrayUtil {
     public static <T> Stream<T> combineAndStream(List<T>... lists) {
         List<T> result = new ArrayList<>();
         for (List<T> list : lists) {
-            if(!list.isEmpty()) {
+            if (!list.isEmpty()) {
                 result.addAll(list);
             }
         }

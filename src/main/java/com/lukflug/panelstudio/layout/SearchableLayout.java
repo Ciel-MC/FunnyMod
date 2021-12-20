@@ -115,9 +115,9 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
-		Button<Void> title=new Button<Void>(titleLabel,()->null,theme.getButtonRenderer(Void.class,0,0,true));
+		Button<Void> title= new Button<>(titleLabel, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
 		HorizontalContainer window=new HorizontalContainer(titleLabel,theme.getContainerRenderer(0,0,true));
-		Supplier<Stream<IModule>> modules=()->client.getCategories().flatMap(cat->cat.getModules()).sorted(comparator);
+		Supplier<Stream<IModule>> modules=()->client.getCategories().flatMap(ICategory::getModules).sorted(comparator);
 		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),button->wrapColumn(button,new ThemeTuple(theme,0,1),1));
 		gui.addComponent(title,window,new ThemeTuple(theme,0,0),position,width,animation);
 		modules.get().forEach(module->{
@@ -131,7 +131,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 
 				@Override
 				public void setValue(Boolean value) {
-					if(module.isEnabled().isOn()!=value) module.isEnabled().toggle();
+					if (module.isEnabled().isOn()!=value) module.isEnabled().toggle();
 				}
 
 				@Override
@@ -176,9 +176,8 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting instanceof HasSubSettings;
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
-		if (component instanceof VerticalContainer) {
-			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));
+		if (component instanceof VerticalContainer colorContainer) {
+			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
 			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
@@ -314,17 +313,17 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	 * @return a horizontal component
 	 */
 	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int weight) {
-		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
+		return new HorizontalComponent<>(new ScrollBarComponent<>(button, theme.getScrollBarRenderer(Void.class), theme.getEmptySpaceRenderer(Void.class, false), theme.getEmptySpaceRenderer(Void.class, true)) {
 			@Override
-			public int getScrollHeight (Context context, int componentHeight) {
-				return SearchableLayout.this.getScrollHeight(context,componentHeight);
+			public int getScrollHeight(Context context, int componentHeight) {
+				return SearchableLayout.this.getScrollHeight(context, componentHeight);
 			}
-			
+
 			@Override
 			protected Void getState() {
 				return null;
 			}
-		},0,weight);
+		}, 0, weight);
 	}
 	
 	/**

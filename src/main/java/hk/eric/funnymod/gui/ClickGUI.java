@@ -22,6 +22,7 @@ import hk.eric.funnymod.gui.setting.*;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.Theme;
+import hk.eric.funnymod.modules.mcqp.MCQPHudModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
 import hk.eric.funnymod.modules.visual.TabGUIModule;
 import net.minecraft.ChatFormatting;
@@ -84,6 +85,8 @@ public class ClickGUI extends MinecraftHUDGUI {
 			}
 		},animation),TabGUIModule.getToggle(),animation.get(),theme,BORDER);
 		gui.addHUDComponent(LogoModule.getComponent(inter),LogoModule.getToggle(),animation.get(),theme,BORDER);
+
+		gui.addHUDComponent(MCQPHudModule.getComponent(),MCQPHudModule.getToggle(),animation.get(),theme,BORDER);
 
 		// Creating popup types ...
 		BiFunction<Context,Integer,Integer> scrollHeight=(context,componentHeight)->Math.min(componentHeight,Math.max(HEIGHT*4,ClickGUI.this.height-context.getPos().y-HEIGHT));
@@ -447,7 +450,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 			@Override
 			public Color getColor (String name) {
 				return ((ColorSetting)ClickGUIModule.theme.getAllSubSettings().filter(setting-> {
-					if(setting instanceof ColorSetting setting1) {
+					if (setting instanceof ColorSetting setting1) {
 						return setting1.getConfigName().equals(themeName + "-" + name);
 					}else {
 						return false;

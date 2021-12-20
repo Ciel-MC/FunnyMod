@@ -16,7 +16,7 @@ public class MCQPFastReviveModule extends ToggleableModule {
     private static MCQPFastReviveModule instance;
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPFastReviveKeybind", null, -1, () -> instance.toggle());
 
-    private static final EventHandler<TickEvent> spamRevive = new EventHandler<TickEvent>() {
+    private static final EventHandler<TickEvent> spamRevive = new EventHandler<>() {
         @Override
         public void handle(TickEvent e) {
             if (e.getState() == EventState.POST) {

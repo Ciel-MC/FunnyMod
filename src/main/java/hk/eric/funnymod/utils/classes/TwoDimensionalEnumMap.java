@@ -50,7 +50,7 @@ public class TwoDimensionalEnumMap<K1 extends Enum<K1>, K2 extends Enum<K2>, V> 
     public boolean containsValue(V v) {
         boolean returnValue = false;
         for (Map.Entry<K1, EnumMap<K2, V>> entry : map.entrySet()) {
-            if(entry.getValue().containsValue(v)) {
+            if (entry.getValue().containsValue(v)) {
                 returnValue = true;
                 break;
             }

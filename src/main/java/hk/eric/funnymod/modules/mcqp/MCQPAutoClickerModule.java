@@ -24,8 +24,8 @@ public class MCQPAutoClickerModule extends ToggleableModule {
         @Override
         public void handle(TickEvent e) {
             if (e.getState() == EventState.PRE) {
-                if(getPlayer() == null) return;
-                if(FunnyModClient.mc.hitResult.getType() == HitResult.Type.BLOCK) {
+                if (getPlayer() == null) return;
+                if (FunnyModClient.mc.hitResult.getType() == HitResult.Type.BLOCK) {
                     PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, ((BlockHitResult) mc.hitResult).getBlockPos(), getPlayer().getDirection()));
                 }else {
                     PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));

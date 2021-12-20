@@ -10,7 +10,9 @@ import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ToggleableModule;
+import hk.eric.funnymod.utils.PacketUtil;
 import hk.eric.funnymod.utils.StringUtil;
+import net.minecraft.network.protocol.game.ServerboundChatPacket;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,12 +20,24 @@ import java.util.Queue;
 
 public class CommandModule extends ToggleableModule {
 
+    private static final String[] fuck = {
+            "⢸⠉⠉⠁⠀⡇⠀⢸⠀⢰⠉⠉⠆⠀⡇⡠⠊",
+            "⢸⠉⠉⠀⠀⡇⠀⢸⠀⢸⠀⠀⡀⠀⡟⢄⠀",
+            "⠘⠀⠀⠀⠀⠑⠒⠊⠀⠈⠒⠒⠁⠀⠃⠀⠑"
+    };
+
     private static CommandModule instance;
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CommandKeybind", null, -1,()-> instance.toggle());
 
-    private static final EventHandler<PlayerChatEvent> commandHandler = new EventHandler<PlayerChatEvent>() {
+    private static final EventHandler<PlayerChatEvent> commandHandler = new EventHandler<>() {
         @Override
         public void handle(PlayerChatEvent event) {
+            if (event.getMessage().contains("{fuck}")) {
+                for (String s : fuck) {
+                    PacketUtil.sendPacket(new ServerboundChatPacket(event.getMessage().replace("{fuck}", s)));
+                }
+                event.setCancelled(true);
+            }
             handleCommand(event);
         }
     };
@@ -60,9 +74,7 @@ public class CommandModule extends ToggleableModule {
                 case "config","cfg","c" -> {
                     String subCommand = StringUtil.getString(strings);
                     switch (subCommand) {
-                        case "save" -> {
-                            ConfigManager.save(strings.poll());
-                        }
+                        case "save" -> ConfigManager.save(strings.poll());
                         case "load" -> {
                             try {
                                 ConfigManager.load(strings.poll());
@@ -74,8 +86,8 @@ public class CommandModule extends ToggleableModule {
                     }
                 }
                 case "toggle" -> Category.getAllModules().forEach(module -> {
-                    if(command.equalsIgnoreCase(module.getDisplayName())) {
-                        if(module instanceof IToggleable) {
+                    if (command.equalsIgnoreCase(module.getDisplayName())) {
+                        if (module instanceof IToggleable) {
                             ((IToggleable) module).toggle();
                         }
                     }

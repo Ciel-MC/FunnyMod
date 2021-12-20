@@ -125,7 +125,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
-		Button<Void> title=new Button<Void>(label,()->null,theme.getButtonRenderer(Void.class,0,0,true));
+		Button<Void> title= new Button<>(label, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
 		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,horizontal?1:0,true));
 		IEnumSetting catSelect;
 		if (horizontal) {
@@ -151,7 +151,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 
 						@Override
 						public void setValue(Boolean value) {
-							if(module.isEnabled().isOn() != value) module.isEnabled().toggle();
+							if (module.isEnabled().isOn() != value) module.isEnabled().toggle();
 						}
 
 						@Override
@@ -187,7 +187,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				category.getModules().forEach(module->{
 					int graphicalLevel=1;
 					FocusableComponent moduleTitle;
-					if (module.isEnabled()==null) moduleTitle=new Button<Void>(module,()->null,theme.getButtonRenderer(Void.class,1,1,true));
+					if (module.isEnabled()==null) moduleTitle= new Button<>(module, () -> null, theme.getButtonRenderer(Void.class, 1, 1, true));
 					else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,true));
 					VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 					if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
@@ -211,9 +211,8 @@ public class CSGOLayout implements ILayout,IScrollSize {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=setting instanceof HasSubSettings;
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
-		if (component instanceof VerticalContainer) {
-			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType==ChildMode.DOWN));
+		if (component instanceof VerticalContainer colorContainer) {
+			Button<T> button= new Button<>(setting, () -> setting.getSettingState(), theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN));
 			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
 			if (setting instanceof HasSubSettings<?> subSettingsSetting) subSettingsSetting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
@@ -343,17 +342,17 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 * @return a horizontal component
 	 */
 	protected HorizontalComponent<ScrollBarComponent<Void,IComponent>> wrapColumn (IComponent button, ThemeTuple theme, int width, int weight) {
-		return new HorizontalComponent<ScrollBarComponent<Void,IComponent>>(new ScrollBarComponent<Void,IComponent>(button,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
+		return new HorizontalComponent<>(new ScrollBarComponent<>(button, theme.getScrollBarRenderer(Void.class), theme.getEmptySpaceRenderer(Void.class, false), theme.getEmptySpaceRenderer(Void.class, true)) {
 			@Override
-			public int getScrollHeight (Context context, int componentHeight) {
-				return CSGOLayout.this.getScrollHeight(context,componentHeight);
+			public int getScrollHeight(Context context, int componentHeight) {
+				return CSGOLayout.this.getScrollHeight(context, componentHeight);
 			}
-			
+
 			@Override
 			protected Void getState() {
 				return null;
 			}
-		},width,weight);
+		}, width, weight);
 	}
 	
 	/**

@@ -58,7 +58,7 @@ public class EventManager {
 
     public void callEvent(Event event) {
         Set<ListeningMethod> handlers = registry.getOrDefault(event.getClass(), Collections.emptySet());
-        if(handlers != null) {
+        if (handlers != null) {
             handlers.forEach(listeningMethod -> {
                 try {
                     listeningMethod.method().invoke(listeningMethod.object(), event);

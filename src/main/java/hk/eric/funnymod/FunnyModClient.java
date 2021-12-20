@@ -3,6 +3,7 @@ package hk.eric.funnymod;
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
 import com.viaversion.fabric.mc117.ViaFabric;
+import hk.eric.funnymod.event.FabricEventAdapter;
 import hk.eric.funnymod.gui.Gui;
 import hk.eric.funnymod.mixin.MixinConfigPlugin;
 import hk.eric.simpleTCP.client.TCPClient;
@@ -43,10 +44,11 @@ public class FunnyModClient implements ClientModInitializer {
                 initialized = true;
             }
         });
+        FabricEventAdapter.init();
     }
 
     public static TCPClient getTcpClient() {
-        return MixinConfigPlugin.client;
+        return null;
     }
 
     public static IBaritone getBaritone() {

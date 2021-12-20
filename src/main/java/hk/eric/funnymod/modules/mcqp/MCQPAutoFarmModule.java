@@ -45,22 +45,22 @@ public class MCQPAutoFarmModule extends ToggleableModule {
     @EventListener
     public void toPathStuffAndThing(TickEvent event) {
         --ticks;
-        if(ticks == 0) {
+        if (ticks == 0) {
             ticks = 3;
 
-            if(((OpenGui) mc.gui).getTitle() == null) return;
+            if (((OpenGui) mc.gui).getTitle() == null) return;
 
             if (getBaritone().getPathingBehavior().isPathing() && !wasPathing) {
                 target = getBaritone().getPathingBehavior().getCurrent().getPath().getDest();
             }
 
             if (!getBaritone().getPathingBehavior().isPathing() && wasPathing) {
-                if(getPlayer() == null) return;
+                if (getPlayer() == null) return;
                 PacketUtil.sendPacket(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
                 ticks = 20;
             }
 
-            if(wasPathing != getBaritone().getPathingBehavior().isPathing()) {
+            if (wasPathing != getBaritone().getPathingBehavior().isPathing()) {
                 wasPathing = getBaritone().getPathingBehavior().isPathing();
             }
         }

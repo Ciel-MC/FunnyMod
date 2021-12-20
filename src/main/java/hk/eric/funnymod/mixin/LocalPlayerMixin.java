@@ -23,7 +23,6 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Abilities;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
@@ -60,15 +59,16 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
     @Inject(method = "drop", at = @At("HEAD"), cancellable = true)
     public void onDrop(boolean bl, CallbackInfoReturnable<Boolean> cir) {
-        if(MCQPPreventDropModule.getToggle().isOn()) {
-            ItemStack item;
-            if((item = this.getInventory().getSelected()) != null) {
-                ChatManager.sendMessage(Component.text("A feature has stopped you from dropping this \"rare\" item or tool from your hotbar.").color(TextColor.color(0x00FFFF)));
+        if (MCQPPreventDropModule.getToggle().isOn()) {
+            if (this.getInventory().getSelected() != null) {
+                ChatManager.sendMessage(Component.text("A feature has stopped you from dropping your hotbar.").color(TextColor.color(0x00FFFF)));
                 cir.cancel();
                 cir.setReturnValue(false);
             }
         }
     }
+
+
 
     @Redirect(method = "aiStep",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isUsingItem()Z")

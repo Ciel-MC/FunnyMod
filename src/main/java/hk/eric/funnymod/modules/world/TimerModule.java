@@ -12,7 +12,7 @@ public class TimerModule extends ToggleableModule {
 
     private static TimerModule instance;
     public static final DoubleSetting speed = new DoubleSetting("Speed","TimerSpeed","Multipler of timer",.1,10,1, .1, (speed)->{
-        if(getToggle().isOn()) {
+        if (getToggle().isOn()) {
             setSpeed(speed);
         }
     });

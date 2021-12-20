@@ -10,7 +10,7 @@ public class PacketUtil {
     private static final Minecraft mc = FunnyModClient.mc;
 
     public static void sendPacket(Packet<?>... packets) {
-        if(mc.getConnection() != null) {
+        if (mc.getConnection() != null) {
             for (Packet<?> packet : packets) {
                 mc.getConnection().send(packet);
             }

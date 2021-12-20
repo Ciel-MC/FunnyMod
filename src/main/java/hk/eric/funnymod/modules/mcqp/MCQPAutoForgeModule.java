@@ -45,13 +45,13 @@ public class MCQPAutoForgeModule extends ToggleableModule {
     private static void click() {
         Screen screen = mc.screen;
         if (screen != null) {
-            if(screen instanceof ContainerScreen containerScreen) {
-                if(containerScreen.getTitle().getString().contains("§b鑄造加工")) {
+            if (screen instanceof ContainerScreen containerScreen) {
+                if (containerScreen.getTitle().getString().contains("§b鑄造加工")) {
                     ChestMenu menu = containerScreen.getMenu();
                     menu.slots.forEach(slot -> {
                         ItemStack itemStack = slot.getItem();
                         if (itemStack.getItem().equals(Items.IRON_INGOT)) {
-                            if(itemStack.getDisplayName().getString().equals("[鑄造]")) {
+                            if (itemStack.getDisplayName().getString().equals("[鑄造]")) {
                                 getGameMode().handleInventoryMouseClick(menu.containerId,slot.index,0, ClickType.CLONE,getPlayer());
                             }
                         }

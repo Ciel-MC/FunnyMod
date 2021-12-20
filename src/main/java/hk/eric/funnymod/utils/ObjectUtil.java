@@ -10,7 +10,7 @@ public class ObjectUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static < T, T2 > T2 nullOrMethod(T object, Function<T, T2> function) {
-        if(object == null) {
+        if (object == null) {
             return null;
         }else {
             return function.apply(object);

@@ -1,8 +1,8 @@
 package hk.eric.funnymod.event.events;
 
-import hk.eric.funnymod.event.CancellableEvent;
+import hk.eric.funnymod.event.EventCancellable;
 
-public class PlayerChatEvent extends CancellableEvent {
+public class PlayerChatEvent extends EventCancellable {
     private String message;
 
     public PlayerChatEvent(String message) {

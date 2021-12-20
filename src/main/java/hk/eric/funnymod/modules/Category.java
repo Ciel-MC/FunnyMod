@@ -8,10 +8,11 @@ import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.mcqp.MCQPAura.MCQPAuraModule;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
+import hk.eric.funnymod.modules.misc.TooltipScrollingModule;
 import hk.eric.funnymod.modules.movement.*;
+import hk.eric.funnymod.modules.player.HeightModule;
 import hk.eric.funnymod.modules.player.InventoryManagerModule;
 import hk.eric.funnymod.modules.player.NoJumpDelayModule;
-import hk.eric.funnymod.modules.player.OldHeightModule;
 import hk.eric.funnymod.modules.visual.AnimationModule;
 import hk.eric.funnymod.modules.visual.EspModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
@@ -48,7 +49,7 @@ public enum Category implements ICategory {
 		);
 		addModule(PLAYER,
 				new InventoryManagerModule(),
-				new OldHeightModule(),
+				new HeightModule(),
 				new NoJumpDelayModule()
 		);
 		addModule(VISUAL,
@@ -63,7 +64,8 @@ public enum Category implements ICategory {
 		);
 		addModule(MISC,
 				new BindModule(),
-				new CommandModule()
+				new CommandModule(),
+				new TooltipScrollingModule()
 		);
 		addModule(MCQP,
 				new MCQPAutoForgeModule(),
@@ -71,6 +73,7 @@ public enum Category implements ICategory {
 				new MCQPAutoClickerModule(),
 				new MCQPAutoFarmModule(),
 				new MCQPFastReviveModule(),
+				new MCQPHudModule(),
 				new MCQPNoGhostHitModule(),
 				new MCQPPreventDropModule()
 		);

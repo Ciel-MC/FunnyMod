@@ -55,7 +55,7 @@ public abstract class ToggleableModule extends Module implements CanToggle {
     }
 
     public void setEnabled(boolean enabled) {
-        if(enabled != this.enabled) {
+        if (enabled != this.enabled) {
             this.enabled = enabled;
             if (enabled) {
                 onEnable();

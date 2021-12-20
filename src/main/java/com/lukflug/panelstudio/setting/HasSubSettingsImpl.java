@@ -50,7 +50,7 @@ public interface HasSubSettingsImpl<T> extends HasSubSettings<T> {
 
     @Override
     default void removeAllSubSettings() {
-        if(getSubSettingsMap() != null) {
+        if (getSubSettingsMap() != null) {
             getSubSettingsMap().clear();
         }
     }

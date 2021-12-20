@@ -25,9 +25,7 @@ public class ConfigManager {
     public static void save(String configName) {
         ChatManager.sendMessage("Saving config: " + configName);
         ObjectNode root = mapper.createObjectNode();
-        Category.getAllModules().forEach(module -> {
-            root.set(module.getDisplayName(), module.save());
-        });
+        Category.getAllModules().forEach(module -> root.set(module.getDisplayName(), module.save()));
         saveToFile(configName, root);
     }
 
@@ -38,7 +36,7 @@ public class ConfigManager {
         try {
             root = loadFromFile(configName);
         } catch (IOException e) {
-            if(e instanceof FileNotFoundException fileNotFoundException) {
+            if (e instanceof FileNotFoundException fileNotFoundException) {
                 ChatManager.sendMessage("Config file not found");
             }else {
                 e.printStackTrace();

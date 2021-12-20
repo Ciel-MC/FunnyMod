@@ -27,7 +27,7 @@ public abstract class Module implements IModule {
 	public final IBoolean visible;
 	public final List<ISetting<?>> settings= new ArrayList<>();
 
-	protected static Minecraft mc = FunnyModClient.mc;
+	protected static final Minecraft mc = FunnyModClient.mc;
 	protected static EventManager eventManager = EventManager.getInstance();
 
 	public Module(String displayName, String description) {
@@ -69,7 +69,7 @@ public abstract class Module implements IModule {
 	public ObjectNode save() {
 		ObjectNode node = ObjectUtil.getObjectNode();
 		getSettings().forEach(setting -> {
-			if(setting instanceof Savable<?> savable) {
+			if (setting instanceof Savable<?> savable) {
 				node.set(savable.getConfigName(), savable.save());
 			}
 		});
@@ -82,7 +82,7 @@ public abstract class Module implements IModule {
 			throw new ConfigLoadingFailedException();
 		}
 		for (ISetting<?> setting : getSettings().toList()) {
-			if(setting instanceof Savable<?> savable) {
+			if (setting instanceof Savable<?> savable) {
 				savable.load((ObjectNode) node.get(savable.getConfigName()));
 			}
 		}

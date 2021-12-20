@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin {
             ),
             at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/LivingEntity;noJumpDelay:I", opcode = Opcodes.GETFIELD))
     public int redirectNoJumpDelay(LivingEntity livingEntity) {
-        if(NoJumpDelayModule.getToggle().isOn()) {
+        if (NoJumpDelayModule.getToggle().isOn()) {
             return 0;
         }else {
             return this.noJumpDelay;
@@ -45,8 +45,8 @@ public abstract class LivingEntityMixin {
 
     @Redirect(method = "onClimbable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/Tag;)Z"))
     public boolean redirectOnClimbable(BlockState blockState, Tag tag) {
-        if(AntiVineModule.getToggle().isOn()) {
-            if(tag == BlockTags.CLIMBABLE && blockState.getBlock().equals(Blocks.VINE)) {
+        if (AntiVineModule.getToggle().isOn()) {
+            if (tag == BlockTags.CLIMBABLE && blockState.getBlock().equals(Blocks.VINE)) {
                 return false;
             }
         }

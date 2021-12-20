@@ -35,8 +35,8 @@ public class MCQPAuraModule extends ToggleableModule {
     private static final EventHandler<TickEvent> killaura = new EventHandler<>() {
         @Override
         public void handle(TickEvent e) {
-            if(inGui.isOn() && mc.screen != null) return;
-            if(getPlayer() == null) return;
+            if (inGui.isOn() && mc.screen != null) return;
+            if (getPlayer() == null) return;
             if (e.getState() == EventState.PRE) {
                 double x = getPlayer().getX(), y = getPlayer().getY(), z = getPlayer().getZ();
                 Stream<LivingEntity> entities = StreamSupport.stream(((OpenLevel)getLevel()).callGetEntities().getAll().spliterator(), false).filter(entity -> entity instanceof LivingEntity).map(entity -> (LivingEntity) entity);

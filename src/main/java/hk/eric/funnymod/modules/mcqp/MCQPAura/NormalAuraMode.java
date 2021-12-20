@@ -33,7 +33,7 @@ public class NormalAuraMode implements AuraMode {
     @Override
     public TriFunction<Stream<LivingEntity>, LocalPlayer, Double, List<LivingEntity>> getEntities() {
         return (entities, player, range) -> {
-            if(cycle >= MCQPAuraModule.cycleTime.getValue()) cycle = 0;
+            if (cycle >= MCQPAuraModule.cycleTime.getValue()) cycle = 0;
             List<LivingEntity> entityToAttack = entities.filter(entity -> {
                 if (EntityUtil.isHostile(entity) || EntityUtil.isPassive(entity)) {
                     if (!entity.isAlive() || entity.getHealth() <= 0) return false;

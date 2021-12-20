@@ -12,7 +12,7 @@ public abstract class KeyboardMixin {
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
         KeyEvent event = new KeyEvent(key, action);
         event.call();
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             ci.cancel();
         }
     }

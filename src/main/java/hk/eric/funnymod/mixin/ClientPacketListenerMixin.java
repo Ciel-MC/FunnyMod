@@ -16,7 +16,7 @@ public abstract class ClientPacketListenerMixin {
     @Redirect(method = "handleSetEntityMotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;lerpMotion(DDD)V"))
     public void redirectHandleEntityMotion(Entity entity, double x, double y, double z) {
         if (entity instanceof LocalPlayer) {
-            if(VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.MODIFY) {
+            if (VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.MODIFY) {
                 double horizontalMultiplier = VelocityModule.horizontal.getValue() / 100d;
                 double verticalMultiplier = VelocityModule.vertical.getValue() / 100d;
                 entity.lerpMotion(x * horizontalMultiplier, y * verticalMultiplier, z * horizontalMultiplier);
@@ -28,7 +28,7 @@ public abstract class ClientPacketListenerMixin {
 
     @Inject(method = "handleSetEntityMotion", at = @At("HEAD"), cancellable = true)
     public void injectHandleEntityMotion(ClientboundSetEntityMotionPacket clientboundSetEntityMotionPacket, CallbackInfo ci) {
-        if(VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.CANCEL) {
+        if (VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.CANCEL) {
             ci.cancel();
         }
     }

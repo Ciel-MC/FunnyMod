@@ -40,7 +40,7 @@ public abstract class Setting<T> implements ISetting<T> {
 	@Override
 	public void setValue (T value) {
 		this.value=value;
-		if(onChange!=null) onChange.accept(value);
+		if (onChange!=null) onChange.accept(value);
 	}
 
 	@Override

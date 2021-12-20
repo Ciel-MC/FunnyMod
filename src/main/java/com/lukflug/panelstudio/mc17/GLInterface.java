@@ -1,24 +1,5 @@
 package com.lukflug.panelstudio.mc17;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.Stack;
-
-import javax.imageio.ImageIO;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-
 import com.lukflug.panelstudio.base.IInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
@@ -29,6 +10,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.math.Matrix4f;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.Stack;
 
 /**
  * Implementation of {@link IInterface} for OpenGL in Minecraft.
@@ -38,7 +34,7 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Clipping rectangle stack.
 	 */
-	private final Stack<Rectangle> clipRect=new Stack<Rectangle>();
+	private final Stack<Rectangle> clipRect = new Stack<>();
 	/**
 	 * Stored projection matrix.
 	 */
@@ -65,7 +61,7 @@ public abstract class GLInterface implements IInterface {
 	@Override
 	public void drawString (Point pos, int height, String s, Color c) {
 		PoseStack modelview = RenderSystem.getModelViewStack();
-		if(modelview.last().pose() == null) return;
+		if (modelview.last().pose() == null) return;
 		modelview.pushPose();
 		modelview.translate(pos.x,pos.y,0);
 		float scale=height/(float)Minecraft.getInstance().font.lineHeight;

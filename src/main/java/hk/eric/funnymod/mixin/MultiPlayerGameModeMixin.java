@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MultiPlayerGameModeMixin {
     @Inject(method = "attack", at = @At("HEAD"), cancellable = true)
     public void injectAttack(Player player, Entity entity, CallbackInfo ci) {
-        if(MCQPNoGhostHitModule.getToggle().isOn()) {
-            if(player instanceof LocalPlayer) {
+        if (MCQPNoGhostHitModule.getToggle().isOn()) {
+            if (player instanceof LocalPlayer) {
                 ci.cancel();
             }
         }

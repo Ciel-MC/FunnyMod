@@ -1,7 +1,5 @@
 package hk.eric.funnymod.mixin;
 
-import hk.eric.funnymod.network.FunnyModPacketHandler;
-import hk.eric.simpleTCP.client.TCPClient;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -10,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 public class MixinConfigPlugin implements IMixinConfigPlugin {
-
-    public static TCPClient client = new TCPClient(new FunnyModPacketHandler());;
+//
+//    public static TCPClient client = new TCPClient(new FunnyModPacketHandler());
     public static boolean isEnabled;
 
     @Override

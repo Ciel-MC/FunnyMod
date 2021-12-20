@@ -1,7 +1,7 @@
 package hk.eric.funnymod.mixin;
 
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
-import hk.eric.funnymod.modules.player.OldHeightModule;
+import hk.eric.funnymod.modules.player.HeightModule;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,14 +41,14 @@ public abstract class PlayerMixin extends LivingEntity {
 
     /**
      * @author Eric
-     * @reason To Implement OldHeightModule
+     * @reason To Implement HeightModule
      */
     @Overwrite
     public EntityDimensions getDimensions(Pose pose) {
-        if(OldHeightModule.getToggle().isOn()) {
+        if (HeightModule.getToggle().isOn()) {
             return switch (pose) {
-                case STANDING -> EntityDimensions.scalable(.6F, OldHeightModule.getHeight(OldHeightModule.HeightType.NORMAL_HITBOX));
-                case CROUCHING -> EntityDimensions.scalable(.6F,OldHeightModule.getHeight(OldHeightModule.HeightType.SNEAKING_HITBOX));
+                case STANDING -> EntityDimensions.scalable(.6F, HeightModule.getHeight(HeightModule.HeightType.NORMAL_HITBOX));
+                case CROUCHING -> EntityDimensions.scalable(.6F, HeightModule.getHeight(HeightModule.HeightType.SNEAKING_HITBOX));
                 default -> POSES.getOrDefault(pose, STANDING_DIMENSIONS);
             };
         }else {
@@ -58,7 +58,7 @@ public abstract class PlayerMixin extends LivingEntity {
 
     /**
      * @author Eric
-     * @reason To Implement OldHeightModule
+     * @reason To Implement HeightModule
      */
     @Overwrite
     public float getStandingEyeHeight(Pose pose, EntityDimensions entityDimensions) {
@@ -67,9 +67,9 @@ public abstract class PlayerMixin extends LivingEntity {
                 return 0.4f;
             }
             case CROUCHING -> {
-                return OldHeightModule.getToggle().isOn()?OldHeightModule.getHeight(OldHeightModule.HeightType.SNEAKING_EYE_HEIGHT):1.27f;
+                return HeightModule.getToggle().isOn()? HeightModule.getHeight(HeightModule.HeightType.SNEAKING_EYE_HEIGHT):1.27f;
             }
         }
-        return OldHeightModule.getToggle().isOn()?OldHeightModule.getHeight(OldHeightModule.HeightType.NORMAL_EYE_HEIGHT):1.62f;
+        return HeightModule.getToggle().isOn()? HeightModule.getHeight(HeightModule.HeightType.NORMAL_EYE_HEIGHT):1.62f;
     }
 }

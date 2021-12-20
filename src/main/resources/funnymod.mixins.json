@@ -24,6 +24,8 @@
     "OpenTimer",
     "OpenVec3",
     "PlayerMixin",
-    "ScreenMixin"
+    "ScreenMixin",
+    "toolTipScrollMixins.AlterPosition",
+    "toolTipScrollMixins.TrackScrollWheel"
   ]
 }

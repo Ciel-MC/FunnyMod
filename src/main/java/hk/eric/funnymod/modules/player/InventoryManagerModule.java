@@ -40,12 +40,12 @@ public class InventoryManagerModule extends ToggleableModule {
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override
         public void handle(TickEvent tickEvent) {
-            if(getPlayer() == null) return;
+            if (getPlayer() == null) return;
             Inventory inventory = getPlayer().getInventory();
             if (inventory == null) return;
             NonNullList<ItemStack> items = inventory.items;
             for (int i = 0; i < items.size(); i++) {
-                if(shouldThrow(items.get(i))) {
+                if (shouldThrow(items.get(i))) {
                     dropItem(getPlayer(), i);
                 }
             }
@@ -88,7 +88,7 @@ public class InventoryManagerModule extends ToggleableModule {
     public static void updateMCQPThrow() {
         MCQPDropEnabled.removeAllSubSettings();
         MCQPList.forEach(s -> MCQPDropEnabled.addSubSettings(true, new BooleanSetting(s, "InvManMCQPDrop" + s, "Drop " + s, false, (bool)->{
-            if(bool) {
+            if (bool) {
                 MCQPEnabled.add(s);
             }else {
                 MCQPEnabled.remove(s);
@@ -97,7 +97,7 @@ public class InventoryManagerModule extends ToggleableModule {
     }
 
     public static boolean shouldThrow(ItemStack itemStack) {
-        if(itemStack.getItem() instanceof AirItem) return false;
+        if (itemStack.getItem() instanceof AirItem) return false;
 //        System.out.println("Should throw " + itemStack.getDisplayName().getString());
         String itemName = itemStack.getDisplayName().getString();
         if (MCQPDropEnabled.isOn()) {
@@ -111,16 +111,16 @@ public class InventoryManagerModule extends ToggleableModule {
     }
 
     public static void dropItem(Player p, int slot) {
-        if(slot < 9) {
+        if (slot < 9) {
             //drop hotbar
-            if(dropHotbar.isOn()) {
+            if (dropHotbar.isOn()) {
                 Inventory inventory = p.getInventory();
                 inventory.removeItem(inventory.getItem(slot));
                 PacketUtil.sendPacket(new ServerboundSetCarriedItemPacket(slot));
                 PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS, BlockPos.ZERO, Direction.DOWN));
             }
         } else {
-            PacketUtil.sendPacket(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<ItemStack>()));
+            PacketUtil.sendPacket(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<>()));
         }
     }
 

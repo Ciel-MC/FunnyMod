@@ -41,12 +41,18 @@ public class ColorSetting extends SavableSetting<Color> implements IColorSetting
 		return new TwoWayFunction<>() {
 			@Override
 			public String convert(Color color) {
-				return String.valueOf(color.getRGB());
+				return String.format("%02x%02x%02x%02x",color.getRed(),color.getGreen(),color.getBlue(),color.getAlpha());
 			}
 
 			@Override
 			public Color revert(String s) {
-				return new Color(Integer.parseInt(s));
+				if (s.length()==8) {
+					return new Color(Integer.parseInt(s.substring(0,2),16),Integer.parseInt(s.substring(2,4),16),Integer.parseInt(s.substring(4,6),16),Integer.parseInt(s.substring(6,8),16));
+				}else if (s.length()==6) {
+					return new Color(Integer.parseInt(s.substring(0,2),16),Integer.parseInt(s.substring(2,4),16),Integer.parseInt(s.substring(4,6),16));
+				}else {
+					return null;
+				}
 			}
 		};
 	}
@@ -83,14 +89,13 @@ public class ColorSetting extends SavableSetting<Color> implements IColorSetting
 
 	@Override
 	public ObjectNode saveThis() {
-		return ObjectUtil.getObjectNode().put("value", getValue().getRGB()).put("rainbow",rainbow).put("allowsRainbow",allowsRainbow).put("hasAlpha",hasAlpha);
+		return ObjectUtil.getObjectNode().put("value", getConverter().convert(getValue())).put("rainbow",rainbow).put("allowsRainbow",allowsRainbow).put("hasAlpha",hasAlpha);
 	}
 
 	@Override
 	public void loadThis(ObjectNode node) {
 		if (node.has("value")) {
-			int rgb=node.get("value").asInt();
-			setValue(new Color(rgb));
+			setValue(getConverter().revert(node.get("value").asText()));
 		}
 		if (node.has("rainbow")) {
 			rainbow=node.get("rainbow").asBoolean();

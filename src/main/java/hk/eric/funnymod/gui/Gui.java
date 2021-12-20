@@ -32,8 +32,8 @@ public class Gui {
     @EventListener
     public void handleKey(KeyEvent event) {
         int key = event.getKey(), action = event.getAction();
-        if(action == GLFW.GLFW_RELEASE || action == GLFW.GLFW_REPEAT) return;
-        if(Minecraft.getInstance().screen != null) return;
+        if (action == GLFW.GLFW_RELEASE || action == GLFW.GLFW_REPEAT) return;
+        if (Minecraft.getInstance().screen != null) return;
         gui.handleKeyEvent(key);
     }
 

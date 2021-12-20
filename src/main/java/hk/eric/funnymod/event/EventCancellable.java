@@ -1,6 +1,6 @@
 package hk.eric.funnymod.event;
 
-public class CancellableEvent extends Event{
+public class EventCancellable extends Event{
     private boolean cancelled = false;
 
     public boolean isCancelled() {
@@ -12,8 +12,8 @@ public class CancellableEvent extends Event{
     }
 
     @Override
-    public CancellableEvent call() {
-        return super.call();
+    public EventCancellable call() {
+        return (EventCancellable) super.call();
     }
 
 
