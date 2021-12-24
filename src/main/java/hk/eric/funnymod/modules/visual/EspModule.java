@@ -18,7 +18,7 @@ public class EspModule extends ToggleableModule {
     public static final BooleanSetting passive = new BooleanSetting("Passive", "EspPassive", "shows passive entities", true);
     public static final BooleanSetting neutral = new BooleanSetting("Neutral", "EspNeutral", "shows neutral entities", true);
     public static final EnumSetting<EspMode> ESP_MODE = new EnumSetting<>("ESP Mode", "EspMode", null, EspMode.GLOWING, EspMode.class);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "EspKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "EspKeybind", null, -1, () -> instance.toggle(), true);
 
     public static final Predicate<Entity> shouldGlow = (entity) ->
             (hostile.isOn() && EntityUtil.isHostile(entity)) ||
@@ -38,7 +38,7 @@ public class EspModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     public enum EspMode {

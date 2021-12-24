@@ -37,6 +37,7 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
+	@SuppressWarnings("rawtypes")
 	default IComponent getComponent(ISetting<?> setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		if (setting instanceof IBooleanSetting) {
 			return getBooleanComponent((IBooleanSetting)setting,animation,adder,theme,colorLevel,isContainer);
@@ -51,7 +52,7 @@ public interface IComponentGenerator {
 		} else if (setting instanceof IStringSetting) {
 			return getStringComponent((IStringSetting)setting,animation,adder,theme,colorLevel,isContainer);
 		} else {
-			return new Button<Void>(setting,()->null,theme.getButtonRenderer(Void.class,isContainer));
+			return new Button<>(setting, () -> null, theme.getButtonRenderer(Void.class, isContainer));
 		}
 	}
 	
@@ -79,6 +80,7 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
+	@SuppressWarnings("rawtypes")
 	default IComponent getNumberComponent(INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new NumberSlider(setting,theme.getSliderRenderer(isContainer));
 	}
@@ -93,6 +95,7 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
+	@SuppressWarnings("rawtypes")
 	default IComponent getEnumComponent(IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 		return new CycleButton(setting,theme.getButtonRenderer(String.class,isContainer));
 	}

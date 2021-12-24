@@ -84,7 +84,7 @@ public class PanelLayout implements ILayout {
 		Point pos=start;
 		AtomicInteger skipY=new AtomicInteger(this.skipY);
 		client.getCategories().forEach(category->{
-			Button<Void> categoryTitle=new Button<Void>(category,()->null,theme.getButtonRenderer(Void.class,0,0,true));
+			Button<Void> categoryTitle= new Button<>(category, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
 			VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0,0,false));
 			gui.addComponent(categoryTitle,categoryContent,new ThemeTuple(theme,0,0),new Point(pos),width,animation);
 			pos.translate(skipX,skipY.get());
@@ -93,11 +93,11 @@ public class PanelLayout implements ILayout {
 				ChildMode mode=layoutType.apply(0);
 				int graphicalLevel=(mode==ChildMode.DOWN)?1:0;
 				FocusableComponent moduleTitle;
-				if (module.isEnabled()==null) moduleTitle=new Button<Void>(module,()->null,theme.getButtonRenderer(Void.class,1,1,mode==ChildMode.DOWN));
-				else moduleTitle=new ToggleButton(module,module.isEnabled(),theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN));
+				if (module.getToggleable()==null) moduleTitle= new Button<>(module, () -> null, theme.getButtonRenderer(Void.class, 1, 1, mode == ChildMode.DOWN));
+				else moduleTitle=new ToggleButton(module,module.getToggleable(),theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN));
 				VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
-				if (module.isEnabled()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
-				else util.addContainer(module,moduleTitle,moduleContainer,()->module.isEnabled().isOn(),Boolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
+				if (module.getToggleable()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
+				else util.addContainer(module,moduleTitle,moduleContainer,()->module.getToggleable().isOn(),Boolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
 				module.getSettings().forEach(setting->addSettingsComponent(setting,moduleContainer,gui,components,new ThemeTuple(theme,2,graphicalLevel+1)));
 			});
 		});
@@ -117,14 +117,13 @@ public class PanelLayout implements ILayout {
 		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=(setting instanceof HasSubSettings)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
-		if (component instanceof VerticalContainer) {
-			VerticalContainer colorContainer=(VerticalContainer)component;
-			Button<T> button=new Button<T>(setting,()->setting.getSettingState(),theme.getButtonRenderer(setting.getSettingClass(),colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN));
-			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
+		if (component instanceof VerticalContainer colorContainer) {
+			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType.apply(theme.logicalLevel - 1) == ChildMode.DOWN));
+			util.addContainer(setting,button,colorContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
 			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.theme.getContainerRenderer(theme.logicalLevel,nextLevel,false));
-			util.addContainer(setting,component,settingContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),layoutType.apply(theme.logicalLevel-1));
+			util.addContainer(setting,component,settingContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,nextLevel),layoutType.apply(theme.logicalLevel-1));
 			hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,nextLevel+1)));
 		} else {
 			container.addComponent(component);

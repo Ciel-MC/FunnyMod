@@ -57,6 +57,7 @@ public class TypedPairList<K1, K2, V > extends ArrayList<Pair<K2,V>> {
     public TypedPairList(K1 type, Object... objects) {
         this.type = type;
         for (int i = 0; i < objects.length; i += 2) {
+            //noinspection unchecked
             add(new Pair<>((K2)objects[i], (V)objects[i+1]));
         }
     }

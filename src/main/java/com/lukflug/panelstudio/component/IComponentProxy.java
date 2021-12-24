@@ -83,7 +83,7 @@ public interface IComponentProxy<T extends IComponent> extends IComponent {
 		operation.accept(subContext);
 		if (subContext!=context) {
 			if (subContext.focusReleased()) context.releaseFocus();
-			else if (subContext.foucsRequested()) context.requestFocus();
+			else if (subContext.focusRequested()) context.requestFocus();
 			context.setHeight(getHeight(subContext.getSize().height));
 			if (subContext.getDescription()!=null) context.setDescription(subContext.getDescription());
 		}

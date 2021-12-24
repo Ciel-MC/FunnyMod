@@ -2,7 +2,6 @@ package hk.eric.funnymod.modules.mcqp;
 
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
-import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
@@ -15,32 +14,23 @@ import net.minecraft.world.item.Items;
 
 public class MCQPAutoForgeModule extends ToggleableModule {
 
-    private static MCQPAutoForgeModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoForgeKeybind", null, () -> true, -1, () -> instance.toggle());
     private static final EventHandler<TickEvent> tickHandler = new EventHandler<>() {
         @Override
         public void handle(TickEvent tickEvent) {
             click();
         }
     };
+    private static MCQPAutoForgeModule instance;
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoForgeKeybind", null, () -> true, -1, () -> instance.toggle(), true);
 
     public MCQPAutoForgeModule() {
         super("MCQPAutoForge", "Automatically clicks smelting QTE for you", () -> true);
         instance = this;
         settings.add(keybind);
+
+        registerOnOffHandler(tickHandler);
     }
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        EventManager.getInstance().register(tickHandler);
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        EventManager.getInstance().unregister(tickHandler);
-    }
 
     private static void click() {
         Screen screen = mc.screen;
@@ -52,7 +42,7 @@ public class MCQPAutoForgeModule extends ToggleableModule {
                         ItemStack itemStack = slot.getItem();
                         if (itemStack.getItem().equals(Items.IRON_INGOT)) {
                             if (itemStack.getDisplayName().getString().equals("[鑄造]")) {
-                                getGameMode().handleInventoryMouseClick(menu.containerId,slot.index,0, ClickType.CLONE,getPlayer());
+                                getGameMode().handleInventoryMouseClick(menu.containerId, slot.index, 0, ClickType.CLONE, getPlayer());
                             }
                         }
                     });
@@ -62,7 +52,7 @@ public class MCQPAutoForgeModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
 }

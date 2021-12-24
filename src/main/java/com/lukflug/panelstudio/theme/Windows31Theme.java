@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
 
 /**
- * Theme replacting the look of Windows 3.1.
+ * Theme replacing the look of Windows 3.1.
  * @author lukflug
  */
 public class Windows31Theme extends ThemeBase {
@@ -108,21 +108,18 @@ public class Windows31Theme extends ThemeBase {
 		}
 		if (focus && !small) {
 			ITheme.drawRect(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),c0);
-			drawButtonBase(inter,new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),focus,clicked,small);
+			drawButtonBase(inter,new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4), true,clicked, false);
 		} else drawButtonBase(inter,new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),focus,clicked,small);
 	}
 
 	@Override
 	public IDescriptionRenderer getDescriptionRenderer() {
-		return new IDescriptionRenderer() {
-			@Override
-			public void renderDescription (IInterface inter, Point pos, String text) {
-				Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+4,height+4));
-				Color color=getMainColor(true,false);
-				inter.fillRect(rect,color,color,color,color);
-				inter.drawString(new Point(pos.x+2,pos.y+2),height,text,getFontColor(true));
-				ITheme.drawRect(inter,rect,getMainColor(true,true));
-			}
+		return (inter, pos, text) -> {
+			Rectangle rect=new Rectangle(pos,new Dimension(inter.getFontWidth(height,text)+4,height+4));
+			Color color=getMainColor(true,false);
+			inter.fillRect(rect,color,color,color,color);
+			inter.drawString(new Point(pos.x+2,pos.y+2),height,text,getFontColor(true));
+			ITheme.drawRect(inter,rect,getMainColor(true,true));
 		};
 	}
 
@@ -158,67 +155,69 @@ public class Windows31Theme extends ThemeBase {
 
 	@Override
 	public <T> IPanelRenderer<T> getPanelRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
-		return new IPanelRenderer<T>() {
+		return new IPanelRenderer<>() {
 			@Override
-			public void renderBackground (Context context, boolean focus) {
-				Rectangle rect=context.getRect();
-				Color c=getMainColor(focus,false);
-				context.getInterface().fillRect(new Rectangle(rect.x+3,rect.y+3,rect.width-6,rect.height-6),c,c,c,c);
+			public void renderBackground(Context context, boolean focus) {
+				Rectangle rect = context.getRect();
+				Color c = getMainColor(focus, false);
+				context.getInterface().fillRect(new Rectangle(rect.x + 3, rect.y + 3, rect.width - 6, rect.height - 6), c, c, c, c);
 			}
-			
+
 			@Override
 			public int getBorder() {
 				return 1;
 			}
-			
+
 			@Override
 			public int getLeft() {
 				return 4;
 			}
-			
+
 			@Override
 			public int getRight() {
 				return 4;
 			}
-			
+
 			@Override
 			public int getTop() {
 				return 4;
 			}
-			
+
 			@Override
 			public int getBottom() {
 				return 4;
 			}
-			
+
 			@Override
-			public void renderPanelOverlay (Context context, boolean focus, T state, boolean open) {
-				Rectangle rect=context.getRect();
-				ITheme.drawRect(context.getInterface(),rect,getFontColor(focus));
-				ITheme.drawRect(context.getInterface(),new Rectangle(rect.x+1,rect.y+1,rect.width-2,rect.height-2),getMainColor(focus,focus));
-				ITheme.drawRect(context.getInterface(),new Rectangle(rect.x+2,rect.y+2,rect.width-4,rect.height-4),getMainColor(focus,focus));
+			public void renderPanelOverlay(Context context, boolean focus, T state, boolean open) {
+				Rectangle rect = context.getRect();
+				ITheme.drawRect(context.getInterface(), rect, getFontColor(focus));
+				ITheme.drawRect(context.getInterface(), new Rectangle(rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2), getMainColor(focus, focus));
+				ITheme.drawRect(context.getInterface(), new Rectangle(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4), getMainColor(focus, focus));
 			}
 
 			@Override
-			public void renderTitleOverlay (Context context, boolean focus, T state, boolean open) {
+			public void renderTitleOverlay(Context context, boolean focus, T state, boolean open) {
 			}
 		};
 	}
 
 	@Override
 	public <T> IScrollBarRenderer<T> getScrollBarRenderer (Class<T> type, int logicalLevel, int graphicalLevel) {
-		return new IScrollBarRenderer<T>() {
+		return new IScrollBarRenderer<>() {
 			@Override
-			public int renderScrollBar (Context context, boolean focus, T state, boolean horizontal, int height, int position) {
-				Color color=getBackgroundColor(focus);
-				context.getInterface().fillRect(context.getRect(),color,color,color,color);
-				int d=horizontal?context.getSize().height:context.getSize().width;
-				int x=context.getPos().x+(horizontal?(int)(position/(double)(height-context.getSize().width)*(context.getSize().width-2*d)):0);
-				int y=context.getPos().y+(horizontal?0:(int)(position/(double)(height-context.getSize().height)*(context.getSize().height-2*d)));
-				Rectangle rect=new Rectangle(x,y,d*(horizontal?2:1),d*(horizontal?1:2));
-				Windows31Theme.this.drawButton(context.getInterface(),rect,focus,context.isClicked(IInterface.LBUTTON)&&rect.contains(context.getInterface().getMouse()),true);
-				if (horizontal) return (int)Math.round((context.getInterface().getMouse().x-context.getPos().x-d)/(double)(context.getSize().width-2*d)*(height-context.getSize().width));
-				else return (int)Math.round((context.getInterface().getMouse().y-context.getPos().y-d)/(double)(context.getSize().height-2*d)*(height-context.getSize().height));
+			public int renderScrollBar(Context context, boolean focus, T state, boolean horizontal, int height, int position) {
+				Color color = getBackgroundColor(focus);
+				context.getInterface().fillRect(context.getRect(), color, color, color, color);
+				int d = horizontal ? context.getSize().height : context.getSize().width;
+				int x = context.getPos().x + (horizontal ? (int) (position / (double) (height - context.getSize().width) * (context.getSize().width - 2 * d)) : 0);
+				int y = context.getPos().y + (horizontal ? 0 : (int) (position / (double) (height - context.getSize().height) * (context.getSize().height - 2 * d)));
+				Rectangle rect = new Rectangle(x, y, d * (horizontal ? 2 : 1), d * (horizontal ? 1 : 2));
+				Windows31Theme.this.drawButton(context.getInterface(), rect, focus, context.isClicked(IInterface.LBUTTON) && rect.contains(context.getInterface().getMouse()), true);
+				if (horizontal)
+					return (int) Math.round((context.getInterface().getMouse().x - context.getPos().x - d) / (double) (context.getSize().width - 2 * d) * (height - context.getSize().width));
+				else
+					return (int) Math.round((context.getInterface().getMouse().y - context.getPos().y - d) / (double) (context.getSize().height - 2 * d) * (height - context.getSize().height));
 			}
 
 			@Override
@@ -230,64 +229,62 @@ public class Windows31Theme extends ThemeBase {
 
 	@Override
 	public <T> IEmptySpaceRenderer<T> getEmptySpaceRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
-		return new IEmptySpaceRenderer<T>() {
-			@Override
-			public void renderSpace (Context context, boolean focus, T state) {
-				Color color;
-				if (container) color=getMainColor(focus,false);
-				else color=getBackgroundColor(focus);
-				context.getInterface().fillRect(context.getRect(),color,color,color,color);
-			}
+		return (context, focus, state) -> {
+			Color color;
+			if (container) color = getMainColor(focus, false);
+			else color = getBackgroundColor(focus);
+			context.getInterface().fillRect(context.getRect(), color, color, color, color);
 		};
 	}
 
 	@Override
 	public <T> IButtonRenderer<T> getButtonRenderer (Class<T> type, int logicalLevel, int graphicalLevel, boolean container) {
-		return new IButtonRenderer<T>() {
+		return new IButtonRenderer<>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, T state) {
-				boolean effFocus=container?context.hasFocus():focus;
-				boolean active=type==Boolean.class?(Boolean)state:effFocus;
-				if (!container && type==Boolean.class) {
-					ITheme.drawRect(context.getInterface(),new Rectangle(context.getPos().x,context.getPos().y,height,height),getFontColor(effFocus));
-					if ((Boolean)state) {
-						context.getInterface().drawLine(context.getPos(),new Point(context.getPos().x+height-1,context.getPos().y+height-1),getFontColor(effFocus),getFontColor(effFocus));
-						context.getInterface().drawLine(new Point(context.getPos().x+height-1,context.getPos().y+1),new Point(context.getPos().x,context.getPos().y+height),getFontColor(effFocus),getFontColor(effFocus));
+			public void renderButton(Context context, String title, boolean focus, T state) {
+				boolean effFocus = container ? context.hasFocus() : focus;
+				boolean active = type == Boolean.class ? (Boolean) state : effFocus;
+				if (!container && type == Boolean.class) {
+					ITheme.drawRect(context.getInterface(), new Rectangle(context.getPos().x, context.getPos().y, height, height), getFontColor(effFocus));
+					if ((Boolean) state) {
+						context.getInterface().drawLine(context.getPos(), new Point(context.getPos().x + height - 1, context.getPos().y + height - 1), getFontColor(effFocus), getFontColor(effFocus));
+						context.getInterface().drawLine(new Point(context.getPos().x + height - 1, context.getPos().y + 1), new Point(context.getPos().x, context.getPos().y + height), getFontColor(effFocus), getFontColor(effFocus));
 					}
-					context.getInterface().drawString(new Point(context.getPos().x+height+padding,context.getPos().y),height,title,getFontColor(effFocus));
+					context.getInterface().drawString(new Point(context.getPos().x + height + padding, context.getPos().y), height, title, getFontColor(effFocus));
 					return;
 				} else if (container) {
-					Color color=getMainColor(effFocus,active);
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-					Color lineColor=getFontColor(effFocus);
-					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),lineColor,lineColor,lineColor,lineColor);
-				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON),false);
-				Color color=(container&&active)?getMainColor(effFocus,false):getFontColor(effFocus);
-				String string=title;
-				if (type==String.class) string+=separator+state;
-				else if (type==Color.class) color=(Color)state;
-				context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,string)/2,context.getPos().y+(container?0:3)+padding),height,string,color);
+					Color color = getMainColor(effFocus, active);
+					context.getInterface().fillRect(context.getRect(), color, color, color, color);
+					Color lineColor = getFontColor(effFocus);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x, context.getPos().y + context.getSize().height - 1, context.getSize().width, 1), lineColor, lineColor, lineColor, lineColor);
+				} else
+					drawButton(context.getInterface(), context.getRect(), effFocus, context.isClicked(IInterface.LBUTTON), false);
+				Color color = (container && active) ? getMainColor(effFocus, false) : getFontColor(effFocus);
+				String string = title;
+				if (type == String.class) string += separator + state;
+				else if (type == Color.class) color = (Color) state;
+				context.getInterface().drawString(new Point(context.getPos().x + context.getSize().width / 2 - context.getInterface().getFontWidth(height, string) / 2, context.getPos().y + (container ? 0 : 3) + padding), height, string, color);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				if (!container && type==Boolean.class) return height;
-				return container?getBaseHeight():getBaseHeight()+6;
+				if (!container && type == Boolean.class) return height;
+				return container ? getBaseHeight() : getBaseHeight() + 6;
 			}
 		};
 	}
 
 	@Override
 	public IButtonRenderer<Void> getSmallButtonRenderer (int symbol, int logicalLevel, int graphicalLevel, boolean container) {
-		return new IButtonRenderer<Void>() {
+		return new IButtonRenderer<>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, Void state) {
-				Windows31Theme.this.drawButton(context.getInterface(),context.getRect(),focus,context.isClicked(IInterface.LBUTTON),true);
-				Point[] points =new Point[3];
-				int padding=context.getSize().height<=12?4:6;
-				Rectangle rect=new Rectangle(context.getPos().x+padding/2,context.getPos().y+padding/2,context.getSize().height-2*(padding/2),context.getSize().height-2*(padding/2));
-				if (title==null) rect.x+=context.getSize().width/2-context.getSize().height/2;
-				Color color=getFontColor(focus);
+			public void renderButton(Context context, String title, boolean focus, Void state) {
+				Windows31Theme.this.drawButton(context.getInterface(), context.getRect(), focus, context.isClicked(IInterface.LBUTTON), true);
+				Point[] points = new Point[3];
+				int padding = context.getSize().height <= 12 ? 4 : 6;
+				Rectangle rect = new Rectangle(context.getPos().x + padding / 2, context.getPos().y + padding / 2, context.getSize().height - 2 * (padding / 2), context.getSize().height - 2 * (padding / 2));
+				if (title == null) rect.x += context.getSize().width / 2 - context.getSize().height / 2;
+				Color color = getFontColor(focus);
 				switch (symbol) {
 					case ITheme.CLOSE -> {
 						context.getInterface().drawLine(new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), color, color);
@@ -325,10 +322,11 @@ public class Windows31Theme extends ThemeBase {
 						points[0] = new Point(rect.x + rect.width / 2, rect.y + rect.height);
 					}
 				}
-				if (symbol>=ITheme.LEFT && symbol<=ITheme.DOWN) {
-					context.getInterface().fillTriangle(points[0],points[1],points[2],color,color,color);
+				if (symbol >= ITheme.LEFT && symbol <= ITheme.DOWN) {
+					context.getInterface().fillTriangle(points[0], points[1], points[2], color, color, color);
 				}
-				if (title!=null) context.getInterface().drawString(new Point(context.getPos().x+(symbol==ITheme.NONE?padding:context.getSize().height),context.getPos().y+padding),height,title,getFontColor(focus));
+				if (title != null)
+					context.getInterface().drawString(new Point(context.getPos().x + (symbol == ITheme.NONE ? padding : context.getSize().height), context.getPos().y + padding), height, title, getFontColor(focus));
 			}
 
 			@Override
@@ -340,24 +338,25 @@ public class Windows31Theme extends ThemeBase {
 
 	@Override
 	public IButtonRenderer<String> getKeybindRenderer (int logicalLevel, int graphicalLevel, boolean container) {
-		return new IButtonRenderer<String>() {
+		return new IButtonRenderer<>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, String state) {
-				boolean effFocus=container?context.hasFocus():focus;
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus = container ? context.hasFocus() : focus;
 				if (container) {
-					Color color=getMainColor(effFocus,effFocus);
-					context.getInterface().fillRect(context.getRect(),color,color,color,color);
-					Color lineColor=getFontColor(effFocus);
-					context.getInterface().fillRect(new Rectangle(context.getPos().x,context.getPos().y+context.getSize().height-1,context.getSize().width,1),lineColor,lineColor,lineColor,lineColor);
-				} else drawButton(context.getInterface(),context.getRect(),effFocus,context.isClicked(IInterface.LBUTTON),false);
-				Color color=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
-				String string=title+separator+(focus?"...":state);
-				context.getInterface().drawString(new Point(context.getPos().x+context.getSize().width/2-context.getInterface().getFontWidth(height,string)/2,context.getPos().y+(container?0:3)+padding),height,string,color);
+					Color color = getMainColor(effFocus, effFocus);
+					context.getInterface().fillRect(context.getRect(), color, color, color, color);
+					Color lineColor = getFontColor(effFocus);
+					context.getInterface().fillRect(new Rectangle(context.getPos().x, context.getPos().y + context.getSize().height - 1, context.getSize().width, 1), lineColor, lineColor, lineColor, lineColor);
+				} else
+					drawButton(context.getInterface(), context.getRect(), effFocus, context.isClicked(IInterface.LBUTTON), false);
+				Color color = (container && effFocus) ? getMainColor(true, false) : getFontColor(effFocus);
+				String string = title + separator + (focus ? "..." : state);
+				context.getInterface().drawString(new Point(context.getPos().x + context.getSize().width / 2 - context.getInterface().getFontWidth(height, string) / 2, context.getPos().y + (container ? 0 : 3) + padding), height, string, color);
 			}
 
 			@Override
 			public int getDefaultHeight() {
-				return container?getBaseHeight():getBaseHeight()+6;
+				return container ? getBaseHeight() : getBaseHeight() + 6;
 			}
 		};
 	}
@@ -378,7 +377,7 @@ public class Windows31Theme extends ThemeBase {
 				Rectangle buttonRect=new Rectangle(rect.x+divider,rect.y,rect.height,rect.height);
 				boolean clicked=context.isClicked(IInterface.LBUTTON) && buttonRect.contains(context.getInterface().getMouse());
 				Windows31Theme.this.drawButton(context.getInterface(),buttonRect,effFocus,clicked,true);
-				Color color=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
+				Color color=(container&&effFocus)?getMainColor(true,false):getFontColor(effFocus);
 				String string=title+separator+state; 
 				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,string,color);
 			}
@@ -424,10 +423,10 @@ public class Windows31Theme extends ThemeBase {
 				boolean effFocus=container?(context.hasFocus()||focus):focus;
 				// Declare and assign variables
 				Color textColor=getFontColor(effFocus);
-				Color titleColor=(container&&effFocus)?getMainColor(effFocus,false):textColor;
+				Color titleColor=(container&&effFocus)?getMainColor(true,false):textColor;
 				Color highlightColor=getMainColor(effFocus,true);
 				Rectangle rect=getTextArea(context,title);
-				int strlen=context.getInterface().getFontWidth(height,content.substring(0,position));
+				int strLen=context.getInterface().getFontWidth(height,content.substring(0,position));
 				if (container && effFocus) {
 					context.getInterface().fillRect(context.getRect(),highlightColor,highlightColor,highlightColor,highlightColor);
 					context.getInterface().fillRect(rect,titleColor,titleColor,titleColor,titleColor);
@@ -436,7 +435,7 @@ public class Windows31Theme extends ThemeBase {
 				if (boxPosition<position) {
 					int minPosition=boxPosition;
 					while (minPosition<position) {
-						if (context.getInterface().getFontWidth(height,content.substring(0,minPosition))+rect.width-padding>=strlen) break;
+						if (context.getInterface().getFontWidth(height,content.substring(0,minPosition))+rect.width-padding>=strLen) break;
 						minPosition++;
 					}
 					if (boxPosition<minPosition) boxPosition=minPosition;
@@ -453,7 +452,7 @@ public class Windows31Theme extends ThemeBase {
 				else if (boxPosition<0) boxPosition=0;
 				int offset=context.getInterface().getFontWidth(height,content.substring(0,boxPosition));
 				// Deal with highlighted text
-				int x1=rect.x+padding/2-offset+strlen;
+				int x1=rect.x+padding/2-offset+strLen;
 				int x2=rect.x+padding/2-offset;
 				if (position<content.length()) x2+=context.getInterface().getFontWidth(height,content.substring(0,position+1));
 				else x2+=context.getInterface().getFontWidth(height,content+"X");
@@ -535,19 +534,20 @@ public class Windows31Theme extends ThemeBase {
 	
 	@Override
 	public ISwitchRenderer<Boolean> getToggleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
-		return new ISwitchRenderer<Boolean>() {
+		return new ISwitchRenderer<>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, Boolean state) {
-				boolean effFocus=container?context.hasFocus():focus;
-				Color colorA=getMainColor(effFocus,true);
-				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
-				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+(state?"On":"Off"),getFontColor(focus));
-				Rectangle rect=new Rectangle(context.getPos().x+context.getSize().width-2*context.getSize().height,context.getPos().y,2*context.getSize().height,context.getSize().height);
-				Color colorB=getMainColor(effFocus,state);
-				context.getInterface().fillRect(rect,colorB,colorB,colorB,colorB);
-				ITheme.drawRect(context.getInterface(),rect,getFontColor(effFocus));
-				Rectangle field=state?getOnField(context):getOffField(context);
-				drawButton(context.getInterface(),field,focus,context.isClicked(IInterface.LBUTTON)&&field.contains(context.getInterface().getMouse()),true);
+			public void renderButton(Context context, String title, boolean focus, Boolean state) {
+				boolean effFocus = container ? context.hasFocus() : focus;
+				Color colorA = getMainColor(effFocus, true);
+				if (container && effFocus)
+					context.getInterface().fillRect(context.getRect(), colorA, colorA, colorA, colorA);
+				context.getInterface().drawString(new Point(context.getPos().x + padding, context.getPos().y + padding), height, title + separator + (state ? "On" : "Off"), getFontColor(focus));
+				Rectangle rect = new Rectangle(context.getPos().x + context.getSize().width - 2 * context.getSize().height, context.getPos().y, 2 * context.getSize().height, context.getSize().height);
+				Color colorB = getMainColor(effFocus, state);
+				context.getInterface().fillRect(rect, colorB, colorB, colorB, colorB);
+				ITheme.drawRect(context.getInterface(), rect, getFontColor(effFocus));
+				Rectangle field = state ? getOnField(context) : getOffField(context);
+				drawButton(context.getInterface(), field, focus, context.isClicked(IInterface.LBUTTON) && field.contains(context.getInterface().getMouse()), true);
 			}
 
 			@Override
@@ -556,39 +556,40 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField (Context context) {
-				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
+			public Rectangle getOnField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - rect.height, rect.y, rect.height, rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField (Context context) {
-				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
+			public Rectangle getOffField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - 2 * rect.height, rect.y, rect.height, rect.height);
 			}
 		};
 	}
 	
 	@Override
 	public ISwitchRenderer<String> getCycleSwitchRenderer (int logicalLevel, int graphicalLevel, boolean container) {
-		return new ISwitchRenderer<String>() {
+		return new ISwitchRenderer<>() {
 			@Override
-			public void renderButton (Context context, String title, boolean focus, String state) {
-				boolean effFocus=container?context.hasFocus():focus;
-				Color colorA=getMainColor(effFocus,true);
-				if (container && effFocus) context.getInterface().fillRect(context.getRect(),colorA,colorA,colorA,colorA);
-				Context subContext=new Context(context,context.getSize().width-2*context.getSize().height,new Point(0,0),true,true);
+			public void renderButton(Context context, String title, boolean focus, String state) {
+				boolean effFocus = container ? context.hasFocus() : focus;
+				Color colorA = getMainColor(effFocus, true);
+				if (container && effFocus)
+					context.getInterface().fillRect(context.getRect(), colorA, colorA, colorA, colorA);
+				Context subContext = new Context(context, context.getSize().width - 2 * context.getSize().height, new Point(0, 0), true, true);
 				subContext.setHeight(context.getSize().height);
-				Color textColor=(container&&effFocus)?getMainColor(effFocus,false):getFontColor(effFocus);
-				context.getInterface().drawString(new Point(context.getPos().x+padding,context.getPos().y+padding),height,title+separator+state,textColor);
-				Rectangle rect=getOnField(context);
-				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				Color textColor = (container && effFocus) ? getMainColor(true, false) : getFontColor(effFocus);
+				context.getInterface().drawString(new Point(context.getPos().x + padding, context.getPos().y + padding), height, title + separator + state, textColor);
+				Rectangle rect = getOnField(context);
+				subContext = new Context(context, rect.width, new Point(rect.x - context.getPos().x, 0), true, true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.RIGHT,logicalLevel,graphicalLevel,container).renderButton(subContext,null,effFocus,null);
-				rect=getOffField(context);
-				subContext=new Context(context,rect.width,new Point(rect.x-context.getPos().x,0),true,true);
+				getSmallButtonRenderer(ITheme.RIGHT, logicalLevel, graphicalLevel, container).renderButton(subContext, null, effFocus, null);
+				rect = getOffField(context);
+				subContext = new Context(context, rect.width, new Point(rect.x - context.getPos().x, 0), true, true);
 				subContext.setHeight(rect.height);
-				getSmallButtonRenderer(ITheme.LEFT,logicalLevel,graphicalLevel,false).renderButton(subContext,null,effFocus,null);
+				getSmallButtonRenderer(ITheme.LEFT, logicalLevel, graphicalLevel, false).renderButton(subContext, null, effFocus, null);
 			}
 
 			@Override
@@ -597,15 +598,15 @@ public class Windows31Theme extends ThemeBase {
 			}
 
 			@Override
-			public Rectangle getOnField (Context context) {
-				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-rect.height,rect.y,rect.height,rect.height);
+			public Rectangle getOnField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - rect.height, rect.y, rect.height, rect.height);
 			}
 
 			@Override
-			public Rectangle getOffField (Context context) {
-				Rectangle rect=context.getRect();
-				return new Rectangle(rect.x+rect.width-2*rect.height,rect.y,rect.height,rect.height);
+			public Rectangle getOffField(Context context) {
+				Rectangle rect = context.getRect();
+				return new Rectangle(rect.x + rect.width - 2 * rect.height, rect.y, rect.height, rect.height);
 			}
 		};
 	}

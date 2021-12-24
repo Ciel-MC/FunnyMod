@@ -12,7 +12,7 @@ public interface IPanelConfig {
 	 * Store the position of the panel.
 	 * @param position the current position of the panel
 	 */
-    void savePositon(Point position);
+    void savePosition(Point position);
 	
 	/**
 	 * Store the size of the panel.

@@ -3,6 +3,7 @@ package hk.eric.funnymod.utils;
 import hk.eric.funnymod.FunnyModClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import org.apache.logging.log4j.LogManager;
 
 public class PacketUtil {
@@ -17,5 +18,21 @@ public class PacketUtil {
         }else {
             LogManager.getLogger().error("Connection is null");
         }
+    }
+
+    public static ServerboundMovePlayerPacket.Pos createPos(double x, double y, double z, boolean onGround) {
+        return new ServerboundMovePlayerPacket.Pos(x, y, z, onGround);
+    }
+
+    public static ServerboundMovePlayerPacket.Rot createRot(float yaw, float pitch, boolean onGround) {
+        return new ServerboundMovePlayerPacket.Rot(yaw, pitch, onGround);
+    }
+
+    public static ServerboundMovePlayerPacket.PosRot createPosRot(double x, double y, double z, float yaw, float pitch, boolean onGround) {
+        return new ServerboundMovePlayerPacket.PosRot(x, y, z, yaw, pitch, onGround);
+    }
+
+    public static ServerboundMovePlayerPacket.StatusOnly createLook(boolean onGround) {
+        return new ServerboundMovePlayerPacket.StatusOnly(onGround);
     }
 }

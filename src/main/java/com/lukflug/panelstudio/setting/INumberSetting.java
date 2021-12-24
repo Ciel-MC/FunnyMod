@@ -6,7 +6,7 @@ package com.lukflug.panelstudio.setting;
  */
 public interface INumberSetting<E extends Number> extends ISetting<E> {
 	/**
-	 * Get the number as double.
+	 * Get the number as a double.
 	 * @return the current setting
 	 */
     double getNumber();

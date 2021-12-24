@@ -8,24 +8,20 @@ import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Static pop-up positioner that positions the pop-up at a fixed position.
+ *
  * @author lukflug
  */
-public class FixedPositioner implements IPopupPositioner {
-	/**
-	 * The position the pop-up should appear.
-	 */
-	protected final Point pos;
-	
+public record FixedPositioner(Point pos) implements IPopupPositioner {
 	/**
 	 * Constructor.
+	 *
 	 * @param pos the position of the pop-up.
 	 */
-	public FixedPositioner (Point pos) {
-		this.pos=pos;
+	public FixedPositioner {
 	}
-	
+
 	@Override
-	public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
+	public Point getPosition(IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
 		return new Point(pos);
 	}
 }

@@ -1,18 +1,18 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.theme.ITextFieldRenderer;
+
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 /**
  * The text field widget.
@@ -146,8 +146,7 @@ public abstract class TextField extends FocusableComponent {
 						position=pos+selection.length();
 						select=pos;
 					}
-				} catch (IOException e) {
-				} catch (UnsupportedFlavorException e) {
+				} catch (IOException | UnsupportedFlavorException ignored) {
 				}
 			} else if (context.getInterface().getModifier(IInterface.CTRL) && keys.isCutKey(scancode) && sel>=0) {
 				StringSelection selection=new StringSelection(s.substring(Math.min(pos,sel),Math.max(pos,sel)));

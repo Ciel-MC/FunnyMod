@@ -15,30 +15,32 @@ import java.awt.*;
  * @author lukflug
  */
 public abstract class MinecraftGUI extends Screen {
+
+
 	/**
 	 * The current mouse position.
 	 */
-	private Point mouse=new Point();
+	protected Point mouse=new Point();
 	/**
 	 * Current left mouse button state.
 	 */
-	private boolean lButton=false;
+	protected boolean lButton=false;
 	/**
 	 * Current right mouse button state.
 	 */
-	private boolean rButton=false;
+	protected boolean rButton=false;
 	/**
 	 * Current GLFW modifier bits.
 	 */
-	private int modifiers=0;
+	protected int modifiers=0;
 	/**
 	 * Last rendering time.
 	 */
-	private long lastTime;
+	protected long lastTime;
 	/**
 	 * Saved matrix stack;
 	 */
-	protected PoseStack matrixStack=new PoseStack();
+	protected PoseStack poseStack =new PoseStack();
 	
 	/**
 	 * Constructor.
@@ -83,7 +85,7 @@ public abstract class MinecraftGUI extends Screen {
 	
 	@Override
 	public void render (PoseStack matrices, int mouseX, int mouseY, float partialTicks) {
-		matrixStack=matrices;
+		poseStack =matrices;
 		mouse=new Point(Math.round(mouseX), Math.round(mouseY));
 		renderGUI();
 	}
@@ -163,59 +165,4 @@ public abstract class MinecraftGUI extends Screen {
 	 * @return the scroll speed
 	 */
 	protected abstract int getScrollSpeed();
-	
-	
-	/**
-	 * Implementation of {@link GLInterface} to be used with {@link MinecraftGUI}
-	 * @author lukflug
-	 */
-	public abstract class GUIInterface extends GLInterface {
-		/**
-		 * Constructor.
-		 * @param clipX whether to clip in the horizontal direction
-		 */
-		public GUIInterface (boolean clipX) {
-			super(clipX);
-		}
-		
-		@Override
-		public boolean getModifier (int modifier) {
-			return switch (modifier) {
-				case SHIFT -> (modifiers & GLFW.GLFW_MOD_SHIFT) != 0;
-				case CTRL -> (modifiers & GLFW.GLFW_MOD_CONTROL) != 0;
-				case ALT -> (modifiers & GLFW.GLFW_MOD_ALT) != 0;
-				case SUPER -> (modifiers & GLFW.GLFW_MOD_SUPER) != 0;
-				default -> false;
-			};
-		}
-		
-		@Override
-		public long getTime() {
-			return lastTime;
-		}
-		
-		@Override
-		public boolean getButton (int button) {
-			return switch (button) {
-				case IInterface.LBUTTON -> lButton;
-				case IInterface.RBUTTON -> rButton;
-				default -> false;
-			};
-		}
-
-		@Override
-		public Point getMouse() {
-			return new Point(mouse);
-		}
-
-		@Override
-		protected float getZLevel() {
-			return getBlitOffset();
-		}
-		
-		@Override
-		protected PoseStack getMatrixStack() {
-			return matrixStack;
-		}
-	}
 }

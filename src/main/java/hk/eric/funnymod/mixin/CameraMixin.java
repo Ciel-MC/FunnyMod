@@ -10,11 +10,14 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 
-    @Shadow private Entity entity;
+    @Shadow
+    private Entity entity;
 
-    @Shadow private float eyeHeightOld;
+    @Shadow
+    private float eyeHeightOld;
 
-    @Shadow private float eyeHeight;
+    @Shadow
+    private float eyeHeight;
 
     /**
      * @author Eric

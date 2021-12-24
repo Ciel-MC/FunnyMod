@@ -1,7 +1,7 @@
 package hk.eric.funnymod.utils.classes;
 
 public class Converters {
-    public static TwoWayFunction<Integer, String> INTEGER_CONVERTER = new TwoWayFunction<>() {
+    public static final TwoWayFunction<Integer, String> INTEGER_CONVERTER = new TwoWayFunction<>() {
         @Override
         public String convert(Integer integer) {
             return integer.toString();
@@ -13,7 +13,7 @@ public class Converters {
         }
     };
 
-    public static TwoWayFunction<Double, String> DOUBLE_CONVERTER = new TwoWayFunction<>() {
+    public static final TwoWayFunction<Double, String> DOUBLE_CONVERTER = new TwoWayFunction<>() {
         @Override
         public String convert(Double aDouble) {
             return aDouble.toString();
@@ -37,7 +37,7 @@ public class Converters {
         }
     };
 
-    public static TwoWayFunction<Float, String> FLOAT_CONVERTER = new TwoWayFunction<>() {
+    public static final TwoWayFunction<Float, String> FLOAT_CONVERTER = new TwoWayFunction<>() {
         @Override
         public String convert(Float aFloat) {
             return aFloat.toString();
@@ -49,7 +49,7 @@ public class Converters {
         }
     };
 
-    public static TwoWayFunction<Boolean, String> BOOLEAN_CONVERTER = new TwoWayFunction<>() {
+    public static final TwoWayFunction<Boolean, String> BOOLEAN_CONVERTER = new TwoWayFunction<>() {
         @Override
         public String convert(Boolean aBoolean) {
             return aBoolean.toString();
@@ -61,7 +61,7 @@ public class Converters {
         }
     };
 
-    public static TwoWayFunction<String, String> STRING_CONVERTER= new TwoWayFunction<>() {
+    public static final TwoWayFunction<String, String> STRING_CONVERTER= new TwoWayFunction<>() {
         @Override
         public String convert(String s) {
             return s;

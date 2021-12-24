@@ -78,7 +78,7 @@ public class HUDGUI extends GUI {
 	 * @return whether the component was added
 	 */
 	public boolean addHUDComponent (IFixedComponent component, IToggleable state, Animation animation, ITheme theme, int border) {
-		return container.addComponent(new HUDPanel<IFixedComponent>(component,state,animation,theme,hudVisibility,border));
+		return container.addComponent(new HUDPanel<>(component, state, animation, theme, hudVisibility, border));
 	}
 	
 	/**

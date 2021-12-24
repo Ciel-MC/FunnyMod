@@ -1,10 +1,9 @@
 package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
-import baritone.api.event.events.type.EventState;
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
-import hk.eric.funnymod.event.EventManager;
-import hk.eric.funnymod.event.events.TickEvent;
+import hk.eric.funnymod.event.EventState;
+import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.DoubleSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
@@ -30,11 +29,11 @@ public class MCQPAuraModule extends ToggleableModule {
     //Rage settings
     public static final DoubleSetting rageRange = new DoubleSetting("Rage Range", "MCQPAuraRageRange", "The range of rage", 1, 50, 10, .1);
     public static final BooleanSetting inGui = new BooleanSetting("In GUI", "MCQPAuraInGui", "Whether to attack in GUI(May cause inability to revive)", true);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", null, -1, () -> instance.toggle(), true);
 
-    private static final EventHandler<TickEvent> killaura = new EventHandler<>() {
+    private static final EventHandler<MotionEvent> killaura = new EventHandler<>() {
         @Override
-        public void handle(TickEvent e) {
+        public void handle(MotionEvent e) {
             if (inGui.isOn() && mc.screen != null) return;
             if (getPlayer() == null) return;
             if (e.getState() == EventState.PRE) {
@@ -61,22 +60,12 @@ public class MCQPAuraModule extends ToggleableModule {
         mode.addSubSetting(Mode.RAGE,rageRange);
         settings.add(inGui);
         settings.add(keybind);
-    }
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        EventManager.getInstance().register(killaura);
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        EventManager.getInstance().unregister(killaura);
+        registerOnOffHandler(killaura);
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     public enum Mode {

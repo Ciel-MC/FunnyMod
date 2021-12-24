@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Screen.class)
 public abstract class ScreenMixin {
-    @Shadow public abstract void render(PoseStack poseStack, int i, int j, float f);
+    @Shadow
+    public abstract void render(PoseStack poseStack, int i, int j, float f);
 
     @Redirect(method = "sendMessage(Ljava/lang/String;Z)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;chat(Ljava/lang/String;)V"))
     private void handleChatMessage(LocalPlayer player, String string) {

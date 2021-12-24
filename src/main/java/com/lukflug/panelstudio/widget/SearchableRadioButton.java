@@ -26,9 +26,10 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 	 * @param container whether this is part of a layout container
 	 * @param keys key predicates for the text box
 	 */
+	@SuppressWarnings("rawtypes")
 	public SearchableRadioButton(IEnumSetting setting, ThemeTuple theme, boolean container, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
-		AtomicReference<String> searchTerm=new AtomicReference<String>("");
+		AtomicReference<String> searchTerm= new AtomicReference<>("");
 		TextField textField=new TextField(new IStringSetting() {
 			@Override
 			public String getDisplayName() {
@@ -123,6 +124,7 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 				setValueIndex(Arrays.asList(values).indexOf(value));
 			}
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			public Class getSettingClass() {
 				return Enum.class;

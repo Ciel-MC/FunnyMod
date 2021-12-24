@@ -3,13 +3,20 @@ package hk.eric.funnymod.modules;
 import com.lukflug.panelstudio.setting.ICategory;
 import com.lukflug.panelstudio.setting.IClient;
 import com.lukflug.panelstudio.setting.IModule;
+import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.modules.combat.CriticalsModule;
+import hk.eric.funnymod.modules.combat.KillAuraModule;
 import hk.eric.funnymod.modules.combat.VelocityModule;
-import hk.eric.funnymod.modules.mcqp.*;
+import hk.eric.funnymod.modules.debug.DebugHudModule;
 import hk.eric.funnymod.modules.mcqp.MCQPAura.MCQPAuraModule;
+import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
 import hk.eric.funnymod.modules.misc.TooltipScrollingModule;
-import hk.eric.funnymod.modules.movement.*;
+import hk.eric.funnymod.modules.movement.AntiVineModule;
+import hk.eric.funnymod.modules.movement.KeepSprintModule;
+import hk.eric.funnymod.modules.movement.NoSlowModule;
+import hk.eric.funnymod.modules.movement.SprintModule;
 import hk.eric.funnymod.modules.player.HeightModule;
 import hk.eric.funnymod.modules.player.InventoryManagerModule;
 import hk.eric.funnymod.modules.player.NoJumpDelayModule;
@@ -29,9 +36,12 @@ public enum Category implements ICategory {
 	VISUAL("Visual"),
 	WORLD("World"),
 	MISC("Misc"),
-	MCQP("文靜");
+	MCQP("文靜"),
+	DEBUG("Debug");
+
+	public static final Set<HasComponents> hudComponents = new HashSet<>();
 	public final String displayName;
-	public final List<Module> modules= new ArrayList<>();
+	public final List<IModule> modules= new ArrayList<>();
 	
 	Category(String displayName) {
 		this.displayName=displayName;
@@ -39,6 +49,8 @@ public enum Category implements ICategory {
 	
 	public static void init() {
 		addModule(COMBAT,
+				new CriticalsModule(),
+				new KillAuraModule(),
 				new VelocityModule()
 		);
 		addModule(MOVEMENT,
@@ -77,13 +89,23 @@ public enum Category implements ICategory {
 				new MCQPNoGhostHitModule(),
 				new MCQPPreventDropModule()
 		);
+		if (FunnyModClient.debug) {
+			addModule(DEBUG,
+					new DebugHudModule()
+			);
+		}
 		for (Category value : values()) {
-			value.modules.sort(Comparator.comparing(Module::getDisplayName));
+			value.modules.sort(Comparator.comparing(IModule::getDisplayName));
 		}
 	}
 
-	public static void addModule(Category category,Module... modules) {
-		category.modules.addAll(Arrays.asList(modules));
+	public static void addModule(Category category,IModule... modules) {
+		for (IModule module : modules) {
+			category.modules.add(module);
+			if(module instanceof HasComponents componentModule) {
+				hudComponents.add(componentModule);
+			}
+		}
     }
 
 	@Override
@@ -93,7 +115,7 @@ public enum Category implements ICategory {
 
 	@Override
 	public Stream<IModule> getModules() {
-		return modules.stream().map(module->module);
+		return modules.stream();
 	}
 
 	public static Stream<IModule> getAllModules() {
@@ -108,6 +130,9 @@ public enum Category implements ICategory {
 	}
 
 	public static IClient getClient() {
-		return () -> Arrays.stream(Category.values());
+		return () -> Arrays.stream(
+				FunnyModClient.debug?
+						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, MCQP, DEBUG} :
+						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, MCQP});
 	}
 }

@@ -30,7 +30,7 @@ public abstract class DropDownList extends HorizontalContainer {
 	 */
 	private Rectangle rect=new Rectangle();
 	/**
-	 * Whether focus has to be transfered to list pop-up.
+	 * Whether focus has to be transferred to list pop-up.
 	 */
 	private boolean transferFocus=false;
 	/**
@@ -48,9 +48,10 @@ public abstract class DropDownList extends HorizontalContainer {
 	 * @param popupSize the scroll behavior of the list
 	 * @param popupAdder consumer to handle adding list pop-up
 	 */
+	@SuppressWarnings("rawtypes")
 	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
-		AtomicReference<String> searchTerm=new AtomicReference<String>(null);
+		AtomicReference<String> searchTerm= new AtomicReference<>(null);
 		TextField textField=new TextField(new IStringSetting() {
 			@Override
 			public String getDisplayName() {
@@ -160,9 +161,11 @@ public abstract class DropDownList extends HorizontalContainer {
 
 			@Override
 			public void setValue(Object value) {
+				//noinspection unchecked
 				setting.setValue(value);
 			}
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			public Class getSettingClass() {
 				return setting.getSettingClass();
@@ -178,31 +181,26 @@ public abstract class DropDownList extends HorizontalContainer {
 				return DropDownList.this.isDownKey(key);
 			}
 		};
-		IFixedComponent popup=ClosableComponent.createStaticPopup(title,content,()->null,getAnimation(),new RendererTuple<Void>(Void.class,popupTheme),popupSize,toggle,()->rect.width,false,"",true);
+		IFixedComponent popup=ClosableComponent.createStaticPopup(title,content,()->null,getAnimation(), new RendererTuple<>(Void.class, popupTheme),popupSize,toggle,()->rect.width,false,"",true);
 		popupAdder.accept(popup);
-		IPopupPositioner positioner=new IPopupPositioner() {
+		IPopupPositioner positioner= (inter, popup1, component, panel) -> new Point(component.x,component.y+component.height);
+		Button<Void> button= new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.DOWN, container)) {
 			@Override
-			public Point getPosition (IInterface inter, Dimension popup, Rectangle component, Rectangle panel) {
-				return new Point(component.x,component.y+component.height);
-			}
-		};
-		Button<Void> button=new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
-			@Override
-			public void handleButton (Context context, int button) {
-				super.handleButton(context,button);
-				rect=new Rectangle(rect.x,context.getPos().y,context.getPos().x+context.getSize().width-rect.x,context.getSize().height);
-				if ((button==IInterface.LBUTTON && context.isClicked(button)) || transferFocus) {
-					context.getPopupDisplayer().displayPopup(popup,rect,toggle,positioner);
-					transferFocus=false;
+			public void handleButton(Context context, int button) {
+				super.handleButton(context, button);
+				rect = new Rectangle(rect.x, context.getPos().y, context.getPos().x + context.getSize().width - rect.x, context.getSize().height);
+				if ((button == IInterface.LBUTTON && context.isClicked(button)) || transferFocus) {
+					context.getPopupDisplayer().displayPopup(popup, rect, toggle, positioner);
+					transferFocus = false;
 				}
 			}
-			
+
 			@Override
 			public int getHeight() {
 				return textField.getHeight();
 			}
 		};
-		addComponent(new HorizontalComponent<Button<Void>>(button,textField.getHeight(),0) {
+		addComponent(new HorizontalComponent<>(button, textField.getHeight(), 0) {
 			@Override
 			public int getWidth(IInterface inter) {
 				return textField.getHeight();

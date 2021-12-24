@@ -63,15 +63,15 @@ public class StandardTheme implements ITabGUITheme {
 		scheme.createSetting(null,"Outline Color","The color for the tab outline.",false,true,new Color(0,0,0),false);
 		scheme.createSetting(null,"Font Color","The main color for the text.",false,true,new Color(255,255,255),false);
 		scheme.createSetting(null,"Enabled Color","The color for enabled text.",false,true,new Color(255,0,0),false);
-		parentRenderer=new RendererBase<Void>() {
+		parentRenderer= new RendererBase<>() {
 			@Override
-			protected Color getFontColor (Void itemState) {
+			protected Color getFontColor(Void itemState) {
 				return scheme.getColor("Font Color");
 			}
 		};
-		childRenderer=new RendererBase<Boolean>() {
+		childRenderer= new RendererBase<>() {
 			@Override
-			protected Color getFontColor (Boolean itemState) {
+			protected Color getFontColor(Boolean itemState) {
 				if (itemState) return scheme.getColor("Enabled Color");
 				else return scheme.getColor("Font Color");
 			}

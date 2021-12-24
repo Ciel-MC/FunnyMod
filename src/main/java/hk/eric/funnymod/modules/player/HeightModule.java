@@ -20,7 +20,7 @@ public class HeightModule extends ToggleableModule {
     public static final EnumSettingWithSubSettings<Version> sneaking_eye = new EnumSettingWithSubSettings<>("Sneaking eye height version", "OldHeightSneakingEye", "The height of your eye when you sneak", Version.CURRENT, Version.class);
     public static final FloatSetting custom_normal_eye = new FloatSetting("Custom normal eye height", "OldHeightCustomNormalEye", "Custom normal eye height", 0.0F, 10.0F, 1.62F);
     public static final FloatSetting custom_sneaking_eye = new FloatSetting("Custom sneaking eye height", "OldHeightCustomSneakingEye", "Custom sneaking eye height", 0.0F, 10.0F, 1.27F);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "OldHeightHeightKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "OldHeightHeightKeybind", null, -1, () -> instance.toggle(), true);
 
 
     private static final TwoDimensionalEnumMap<Version,HeightType, AtomicFloat> HEIGHTS = TwoDimensionalEnumMap.of(Version.class, HeightType.class,
@@ -76,7 +76,7 @@ public class HeightModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     public static float getHeight(HeightType type) {

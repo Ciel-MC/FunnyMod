@@ -1,9 +1,8 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Color;
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.base.IInterface;
+
+import java.awt.*;
 
 /**
  * Interface representing a GUI theme (i.e. skin).
@@ -19,7 +18,7 @@ public interface ITheme {
 	 */
     int CLOSE=1;
 	/**
-	 * The constant for a small button with a minimize symbol.
+	 * The constant for a small button with a "minimize" symbol.
 	 */
     int MINIMIZE=2;
 	/**

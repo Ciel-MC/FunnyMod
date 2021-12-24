@@ -15,7 +15,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 
 /**
- * A spinner for fine tuning numerical settings.
+ * A spinner for fine-tuning numerical settings.
  * @author lukflug
  */
 public class Spinner extends HorizontalContainer {
@@ -27,6 +27,7 @@ public class Spinner extends HorizontalContainer {
 	 * @param allowInput whether text input is allowed
 	 * @param keys the keyboard predicates for the text box
 	 */
+	@SuppressWarnings("rawtypes")
 	public Spinner (INumberSetting setting, ThemeTuple theme, boolean container, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
@@ -77,41 +78,41 @@ public class Spinner extends HorizontalContainer {
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		VerticalContainer buttons=new VerticalContainer(setting,new IContainerRenderer(){});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.UP,container)) {
+		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.UP, container)) {
 			@Override
-			public void handleButton (Context context, int button) {
-				super.handleButton(context,button);
-				if (button==IInterface.LBUTTON && context.isClicked(button)) {
-					double number=setting.getNumber();
-					number+=setting.getStepAsDouble();
-					if (number<=setting.getMaximumValue()) setting.setNumber(number);
+			public void handleButton(Context context, int button) {
+				super.handleButton(context, button);
+				if (button == IInterface.LBUTTON && context.isClicked(button)) {
+					double number = setting.getNumber();
+					number += setting.getStepAsDouble();
+					if (number <= setting.getMaximumValue()) setting.setNumber(number);
 				}
 			}
-			
+
 			@Override
 			public int getHeight() {
-				return textField.getHeight()/2;
+				return textField.getHeight() / 2;
 			}
 		});
-		buttons.addComponent(new Button<Void>(new Labeled(null,null),()->null,theme.getSmallButtonRenderer(ITheme.DOWN,container)) {
+		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.DOWN, container)) {
 			@Override
-			public void handleButton (Context context, int button) {
-				super.handleButton(context,button);
-				if (button==IInterface.LBUTTON && context.isClicked(button)) {
-					double number=setting.getNumber();
-					number-=setting.getStepAsDouble();
-					if (number>=setting.getMinimumValue()) setting.setNumber(number);
+			public void handleButton(Context context, int button) {
+				super.handleButton(context, button);
+				if (button == IInterface.LBUTTON && context.isClicked(button)) {
+					double number = setting.getNumber();
+					number -= setting.getStepAsDouble();
+					if (number >= setting.getMinimumValue()) setting.setNumber(number);
 				}
 			}
-			
+
 			@Override
 			public int getHeight() {
-				return textField.getHeight()/2;
+				return textField.getHeight() / 2;
 			}
 		});
-		addComponent(new HorizontalComponent<VerticalContainer>(buttons,textField.getHeight(),0) {
+		addComponent(new HorizontalComponent<>(buttons, textField.getHeight(), 0) {
 			@Override
-			public int getWidth (IInterface inter) {
+			public int getWidth(IInterface inter) {
 				return textField.getHeight();
 			}
 		});

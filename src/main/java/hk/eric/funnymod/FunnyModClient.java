@@ -2,6 +2,7 @@ package hk.eric.funnymod;
 
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.viaversion.fabric.mc117.ViaFabric;
 import hk.eric.funnymod.event.FabricEventAdapter;
 import hk.eric.funnymod.gui.Gui;
@@ -19,16 +20,19 @@ public class FunnyModClient implements ClientModInitializer {
 
     public static final String MOD_ID = "funnymod";
     public static final String MOD_NAME = "Funny Mod";
+    public static final boolean debug = true;
     private static boolean initialized = false;
     private static IBaritone baritone;
+    private static PoseStack poseStack;
 
     /*TODO:
+    *  Item Aura - Like infinite aura, but picks up items
+    *  No break delay
     *  Auto farm
     *  Mob ESP - Semi done
     *  Freecam
     *  Slot locking
     *  Speed module
-    *  XP boost time left
     *  Stat change preview*/
 
     public static final Minecraft mc = Minecraft.getInstance();
@@ -47,6 +51,15 @@ public class FunnyModClient implements ClientModInitializer {
         FabricEventAdapter.init();
     }
 
+    public static PoseStack getPoseStack() {
+        return poseStack;
+    }
+
+    public static void setPoseStack(PoseStack poseStack) {
+        FunnyModClient.poseStack = poseStack;
+    }
+
+    @SuppressWarnings("rawtypes")
     public static TCPClient getTcpClient() {
         return null;
     }

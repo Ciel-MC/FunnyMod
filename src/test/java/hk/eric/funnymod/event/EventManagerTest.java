@@ -1,44 +1,45 @@
 package hk.eric.funnymod.event;
 
-import hk.eric.funnymod.event.events.TickEvent;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.ParameterizedType;
-import java.util.function.Consumer;
+import static org.junit.jupiter.api.Assertions.*;
 
-class EventManagerTest {
+    class EventManagerTest {
+        @Test
+        public void test() {
+            EventHandler<Event> handler = new EventHandler<>(EventPriority.HIGH) {
+                @Override
+                public void handle(Event event) {
+                    System.out.println("Hello World!");
+                }
+            };
 
-    EventManager eventManager;
+            EventHandler<EventA> handlerA = new EventHandler<>(EventPriority.HIGHEST) {
+                @Override
+                public void handle(EventA event) {
+                    System.out.println("EventA");
+                }
+            };
 
-    @BeforeEach
-    void setUp() {
-        eventManager = EventManager.getInstance();
+            EventHandler<EventB> handlerB = new EventHandler<>(EventPriority.LOWEST) {
+                @Override
+                public void handle(EventB event) {
+                    System.out.println("EventB");
+                }
+            };
+
+            EventManager.getInstance().register(handler);
+            EventManager.getInstance().register(handlerA);
+            EventManager.getInstance().register(handlerB);
+
+            EventManager.getInstance().callEvent(new EventB());
+        }
+
+        private class EventA extends Event {
+
+        }
+
+        private class EventB extends EventA {
+
+        }
     }
-
-    @org.junit.jupiter.api.Test
-    void test() {
-        EventHandler<TickEvent> handler = EventHandler.of(TickEvent.class, event -> {
-            event.getState();
-        });
-        getEventClassOfEventHandler(handler);
-    }
-
-    public < E extends Event> void getEventClassOfEventHandler(EventHandler<E> handler) {
-        System.out.println(((ParameterizedType) handler.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
-    }
-
-}
-
-abstract class EventHandler<E extends Event> {
-
-    public static < T extends Event > EventHandler<T> of(Class<T> clazz, Consumer<T> consumer) {
-        return new EventHandler<>() {
-            @Override
-            public void handle(T e) {
-                consumer.accept(e);
-            }
-        };
-    }
-
-    abstract void handle(E e);
-}

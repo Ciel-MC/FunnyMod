@@ -79,7 +79,7 @@ public abstract class ColorComponent extends VerticalContainer {
 
 		@Override
 		public IBoolean isVisible() {
-			return ()->setting.allowsRainbow();
+			return setting::allowsRainbow;
 		}
 		
 		@Override
@@ -229,8 +229,9 @@ public abstract class ColorComponent extends VerticalContainer {
 		}
 
 
+		@SuppressWarnings("rawtypes")
 		@Override
-		public Class getSettingClass() {
+		public Class<Integer> getSettingClass() {
 			return null;
 		}
 	}

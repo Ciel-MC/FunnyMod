@@ -1,7 +1,5 @@
 package com.lukflug.panelstudio.container;
 
-import java.awt.Point;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IInterface;
@@ -9,6 +7,8 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.config.IConfigList;
 import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.theme.IDescriptionRenderer;
+
+import java.awt.*;
 
 /**
  * Object representing the entire GUI.
@@ -62,7 +62,7 @@ public class GUI implements IContainer<IFixedComponent> {
 	}
 	
 	/**
-	 * Render the GUI (lowest component first, highest component last).
+	 * Render the GUI (the lowest component first, the highest component last).
 	 */
 	public void render() {
 		Context context=getContext();

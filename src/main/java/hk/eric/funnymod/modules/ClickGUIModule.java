@@ -14,7 +14,7 @@ public class ClickGUIModule extends Module {
 	public static final IntegerSetting animationSpeed=new IntegerSetting("Animation Speed","animationSpeed","The speed of GUI animations.",0,1000,200);
 	public static final EnumSettingWithSubSettings<Theme> theme= new EnumSettingWithSubSettings<>("Theme", "theme", "What theme to use.", Theme.Impact, Theme.class);
 	public static final EnumSetting<Layout> layout= new EnumSetting<>("Layout", "layout", "What layout to use.", Layout.CSGOVertical, Layout.class);
-	public static final KeybindSetting keybind=new KeybindSetting("Keybind","keybind","The key to toggle the module.",GLFW.GLFW_KEY_RIGHT_SHIFT,()-> Gui.getGUI().enterGUI());
+	public static final KeybindSetting keybind=new KeybindSetting("Keybind","keybind","The key to toggle the module.",GLFW.GLFW_KEY_RIGHT_SHIFT,()-> Gui.getGUI().enterGUI(), true);
 	
 	public ClickGUIModule() {
 		super("ClickGUI","Module containing ClickGUI settings.");
@@ -37,9 +37,5 @@ public class ClickGUIModule extends Module {
 	
 	public enum Layout {
 		ClassicPanel,PopupPanel,DraggablePanel,SinglePanel,PanelMenu,ColorPanel,CSGOHorizontal,CSGOVertical,CSGOCategory,SearchableCSGO
-	}
-
-	public enum Test {
-		test
 	}
 }

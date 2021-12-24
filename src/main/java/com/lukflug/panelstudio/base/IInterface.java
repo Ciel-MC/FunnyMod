@@ -124,10 +124,10 @@ public interface IInterface {
 	 * The color of the rectangle should ideally be smoothly interpolated. 
 	 * May only be called in a GUI rendering method.
 	 * @param r the rectangle to be rendered
-	 * @param c1 the color at the top-left corner of the rectangle
-	 * @param c2 the color at the top-right corner of the rectangle
-	 * @param c3 the color at the bottom-right corner of the rectangle
-	 * @param c4 the color at the bottom-left corner of the rectangle
+	 * @param c1 the color in the top-left corner of the rectangle
+	 * @param c2 the color in the top-right corner of the rectangle
+	 * @param c3 the color in the bottom-right corner of the rectangle
+	 * @param c4 the color in the bottom-left corner of the rectangle
 	 */
     void fillRect(Rectangle r, Color c1, Color c2, Color c3, Color c4);
 	
@@ -136,10 +136,10 @@ public interface IInterface {
 	 * The color of the rectangle should ideally be smoothly interpolated.
 	 * May only be called in a GUI rendering method.
 	 * @param r the rectangle to be rendered
-	 * @param c1 the color at the top-left corner of the rectangle
-	 * @param c2 the color at the top-right corner of the rectangle
-	 * @param c3 the color at the bottom-right corner of the rectangle
-	 * @param c4 the color at the bottom-left corner of the rectangle
+	 * @param c1 the color in the top-left corner of the rectangle
+	 * @param c2 the color in the top-right corner of the rectangle
+	 * @param c3 the color in the bottom-right corner of the rectangle
+	 * @param c4 the color in the bottom-left corner of the rectangle
 	 */
     void drawRect(Rectangle r, Color c1, Color c2, Color c3, Color c4);
 	

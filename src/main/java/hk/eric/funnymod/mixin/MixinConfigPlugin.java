@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MixinConfigPlugin implements IMixinConfigPlugin {
-//
+    //
 //    public static TCPClient client = new TCPClient(new FunnyModPacketHandler());
     public static boolean isEnabled;
 

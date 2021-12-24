@@ -2,6 +2,7 @@ package hk.eric.funnymod.utils;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.GlowSquid;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
@@ -68,9 +69,7 @@ public class EntityUtil {
             entity instanceof Zombie ||
             entity instanceof ZombieHorse;
 
-    public static final Predicate<Entity> isNeutral = (entity) -> {
-        return entity instanceof EnderMan || entity instanceof IronGolem || entity instanceof SnowGolem;
-    };
+    public static final Predicate<Entity> isNeutral = (entity) -> entity instanceof EnderMan || entity instanceof IronGolem || entity instanceof SnowGolem;
     public static boolean isHostile(Entity entity) {
         return isHostile.test(entity);
     }
@@ -82,5 +81,12 @@ public class EntityUtil {
     }
     public static boolean isNeutral(Entity entity) {
         return isNeutral.test(entity);
+    }
+    public static int rateArmor(LivingEntity entity) {
+        return 0; //TODO: Implement
+    }
+
+    public static double distanceToEntitySquared(Entity entity, Entity target) {
+        return MathUtil.getDistance3D(entity.position(), target.position(), false);
     }
 }

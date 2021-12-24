@@ -68,6 +68,7 @@ public abstract class FocusableComponent extends ComponentBase {
 	 * @param context the {@link Context} for the component
 	 * @param focus the new focus state
 	 */
+	@SuppressWarnings("EmptyMethod")
 	protected void handleFocus (Context context, boolean focus) {
 	}
 }

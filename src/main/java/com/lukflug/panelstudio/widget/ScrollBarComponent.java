@@ -35,34 +35,34 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 	 * @param emptyRenderer the renderer for empty space, if the component is too small
 	 */
 	public ScrollBarComponent (T component, IScrollBarRenderer<S> renderer, IEmptySpaceRenderer<S> cornerRenderer, IEmptySpaceRenderer<S> emptyRenderer) {
-		super(new Labeled(component.getTitle(),null,()->component.isVisible()),renderer);
+		super(new Labeled(component.getTitle(),null, component::isVisible),renderer);
 		this.component=component;
 		// Component containing content
-		ScrollableComponent<T> scrollComponent=new ScrollableComponent<T>() {
+		ScrollableComponent<T> scrollComponent= new ScrollableComponent<>() {
 			@Override
 			public T getComponent() {
 				return component;
 			}
-			
+
 			@Override
-			public int getScrollHeight (Context context, int height) {
-				return ScrollBarComponent.this.getScrollHeight(context,height);
+			public int getScrollHeight(Context context, int height) {
+				return ScrollBarComponent.this.getScrollHeight(context, height);
 			}
-			
+
 			@Override
-			public int getComponentWidth (Context context) {
+			public int getComponentWidth(Context context) {
 				return ScrollBarComponent.this.getComponentWidth(context);
 			}
-			
+
 			@Override
-			public void fillEmptySpace (Context context, Rectangle rect) {
-				Context subContext=new Context(context.getInterface(),rect.width,rect.getLocation(),context.hasFocus(),context.onTop());
+			public void fillEmptySpace(Context context, Rectangle rect) {
+				Context subContext = new Context(context.getInterface(), rect.width, rect.getLocation(), context.hasFocus(), context.onTop());
 				subContext.setHeight(rect.height);
-				emptyRenderer.renderSpace(subContext,context.hasFocus(),getState());
+				emptyRenderer.renderSpace(subContext, context.hasFocus(), getState());
 			}
 		};
 		// Vertical scroll bar
-		ScrollBar<S> verticalBar=new ScrollBar<S>(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingY()),false,renderer) {
+		ScrollBar<S> verticalBar= new ScrollBar<>(new Labeled(component.getTitle(), null, scrollComponent::isScrollingY), false, renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().height;
@@ -89,7 +89,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 		};
 		// Horizontal scroll bar
-		ScrollBar<S> horizontalBar=new ScrollBar<S>(new Labeled(component.getTitle(),null,()->scrollComponent.isScrollingX()),true,renderer) {
+		ScrollBar<S> horizontalBar= new ScrollBar<>(new Labeled(component.getTitle(), null, scrollComponent::isScrollingX), true, renderer) {
 			@Override
 			protected int getLength() {
 				return scrollComponent.getScrollSize().width;
@@ -106,7 +106,7 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 			}
 
 			@Override
-			protected void setScrollPosition (int position) {
+			protected void setScrollPosition(int position) {
 				scrollComponent.setScrollPosX(position);
 			}
 
@@ -121,19 +121,19 @@ public abstract class ScrollBarComponent<S,T extends IComponent> extends Horizon
 		leftContainer.addComponent(horizontalBar);
 		VerticalContainer rightContainer=new VerticalContainer(new Labeled(component.getTitle(),null),new IContainerRenderer(){});
 		rightContainer.addComponent(verticalBar);
-		rightContainer.addComponent(new EmptySpace<S>(new Labeled("Empty",null,()->scrollComponent.isScrollingX()&&scrollComponent.isScrollingY()),()->renderer.getThickness(),cornerRenderer) {
+		rightContainer.addComponent(new EmptySpace<>(new Labeled("Empty", null, () -> scrollComponent.isScrollingX() && scrollComponent.isScrollingY()), renderer::getThickness, cornerRenderer) {
 			@Override
 			protected S getState() {
 				return ScrollBarComponent.this.getState();
 			}
 		});
-		addComponent(new HorizontalComponent<VerticalContainer>(leftContainer,0,1));
-		addComponent(new HorizontalComponent<VerticalContainer>(rightContainer,0,0) {
+		addComponent(new HorizontalComponent<>(leftContainer, 0, 1));
+		addComponent(new HorizontalComponent<>(rightContainer, 0, 0) {
 			@Override
-			public int getWidth (IInterface inter) {
+			public int getWidth(IInterface inter) {
 				return renderer.getThickness();
 			}
-		},()->scrollComponent.isScrollingY());
+		}, scrollComponent::isScrollingY);
 	}
 	
 	/**

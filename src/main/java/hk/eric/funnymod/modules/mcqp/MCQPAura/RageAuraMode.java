@@ -2,14 +2,23 @@ package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.MathUtil;
+import hk.eric.funnymod.utils.PacketUtil;
+import hk.eric.funnymod.utils.PlayerUtil;
+import hk.eric.funnymod.utils.classes.XYRot;
 import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
 import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -29,27 +38,17 @@ public class RageAuraMode implements AuraMode {
 
     @Override
     public TriConsumer<LivingEntity, LocalPlayer, Consumer<Packet<?>>> getAttack() {
-//        return (entity, player, packetSender) -> {
-//            double targetX = entity.getX(), targetY = entity.getY(), targetZ = entity.getZ();
-//            double eyeHeight = player.getEyeHeight();
-//            Pair<Float, Float> yawPitch = PlayerUtil.getRotFromCoordinates(targetX, targetY, targetZ, eyeHeight, targetX, targetY, targetZ);
-//            float rotY = yawPitch.getSecond(), rotX = yawPitch.getFirst();
-//            Vec3 from = new Vec3(targetX, targetY + eyeHeight, targetZ);
-//            Vec3 to = new Vec3(entity.getX(), entity.getY() + entity.getBbHeight()/2, entity.getZ());
-//            BlockHitResult result = player.level.clip(new ClipContext(from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
-//
-//            if (result.getType() == HitResult.Type.BLOCK) {
-//                packetSender.accept(new ServerboundMovePlayerPacket.Pos(targetX, targetY, targetZ, player.isOnGround()));
-//                packetSender.accept(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, result.getBlockPos(), Direction.fromYRot(rotY)));
-//            } else {
-//                packetSender.accept(new ServerboundMovePlayerPacket.PosRot(targetX, targetY, targetZ, rotY, rotX, player.isOnGround()));
-//                packetSender.accept(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
-//            }
-//            packetSender.accept(new ServerboundMovePlayerPacket.Pos(player.getX(), player.getY(), player.getZ(), player.isOnGround()));
-//        };
         return (entity, player, packetSender) -> {
-            packetSender.accept(new ServerboundMovePlayerPacket.Pos(entity.getX(), entity.getY(), entity.getZ(), player.isOnGround()));
-            packetSender.accept(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+            Vec3 targetLoc = entity.position();
+            XYRot xyRot = PlayerUtil.getRotFromCoordinate(entity.getX(), entity.getY() + player.getEyeHeight(), entity.getZ(), entity.getX(), entity.getY(), entity.getZ());
+            packetSender.accept(new ServerboundMovePlayerPacket.PosRot(targetLoc.x, targetLoc.y, targetLoc.z, xyRot.getYRot(), xyRot.getXRot(), false));
+            HitResult result = player.pick(3,1,false);
+            if (result.getType() == HitResult.Type.BLOCK) {
+                BlockPos blockPos = ((BlockHitResult) result).getBlockPos();
+                PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockPos, Direction.fromYRot(xyRot.getYRot())));
+            }else {
+                PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+            }
         };
     }
 }

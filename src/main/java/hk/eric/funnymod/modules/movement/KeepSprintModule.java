@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class KeepSprintModule extends ToggleableModule {
 
     private static KeepSprintModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KeepSprintKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KeepSprintKeybind", null, -1, () -> instance.toggle(), true);
 
     public KeepSprintModule() {
         super("KeepSprint", "Doesn't break your sprint when hitting an entity");
@@ -16,7 +16,7 @@ public class KeepSprintModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     enum Mode {

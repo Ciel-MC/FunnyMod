@@ -1,12 +1,12 @@
 package com.lukflug.panelstudio.tabgui;
 
-import java.util.function.IntPredicate;
-import java.util.stream.Collectors;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.setting.ICategory;
+
+import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
 
 /**
  * A category tab.
@@ -17,7 +17,7 @@ public class Tab extends TabItem<IToggleable,Boolean> {
 	/**
 	 * Constructor.
 	 * @param category the category to be used
-	 * @param renderer the renderer for this componet
+	 * @param renderer the renderer for this component
 	 * @param animation the animation for the tab state
 	 * @param up the scancode predicate for moving up an item
 	 * @param down the scancode predicate for moving down an item
@@ -25,7 +25,7 @@ public class Tab extends TabItem<IToggleable,Boolean> {
 	 */
 	public Tab (ICategory category, ITabGUIRenderer<Boolean> renderer, Animation animation, IntPredicate up, IntPredicate down, IntPredicate enter) {
 		super(category,renderer,animation,up,down,enter,key->false);
-		contents=category.getModules().filter(module->module.isEnabled()!=null).map(module->new ContentItem<IToggleable,Boolean>(module.getDisplayName(),module.isEnabled())).collect(Collectors.toList());
+		contents=category.getModules().filter(module->module.getToggleable()!=null).map(module-> new ContentItem<>(module.getDisplayName(), module.getToggleable())).collect(Collectors.toList());
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class NoSlowModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     enum Mode {

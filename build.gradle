@@ -1,3 +1,10 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection GrUnresolvedAccess
+//file:noinspection GrUnresolvedAccess
+//file:noinspection GrUnresolvedAccess
 plugins {
     id 'fabric-loom' version '0.10.+'
     id 'maven-publish'
@@ -38,7 +45,8 @@ dependencies {
     include(modImplementation("net.kyori:adventure-platform-fabric:${project.adventure_platform_version}"))
 
     //Integrate with baritone
-    include(modImplementation("baritone:baritone-unoptimized-fabric:${project.baritone_version}"))
+    include("baritone:baritone-unoptimized-fabric:${project.baritone_version}")
+    modImplementation("baritone:baritone-api-fabric:${project.baritone_version}")
 
     //Integrate with viaversion
     include(modImplementation("com.viaversion.viafabric:viafabric:${project.viafabric_version}"))

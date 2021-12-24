@@ -65,7 +65,7 @@ public class SinglePanelAdder implements IComponentAdder {
 		title=new HorizontalContainer(label,theme.getContainerRenderer(-1,-1,true));
 		content=new HorizontalContainer(label,theme.getContainerRenderer(-1,-1,true));
 		AnimatedToggleable toggle=new AnimatedToggleable(new SimpleToggleable(true),animation.get());
-		RendererTuple<Void> renderer=new RendererTuple<Void>(Void.class,new ThemeTuple(theme,-1,-1));
+		RendererTuple<Void> renderer= new RendererTuple<>(Void.class, new ThemeTuple(theme, -1, -1));
 		IResizable size=getResizable(width);
 		this.size=getScrollSize(size);
 		container.addComponent(ResizableComponent.createResizableComponent(title,content,()->null,toggle,renderer,theme.getResizeRenderer(),size,new IScrollSize() {
@@ -78,7 +78,7 @@ public class SinglePanelAdder implements IComponentAdder {
 	
 	@Override
 	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ThemeTuple theme, Point position, int width, Supplier<Animation> animation) {
-		this.title.addComponent(new HorizontalComponent<S>(title,0,1));
+		this.title.addComponent(new HorizontalComponent<>(title, 0, 1));
 		this.content.addComponent(new HorizontalComponent<>(new ScrollBarComponent<Void,T>(content,theme.getScrollBarRenderer(Void.class),theme.getEmptySpaceRenderer(Void.class,false),theme.getEmptySpaceRenderer(Void.class,true)) {
 			@Override
 			public int getScrollHeight (Context context, int componentHeight) {

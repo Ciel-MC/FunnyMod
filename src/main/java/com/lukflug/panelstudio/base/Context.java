@@ -1,10 +1,8 @@
 package com.lukflug.panelstudio.base;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.popup.IPopupDisplayer;
+
+import java.awt.*;
 
 /**
  * A class for the communication between a component and its parent.
@@ -12,7 +10,7 @@ import com.lukflug.panelstudio.popup.IPopupDisplayer;
  */
 public final class Context {
 	/**
-	 * The current {@link Interface}.
+	 * The current {@link IInterface}.
 	 */
 	private final IInterface inter;
 	/**
@@ -76,7 +74,7 @@ public final class Context {
 	 * @param inter the current {@link IInterface}
 	 * @param width the width of the component
 	 * @param position the position of the component
-	 * @param focus set to false, to disable the component from having focus
+	 * @param focus set to false in order to disable the component from having focus
 	 * @param onTop set to false, if a component is above another component at the current cursor position
 	 */
 	public Context (IInterface inter, int width, Point position, boolean focus, boolean onTop) {
@@ -154,7 +152,7 @@ public final class Context {
 	 * Returns {@link #focusRequested}.
 	 * @return whether the child is requesting focus.
 	 */
-	public boolean foucsRequested() {
+	public boolean focusRequested() {
 		return focusRequested && !focusOverride;
 	}
 	

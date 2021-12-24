@@ -1,10 +1,10 @@
 package com.lukflug.panelstudio.component;
 
-import java.awt.Point;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.config.IPanelConfig;
+
+import java.awt.*;
 
 /**
  * Fixed component wrapper that can be dragged by another component.
@@ -65,25 +65,25 @@ public abstract class DraggableComponent<T extends IFixedComponent> implements I
 	 * @return wrapped component
 	 */
 	public <S extends IComponent> ComponentProxy<S> getWrappedDragComponent (S dragComponent) {
-		return new ComponentProxy<S>(dragComponent) {
+		return new ComponentProxy<>(dragComponent) {
 			@Override
-			public void handleButton (Context context, int button) {
-				super.handleButton(context,button);
-				if (context.isClicked(button) && button==IInterface.LBUTTON) {
-					dragging=true;
-					attachPoint=context.getInterface().getMouse();
+			public void handleButton(Context context, int button) {
+				super.handleButton(context, button);
+				if (context.isClicked(button) && button == IInterface.LBUTTON) {
+					dragging = true;
+					attachPoint = context.getInterface().getMouse();
 				} else if (!context.getInterface().getButton(IInterface.LBUTTON) && dragging) {
-					Point mouse=context.getInterface().getMouse();
-					dragging=false;
-					Point p=DraggableComponent.this.getComponent().getPosition(context.getInterface());
-					p.translate(mouse.x-attachPoint.x,mouse.y-attachPoint.y);
-					DraggableComponent.this.getComponent().setPosition(context.getInterface(),p);
+					Point mouse = context.getInterface().getMouse();
+					dragging = false;
+					Point p = DraggableComponent.this.getComponent().getPosition(context.getInterface());
+					p.translate(mouse.x - attachPoint.x, mouse.y - attachPoint.y);
+					DraggableComponent.this.getComponent().setPosition(context.getInterface(), p);
 				}
 			}
-			
+
 			@Override
 			public void exit() {
-				dragging=false;
+				dragging = false;
 				super.exit();
 			}
 		};

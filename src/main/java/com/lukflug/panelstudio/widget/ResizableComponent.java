@@ -1,21 +1,15 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
-import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.component.IFixedComponent;
-import com.lukflug.panelstudio.component.IFixedComponentProxy;
-import com.lukflug.panelstudio.component.IResizable;
-import com.lukflug.panelstudio.component.IScrollSize;
+import com.lukflug.panelstudio.component.*;
 import com.lukflug.panelstudio.config.IPanelConfig;
 import com.lukflug.panelstudio.theme.IResizeBorderRenderer;
 import com.lukflug.panelstudio.theme.RendererTuple;
+
+import java.awt.*;
+import java.util.function.Supplier;
 
 /**
  * A fixed component that can be resized.
@@ -157,7 +151,7 @@ public class ResizableComponent<T extends IFixedComponent> implements IFixedComp
 	 * @param title the title component
 	 * @param content the content component
 	 * @param state the render state
-	 * @param open the toggleable for opening an closing
+	 * @param open the toggleable for opening a closing
 	 * @param renderer the panel renderers to be used
 	 * @param resizeRenderer the resize renderer to be sued
 	 * @param size the resize behavior, null for normal un-resizable panel

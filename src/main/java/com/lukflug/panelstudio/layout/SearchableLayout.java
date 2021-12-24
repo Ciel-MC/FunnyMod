@@ -113,6 +113,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		util=new ChildUtil(popupWidth,animation,popupType);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
 		Button<Void> title= new Button<>(titleLabel, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
@@ -123,15 +124,15 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		modules.get().forEach(module->{
 			VerticalContainer container=new VerticalContainer(module,theme.getContainerRenderer(1,1,false));
 			window.addComponent(wrapColumn(container,new ThemeTuple(theme,1,1),weight),()-> modSelect.getValueName().equals(module.getDisplayName()));
-			if (module.isEnabled()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
+			if (module.getToggleable()!=null) container.addComponent(components.getComponent(new IBooleanSetting() {
 				@Override
 				public Boolean getValue() {
-					return module.isEnabled().isOn();
+					return module.getToggleable().isOn();
 				}
 
 				@Override
 				public void setValue(Boolean value) {
-					if (module.isEnabled().isOn()!=value) module.isEnabled().toggle();
+					if (module.getToggleable().isOn()!=value) module.getToggleable().toggle();
 				}
 
 				@Override
@@ -151,12 +152,12 @@ public class SearchableLayout implements ILayout,IScrollSize {
 
 				@Override
 				public void toggle() {
-					module.isEnabled().toggle();
+					module.getToggleable().toggle();
 				}
 
 				@Override
 				public boolean isOn() {
-					return module.isEnabled().isOn();
+					return module.getToggleable().isOn();
 				}
 			},animation,gui,new ThemeTuple(theme,1,2),2,false));
 			module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
@@ -178,7 +179,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
 		if (component instanceof VerticalContainer colorContainer) {
 			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN));
-			util.addContainer(setting,button,colorContainer,()->setting.getSettingState(),setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
+			util.addContainer(setting,button,colorContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
 			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(false));
@@ -199,6 +200,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	 * @param container mapping from radio button to container component type instance
 	 * @return the enum setting controlling the radio button list
 	 */
+	@SuppressWarnings("rawtypes")
 	protected <T extends IComponent> IEnumSetting addContainer(ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, Function<SearchableRadioButton, T> container) {
 		return addContainer(label, labels, window, theme, container, Constants.alwaysTrue);
 	}
@@ -214,6 +216,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	 * @param visible radio buttons visibility predicate
 	 * @return the enum setting controlling the radio button list
 	 */
+	@SuppressWarnings("rawtypes")
 	protected <T extends IComponent> IEnumSetting addContainer (ILabeled label, Stream<ILabeled> labels, IContainer<T> window, ThemeTuple theme, Function<SearchableRadioButton,T> container, IBoolean visible) {
 		IEnumSetting setting=new IEnumSetting() {
 			private int state=0;
@@ -275,6 +278,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 				state= Arrays.asList(array).indexOf(value);
 			}
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			public Class getSettingClass() {
 				return Enum.class;

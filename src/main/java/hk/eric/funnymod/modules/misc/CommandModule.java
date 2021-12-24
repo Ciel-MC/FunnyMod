@@ -4,7 +4,6 @@ import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.config.ConfigManager;
 import hk.eric.funnymod.event.EventHandler;
-import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.PlayerChatEvent;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
@@ -45,23 +44,13 @@ public class CommandModule extends ToggleableModule {
     public CommandModule() {
         super("Command", "Commands", true);
         instance = this;
+        registerOnOffHandler(commandHandler);
         settings.add(keybind);
-    }
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        EventManager.getInstance().register(commandHandler);
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        EventManager.getInstance().unregister(commandHandler);
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     public static void handleCommand(PlayerChatEvent event) {

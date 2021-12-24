@@ -1,13 +1,13 @@
 package com.lukflug.panelstudio.tabgui;
 
-import java.util.List;
-import java.util.function.IntPredicate;
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.setting.ILabeled;
+
+import java.util.List;
+import java.util.function.IntPredicate;
+import java.util.function.Supplier;
 
 /**
  * Class representing a tab in the TabGUI.
@@ -48,7 +48,7 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 	/**
 	 * Constructor.
 	 * @param label the label for this component
-	 * @param renderer the renderer for this componet
+	 * @param renderer the renderer for this component
 	 * @param animation the animation for the tab state
 	 * @param up the scancode predicate for moving up an item
 	 * @param down the scancode predicate for moving down an item
@@ -127,7 +127,7 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 	 * @param <S> the item state supplier type
 	 * @param <T> the item state type
 	 */
-	protected static final class ContentItem<S extends Supplier<T>,T> {
+	public static final class ContentItem<S extends Supplier<T>,T> {
 		/**
 		 * The item name.
 		 */

@@ -14,7 +14,8 @@ public class CycleButton extends FocusableComponent {
 	/**
 	 * The setting in question.
 	 */
-	protected final IEnumSetting setting;
+	@SuppressWarnings("rawtypes")
+    protected final IEnumSetting setting;
 	/**
 	 * The renderer to be used.
 	 */
@@ -25,7 +26,8 @@ public class CycleButton extends FocusableComponent {
 	 * @param setting the setting in question
 	 * @param renderer the renderer for this component
 	 */
-	public CycleButton (IEnumSetting setting, IButtonRenderer<String> renderer) {
+	@SuppressWarnings("rawtypes")
+    public CycleButton (IEnumSetting setting, IButtonRenderer<String> renderer) {
 		super(setting);
 		this.setting=setting;
 		this.renderer=renderer;

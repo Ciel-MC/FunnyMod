@@ -2,18 +2,17 @@ package hk.eric.funnymod.event;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class EventManager {
 
     /*Potential to have mapped events called by strings*/
 
-    private final static EventManager instance;
-    private final Map<Class<? extends Event>, Set<ListeningMethod>> registry;
-    private final Map<Class<? extends Event>, Set<EventHandler<?>>> eventHandlers;
-
-    static {
-        instance = new EventManager();
-    }
+    private final static EventManager instance = new EventManager();
+    private final Map<Class<? extends Event>, SortedSet<ListeningMethod>> registry;
+    private final Map<Class<? extends Event>, SortedSet<EventHandler<?>>> eventHandlers;
+    private final Supplier<SortedSet<ListeningMethod>> listeningMethodSetSupplier = () -> new TreeSet<>(Comparator.comparing(ListeningMethod::priority));
+    private final Supplier<SortedSet<EventHandler<?>>> eventHandlerSetSupplier = () -> new TreeSet<>(Comparator.comparing(EventHandler::getPriority));
 
     private EventManager() {
         registry = new HashMap<>();
@@ -34,19 +33,17 @@ public class EventManager {
             Class<? extends Event> eventClass = (Class<? extends Event>) method.getParameterTypes()[0];
             method.setAccessible(true);
 
-            methods.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(new ListeningMethod(handler, method));
+            methods.computeIfAbsent(eventClass, k -> new ArrayList<>()).add(new ListeningMethod(handler, method, method.getAnnotation(EventListener.class).priority()));
         });
-        methods.forEach((aClass, listeningMethods) -> {
-            registry.computeIfAbsent(aClass, k -> new HashSet<>()).addAll(listeningMethods);
-        });
+        methods.forEach((aClass, listeningMethods) -> registry.computeIfAbsent(aClass, k -> listeningMethodSetSupplier.get()).addAll(listeningMethods));
     }
 
     public <E extends Event> void register(EventHandler<E> handler) {
-        eventHandlers.computeIfAbsent(getEventClassOfEventHandler(handler), k -> new HashSet<>()).add(handler);
+        eventHandlers.computeIfAbsent(getEventClassOfEventHandler(handler), k -> eventHandlerSetSupplier.get()).add(handler);
     }
 
     public void unregister(Object handler) {
-        for (Map.Entry<Class<? extends Event>, Set<ListeningMethod>> entry : registry.entrySet()) {
+        for (Map.Entry<Class<? extends Event>, SortedSet<ListeningMethod>> entry : registry.entrySet()) {
             Set<ListeningMethod> handlers = entry.getValue();
             handlers.removeIf(listeningMethod -> listeningMethod.object() == handler);
         }
@@ -57,9 +54,18 @@ public class EventManager {
     }
 
     public void callEvent(Event event) {
-        Set<ListeningMethod> handlers = registry.getOrDefault(event.getClass(), Collections.emptySet());
-        if (handlers != null) {
-            handlers.forEach(listeningMethod -> {
+        Set<ListeningMethod> listeningMethods = registry.getOrDefault(event.getClass(), listeningMethodSetSupplier.get());
+        Set<EventHandler<?>> eventHandlers = this.eventHandlers.getOrDefault(event.getClass(), eventHandlerSetSupplier.get());
+
+        Class<? extends Event> clazz = event.getClass();
+        while (clazz != null) {
+            clazz = (Class<? extends Event>) clazz.getSuperclass();
+            listeningMethods.addAll(registry.getOrDefault(clazz, listeningMethodSetSupplier.get()));
+            eventHandlers.addAll(this.eventHandlers.getOrDefault(clazz, eventHandlerSetSupplier.get()));
+        }
+
+        if (listeningMethods != null) {
+            listeningMethods.forEach(listeningMethod -> {
                 try {
                     listeningMethod.method().invoke(listeningMethod.object(), event);
                 } catch (Exception e) {
@@ -68,7 +74,6 @@ public class EventManager {
             });
         }
 
-        Set<EventHandler<?>> eventHandlers = this.eventHandlers.getOrDefault(event.getClass(), Collections.emptySet());
         eventHandlers.forEach(eventHandler -> callEventToEventHandler(eventHandler, event));
     }
 

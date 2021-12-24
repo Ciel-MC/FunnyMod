@@ -1,9 +1,5 @@
 package com.lukflug.panelstudio.container;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -11,6 +7,11 @@ import com.lukflug.panelstudio.component.ComponentBase;
 import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
+import hk.eric.funnymod.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Base class for containers.
@@ -21,13 +22,13 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	/**
 	 * List of components.
 	 */
-	protected final List<ComponentState> components=new ArrayList<ComponentState>();
+	protected final List<ComponentState> components= new ArrayList<>();
 	/**
 	 * The renderer to use.
 	 */
 	protected final IContainerRenderer renderer;
 	/**
-	 * The container visiblity.
+	 * The container visibility.
 	 */
 	private boolean visible;
 	
@@ -145,8 +146,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * @param function the payload function to execute
 	 */
 	protected void doContextlessLoop (Consumer<T> function) {
-		List<ComponentState> components=new ArrayList<ComponentState>();
-		components.addAll(this.components);
+		List<ComponentState> components = new ArrayList<>(this.components);
 		for (ComponentState state: components) state.update();
 		for (ComponentState state: components) {
 			if (state.lastVisible()) function.accept(state.component);
@@ -165,7 +165,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 	 * @return the visibility boolean
 	 */
 	protected IBoolean getDefaultVisibility() {
-		return ()->true;
+		return Constants.alwaysTrue;
 	}
 	
 	
@@ -215,7 +215,7 @@ public abstract class Container<T extends IComponent> extends ComponentBase impl
 		
 		/**
 		 * Get last visibility state.
-		 * @return the last visiblity state
+		 * @return the last visibility state
 		 */
 		public boolean lastVisible() {
 			return lastVisible;

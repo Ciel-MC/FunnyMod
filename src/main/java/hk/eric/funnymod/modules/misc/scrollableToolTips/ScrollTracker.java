@@ -1,4 +1,4 @@
-package hk.eric.funnymod.scrollableToolTips;
+package hk.eric.funnymod.modules.misc.scrollableToolTips;
 
 import hk.eric.funnymod.modules.misc.TooltipScrollingModule;
 import net.minecraft.network.chat.Component;

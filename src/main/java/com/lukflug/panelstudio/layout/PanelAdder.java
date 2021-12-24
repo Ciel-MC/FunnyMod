@@ -56,7 +56,7 @@ public class PanelAdder implements IComponentAdder {
 	@Override
 	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ThemeTuple theme, Point position, int width, Supplier<Animation> animation) {
 		AnimatedToggleable toggle=new AnimatedToggleable(new SimpleToggleable(open),animation.get());
-		RendererTuple<Void> renderer=new RendererTuple<Void>(Void.class,theme);
+		RendererTuple<Void> renderer= new RendererTuple<>(Void.class, theme);
 		IResizable size=getResizable(width);
 		container.addComponent(ResizableComponent.createResizableComponent(title,content,()->null,toggle,renderer,theme.theme.getResizeRenderer(),size,getScrollSize(size),position,width,true,configName.apply(content.getTitle())),isVisible);
 	}

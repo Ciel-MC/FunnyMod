@@ -50,6 +50,7 @@ public interface IEnumSetting<E extends Enum<E>> extends ISetting<E> {
 	 * @param setting the enum setting in question
 	 * @return list of visible enum values
 	 */
+	@SuppressWarnings("rawtypes")
 	static ILabeled[] getVisibleValues(IEnumSetting setting) {
 		return Arrays.stream(setting.getAllowedValues()).filter(value->value.isVisible().isOn()).toArray(ILabeled[]::new);
 	}

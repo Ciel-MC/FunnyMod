@@ -9,7 +9,7 @@ public class AnimationModule extends ToggleableModule {
 
     private static AnimationModule instance;
     public static final BooleanSetting noSmoothSneak = new BooleanSetting("No Smooth Sneak", "AnimationNoSmoothSneak", "Removes the smooth sneaking animation", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "AnimationKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "AnimationKeybind", null, -1, () -> instance.toggle(), true);
 
     public AnimationModule() {
         super("Animation", "Modifies animations");
@@ -19,7 +19,7 @@ public class AnimationModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
 }

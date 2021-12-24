@@ -108,7 +108,7 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 			this.border=border;
 			panelRenderer=theme.getPanelRenderer(Boolean.class,0,0);
 			titleRenderer=theme.getButtonRenderer(Boolean.class,0,0,true);
-			closable=getWrappedDragComponent(new ClosableComponent<ToggleButton,ComponentProxy<T>>(new ToggleButton(new Labeled(component.getTitle(),null,()->component.isVisible()),new IToggleable() {
+			closable=getWrappedDragComponent(new ClosableComponent<>(new ToggleButton(new Labeled(component.getTitle(), null, component::isVisible), new IToggleable() {
 				@Override
 				public boolean isOn() {
 					return state.isOn();
@@ -117,47 +117,47 @@ public class HUDPanel<T extends IFixedComponent> extends DraggableComponent<HUDP
 				@Override
 				public void toggle() {
 				}
-			},new IButtonRendererProxy<Boolean>() {
+			}, new IButtonRendererProxy<>() {
 				@Override
-				public void renderButton (Context context, String title, boolean focus, Boolean state) {
-					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context,title,focus,state);
+				public void renderButton(Context context, String title, boolean focus, Boolean state) {
+					if (renderState.isOn()) IButtonRendererProxy.super.renderButton(context, title, focus, state);
 				}
-				
+
 				@Override
 				public IButtonRenderer<Boolean> getRenderer() {
 					return titleRenderer;
 				}
-			}),new ComponentProxy<T>(component) {
+			}), new ComponentProxy<>(component) {
 				@Override
-				public int getHeight (int height) {
-					return height+2*border;
-				}
-				
-				@Override
-				public Context getContext (Context context) {
-					return new Context(context,context.getSize().width-2*border,new Point(border,border),context.hasFocus(),context.onTop());
-				}
-			},()->state.isOn(),new AnimatedToggleable(state,animation),new IPanelRendererProxy<Boolean>() {
-				@Override
-				public void renderBackground (Context context, boolean focus) {
-					if (renderState.isOn()) IPanelRendererProxy.super.renderBackground(context,focus);
-				}
-				
-				@Override
-				public void renderPanelOverlay (Context context, boolean focus, Boolean state, boolean open) {
-					if (renderState.isOn()) IPanelRendererProxy.super.renderPanelOverlay(context,focus,state,open);
+				public int getHeight(int height) {
+					return height + 2 * border;
 				}
 
 				@Override
-				public void renderTitleOverlay (Context context, boolean focus, Boolean state, boolean open) {
-					if (renderState.isOn()) IPanelRendererProxy.super.renderTitleOverlay(context,focus,state,open);
+				public Context getContext(Context context) {
+					return new Context(context, context.getSize().width - 2 * border, new Point(border, border), context.hasFocus(), context.onTop());
+				}
+			}, state::isOn, new AnimatedToggleable(state, animation), new IPanelRendererProxy<>() {
+				@Override
+				public void renderBackground(Context context, boolean focus) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderBackground(context, focus);
+				}
+
+				@Override
+				public void renderPanelOverlay(Context context, boolean focus, Boolean state, boolean open) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderPanelOverlay(context, focus, state, open);
+				}
+
+				@Override
+				public void renderTitleOverlay(Context context, boolean focus, Boolean state, boolean open) {
+					if (renderState.isOn()) IPanelRendererProxy.super.renderTitleOverlay(context, focus, state, open);
 				}
 
 				@Override
 				public IPanelRenderer<Boolean> getRenderer() {
 					return panelRenderer;
 				}
-			},false));
+			}, false));
 		}
 
 		@Override

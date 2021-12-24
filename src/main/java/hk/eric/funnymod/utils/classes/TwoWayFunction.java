@@ -6,7 +6,7 @@ public interface TwoWayFunction<A,B> {
     A revert(B b);
 
     default TwoWayFunction<B,A> reverse() {
-        return new TwoWayFunction<B, A>() {
+        return new TwoWayFunction<>() {
             @Override
             public A convert(B b) {
                 return TwoWayFunction.this.revert(b);

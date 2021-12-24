@@ -11,14 +11,16 @@ public class NumberSlider extends Slider {
 	/**
 	 * The setting in question.
 	 */
-	protected final INumberSetting setting;
+	@SuppressWarnings("rawtypes")
+    protected final INumberSetting setting;
 	
 	/**
 	 * Constructor.
 	 * @param setting the setting in question
 	 * @param renderer the renderer for the component
 	 */
-	public NumberSlider (INumberSetting setting, ISliderRenderer renderer) {
+	@SuppressWarnings("rawtypes")
+    public NumberSlider (INumberSetting setting, ISliderRenderer renderer) {
 		super(setting,renderer);
 		this.setting=setting;
 	}

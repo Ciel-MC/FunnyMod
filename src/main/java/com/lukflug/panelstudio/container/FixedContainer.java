@@ -1,12 +1,5 @@
 package com.lukflug.panelstudio.container;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.Description;
 import com.lukflug.panelstudio.base.IInterface;
@@ -20,6 +13,13 @@ import com.lukflug.panelstudio.popup.IPopupPositioner;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
 /**
  * Container with contents arranged at will.
  * @author lukflug
@@ -32,7 +32,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	/**
 	 * List of static pop-ups to be displayed.
 	 */
-	protected final List<PopupPair> popups=new ArrayList<PopupPair>();
+	protected final List<PopupPair> popups= new ArrayList<>();
 	
 	/**
 	 * Constructor.
@@ -47,7 +47,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 
 	@Override
 	public void displayPopup (IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
-		popups.add(new PopupPair(popup,rect,visible,positioner));
+		popups.add(new PopupPair(popup, rect, visible, positioner));
 	}
 	
 	@Override
@@ -57,19 +57,19 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		// Clip rectangle
 		if (clip) context.getInterface().window(context.getRect());
 		if (renderer!=null) renderer.renderBackground(context,context.hasFocus());
-		// Find highest component
-		AtomicReference<IFixedComponent> highest=new AtomicReference<IFixedComponent>(null);
-		AtomicReference<IFixedComponent> first=new AtomicReference<IFixedComponent>(null);
+		// Find the highest component
+		AtomicReference<IFixedComponent> highest= new AtomicReference<>(null);
+		AtomicReference<IFixedComponent> first= new AtomicReference<>(null);
 		doContextlessLoop(component->{
 			if (first.get()==null) first.set(component);
 			Context subContext=getSubContext(context,component,true,true);
 			component.getHeight(subContext);
 			if (subContext.isHovered() && highest.get()==null) highest.set(component);
 		});
-		// Render loop in right order (lowest panel first)
+		// Render loop in right order (the lowest panel first)
 		AtomicBoolean highestReached=new AtomicBoolean(false);
 		if (highest.get()==null) highestReached.set(true);
-		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
+		AtomicReference<IFixedComponent> focusComponent= new AtomicReference<>(null);
 		super.doContextlessLoop(component->{
 			// Check onTop state
 			if (component==highest.get()) highestReached.set(true);
@@ -78,7 +78,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			component.render(subContext);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
-			else if (subContext.foucsRequested()) {
+			else if (subContext.focusRequested()) {
 				focusComponent.set(component);
 				context.requestFocus();
 			}
@@ -104,8 +104,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	
 	@Override
 	protected void doContextlessLoop (Consumer<IFixedComponent> function) {
-		List<ComponentState> components=new ArrayList<ComponentState>();
-		components.addAll(this.components);
+		List<ComponentState> components = new ArrayList<>(this.components);
 		for (ComponentState state: components) state.update();
 		for (int i=components.size()-1;i>=0;i--) {
 			ComponentState state=components.get(i);
@@ -120,7 +119,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		// Do loop in inverse order
 		AtomicBoolean highest=new AtomicBoolean(true);
 		AtomicBoolean first=new AtomicBoolean(true);
-		AtomicReference<IFixedComponent> focusComponent=new AtomicReference<IFixedComponent>(null);
+		AtomicReference<IFixedComponent> focusComponent= new AtomicReference<>(null);
 		doContextlessLoop(component->{
 			// Do payload operation
 			Context subContext=getSubContext(context,component,first.get(),highest.get());
@@ -128,7 +127,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 			function.accept(subContext,component);
 			// Check focus state
 			if (subContext.focusReleased()) context.releaseFocus();
-			else if (subContext.foucsRequested()) {
+			else if (subContext.focusRequested()) {
 				focusComponent.set(component);
 				context.requestFocus();
 			}
@@ -197,42 +196,25 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		}
 		config.end(true);
 	}
-	
-	
+
+
 	/**
 	 * A tuple containing all the information to display a pop-up.
+	 *
 	 * @author lukflug
 	 */
-	protected final class PopupPair {
-		/**
-		 * The pop-up to be displayed.
-		 */
-		public final IPopup popup;
-		/**
-		 * The displaying component location.
-		 */
-		public final Rectangle rect;
-		/**
-		 * The visibility predicate.
-		 */
-		public final IToggleable visible;
-		/**
-		 * The positioner to be used.
-		 */
-		public final IPopupPositioner positioner;
-		
+	protected record PopupPair(IPopup popup, Rectangle rect,
+							   IToggleable visible,
+							   IPopupPositioner positioner) {
 		/**
 		 * Constructor.
-		 * @param popup value for {@link #popup}
-		 * @param rect value for {@link #rect}
-		 * @param visible value for {@link #visible}
+		 *
+		 * @param popup      value for {@link #popup}
+		 * @param rect       value for {@link #rect}
+		 * @param visible    value for {@link #visible}
 		 * @param positioner value for {@link #positioner}
 		 */
-		public PopupPair (IPopup popup, Rectangle rect, IToggleable visible, IPopupPositioner positioner) {
-			this.popup=popup;
-			this.rect=rect;
-			this.visible=visible;
-			this.positioner=positioner;
+		protected PopupPair {
 		}
 	}
 }

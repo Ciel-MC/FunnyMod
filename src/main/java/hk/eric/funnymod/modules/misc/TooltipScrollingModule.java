@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class TooltipScrollingModule extends ToggleableModule {
 
     private static TooltipScrollingModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TooltipScrollingKeybind", "", () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "TooltipScrollingKeybind", null, () -> true, -1, () -> instance.toggle(), true);
 
     public TooltipScrollingModule() {
         super("Tooltip Scrolling", "Allows you to scroll tooltips", () -> true);
@@ -16,7 +16,7 @@ public class TooltipScrollingModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
 }

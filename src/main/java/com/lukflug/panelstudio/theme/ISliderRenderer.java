@@ -1,8 +1,8 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.base.Context;
+
+import java.awt.*;
 
 /**
  * Interface abstracting the rendering of a slider.
@@ -26,11 +26,11 @@ public interface ISliderRenderer {
     int getDefaultHeight();
 	
 	/**
-	 * Get slidable area.
+	 * Get the slidable area.
 	 * @param context the context to be used
 	 * @param title the title of the slider
 	 * @param state the display state of the slider
-	 * @return the rectangle reprsenting the area that can be slided
+	 * @return the rectangle representing the area that can be slided
 	 */
 	default Rectangle getSlideArea(Context context, String title, String state) {
 		return context.getRect();

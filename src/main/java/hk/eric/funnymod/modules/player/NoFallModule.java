@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class NoFallModule extends ToggleableModule {
 
     private static NoFallModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoFallKeybind", null, () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "NoFallKeybind", null, () -> true, -1, () -> instance.toggle(), true);
 
     public NoFallModule() {
         super("NoFall", "Prevents fall damage", () -> true);
@@ -16,7 +16,7 @@ public class NoFallModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
 }

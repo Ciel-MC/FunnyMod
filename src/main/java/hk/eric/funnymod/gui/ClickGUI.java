@@ -9,6 +9,7 @@ import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.hud.HUDGUI;
 import com.lukflug.panelstudio.layout.*;
 import com.lukflug.panelstudio.layout.ChildUtil.ChildMode;
+import com.lukflug.panelstudio.mc17.GUIInterface;
 import com.lukflug.panelstudio.mc17.MinecraftHUDGUI;
 import com.lukflug.panelstudio.popup.CenteredPositioner;
 import com.lukflug.panelstudio.popup.MousePositioner;
@@ -18,13 +19,13 @@ import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.*;
 import com.lukflug.panelstudio.widget.*;
 import hk.eric.funnymod.FunnyModClient;
-import hk.eric.funnymod.gui.setting.*;
+import hk.eric.funnymod.gui.setting.BooleanSetting;
+import hk.eric.funnymod.gui.setting.ColorSetting;
+import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.Theme;
-import hk.eric.funnymod.modules.mcqp.MCQPHudModule;
-import hk.eric.funnymod.modules.visual.LogoModule;
-import hk.eric.funnymod.modules.visual.TabGUIModule;
+import hk.eric.funnymod.modules.ToggleableModule;
 import net.minecraft.ChatFormatting;
 import org.lwjgl.glfw.GLFW;
 
@@ -32,11 +33,12 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.*;
 
 public class ClickGUI extends MinecraftHUDGUI {
-	private final GUIInterface inter;
+	public static GUIInterface inter;
 	private final HUDGUI gui;
 	public static final int WIDTH=120,HEIGHT=12,DISTANCE=6,BORDER=2;
 	
@@ -53,12 +55,13 @@ public class ClickGUI extends MinecraftHUDGUI {
 		IClient client=Category.getClient();
 		/* Set to false in order to disable horizontal clipping, this may cause graphical glitches,
 		 * but will let you see long text, even if it is too long to fit in the panel. */
-		inter=new GUIInterface(true) {
+		inter = new GUIInterface(false, () -> modifiers, () -> lastTime, () -> mouse, () -> poseStack, this::getBlitOffset, () -> lButton, () -> rButton) {
 			@Override
 			protected String getResourcePrefix() {
 				return FunnyModClient.MOD_ID + ":";
 			}
 		};
+
 		// Instantiating theme ...
 		ITheme theme=new OptimizedTheme(new ThemeSelector(inter));
 		// Instantiating GUI ...
@@ -68,7 +71,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		// Creating animation ...
 		Supplier<Animation> animation=()->new SettingsAnimation(ClickGUIModule.animationSpeed::getValue, inter::getTime);
 		// Populating HUD ...
-		gui.addHUDComponent(TabGUIModule.getComponent(client, new IContainer<>() {
+		IContainer<IFixedComponent> container=new IContainer<>() {
 			@Override
 			public boolean addComponent(IFixedComponent component) {
 				return gui.addHUDComponent(component);
@@ -83,10 +86,15 @@ public class ClickGUI extends MinecraftHUDGUI {
 			public boolean removeComponent(IFixedComponent component) {
 				return gui.removeComponent(component);
 			}
-		},animation),TabGUIModule.getToggle(),animation.get(),theme,BORDER);
-		gui.addHUDComponent(LogoModule.getComponent(inter),LogoModule.getToggle(),animation.get(),theme,BORDER);
+		};
 
-		gui.addHUDComponent(MCQPHudModule.getComponent(),MCQPHudModule.getToggle(),animation.get(),theme,BORDER);
+		Category.hudComponents.forEach(c -> {
+			Set<IFixedComponent> components = c.getComponents(client, container, animation);
+			if (c instanceof ToggleableModule toggleable)
+				components.forEach(iFixedComponent -> gui.addHUDComponent(iFixedComponent, toggleable.getToggleable(), animation.get(), theme, BORDER));
+			else
+				components.forEach(gui::addHUDComponent);
+		});
 
 		// Creating popup types ...
 		BiFunction<Context,Integer,Integer> scrollHeight=(context,componentHeight)->Math.min(componentHeight,Math.max(HEIGHT*4,ClickGUI.this.height-context.getPos().y-HEIGHT));
@@ -190,6 +198,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		IComponentGenerator generator=new ComponentGenerator(keybindKey,charFilter,keys);
 		// Use cycle switches instead of buttons
 		IComponentGenerator cycleGenerator=new ComponentGenerator(keybindKey,charFilter,keys) {
+			@SuppressWarnings("rawtypes")
 			@Override
 			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 				return new CycleSwitch(setting,theme.getCycleSwitchRenderer(isContainer));
@@ -202,6 +211,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				return new ToggleSwitch(setting,theme.getToggleSwitchRenderer(isContainer));
 			}
 			
+			@SuppressWarnings("rawtypes")
 			@Override
 			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 				return new DropDownList(setting,theme,isContainer,false,keys,new IScrollSize(){},adder::addPopup) {
@@ -232,6 +242,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 				};
 			}
 			
+			@SuppressWarnings("rawtypes")
 			@Override
 			public IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
 				return new Spinner(setting,theme,isContainer,true,keys);
@@ -403,7 +414,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		super.handleKeyEvent(scancode);
 	}
 
-	private class ThemeSelector implements IThemeMultiplexer {
+	private static class ThemeSelector implements IThemeMultiplexer {
 		protected final Map<Theme,ITheme> themes= new EnumMap<>(Theme.class);
 		
 		public ThemeSelector (IInterface inter) {

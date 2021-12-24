@@ -11,13 +11,16 @@ import com.lukflug.panelstudio.tabgui.TabGUI;
 import com.lukflug.panelstudio.theme.IColorScheme;
 import com.lukflug.panelstudio.theme.ITheme;
 import hk.eric.funnymod.gui.setting.ColorSetting;
+import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Supplier;
 
-public class TabGUIModule extends ToggleableModule {
+public class TabGUIModule extends ToggleableModule implements HasComponents {
 	private static TabGUIModule instance;
 	private static ITabGUITheme theme;
 	
@@ -38,11 +41,11 @@ public class TabGUIModule extends ToggleableModule {
 		},75,9,2,10);
 	}
 
-	public static IFixedComponent getComponent (IClient client, IContainer<IFixedComponent> container, Supplier<Animation> animation) {
-		return new TabGUI(()->"TabGUI",client,theme,container,animation,key->key==GLFW.GLFW_KEY_UP,key->key==GLFW.GLFW_KEY_DOWN,key->key==GLFW.GLFW_KEY_ENTER||key==GLFW.GLFW_KEY_RIGHT,key->key==GLFW.GLFW_KEY_LEFT,new Point(10,10),"tabGUI").getWrappedComponent();
+	public Set<IFixedComponent> getComponents(IClient client, IContainer<IFixedComponent> container, Supplier<Animation> animation) {
+		return Collections.singleton(new TabGUI(() -> "TabGUI", client, theme, container, animation, key -> key == GLFW.GLFW_KEY_UP, key -> key == GLFW.GLFW_KEY_DOWN, key -> key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_RIGHT, key -> key == GLFW.GLFW_KEY_LEFT, new Point(10, 10), "tabGUI").getWrappedComponent());
 	}
 	
 	public static IToggleable getToggle() {
-		return instance.isEnabled();
+		return instance.getToggleable();
 	}
 }

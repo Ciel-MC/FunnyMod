@@ -6,6 +6,7 @@ import hk.eric.funnymod.modules.visual.EspModule;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.objectweb.asm.Opcodes;
@@ -20,7 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Shadow private int noJumpDelay;
+    @Shadow
+    private int noJumpDelay;
 
     @Inject(method = "isCurrentlyGlowing", at = @At("HEAD"), cancellable = true)
     public void isCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
@@ -38,13 +40,14 @@ public abstract class LivingEntityMixin {
     public int redirectNoJumpDelay(LivingEntity livingEntity) {
         if (NoJumpDelayModule.getToggle().isOn()) {
             return 0;
-        }else {
+        } else {
             return this.noJumpDelay;
         }
     }
 
+    @SuppressWarnings("rawtypes")
     @Redirect(method = "onClimbable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/Tag;)Z"))
-    public boolean redirectOnClimbable(BlockState blockState, Tag tag) {
+    public boolean redirectOnClimbable(BlockState blockState, Tag<Block> tag) {
         if (AntiVineModule.getToggle().isOn()) {
             if (tag == BlockTags.CLIMBABLE && blockState.getBlock().equals(Blocks.VINE)) {
                 return false;

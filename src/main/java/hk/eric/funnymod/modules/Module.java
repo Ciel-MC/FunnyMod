@@ -56,7 +56,7 @@ public abstract class Module implements IModule {
 	}
 
 	@Override
-	public IToggleable isEnabled() {
+	public IToggleable getToggleable() {
 		return null;
 	}
 

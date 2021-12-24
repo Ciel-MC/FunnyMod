@@ -57,24 +57,22 @@ public abstract class GLInterface implements IInterface {
 		return new Dimension((int)Math.ceil(getScreenWidth()),(int)Math.ceil(getScreenHeight()));
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void drawString (Point pos, int height, String s, Color c) {
-		PoseStack modelview = RenderSystem.getModelViewStack();
-		if (modelview.last().pose() == null) return;
-		modelview.pushPose();
-		modelview.translate(pos.x,pos.y,0);
+		PoseStack modelView = RenderSystem.getModelViewStack();
+		if (modelView.last().pose() == null) return;
+		modelView.pushPose();
+		modelView.translate(pos.x,pos.y,0);
 		float scale=height/(float)Minecraft.getInstance().font.lineHeight;
-		modelview.scale(scale,scale,1);
+		modelView.scale(scale,scale,1);
 		RenderSystem.applyModelViewMatrix();
 		end(false);
 		Minecraft.getInstance().font.drawShadow(getMatrixStack(),s,0,0,c.getRGB());
 		begin(false);
-		modelview.popPose();
+		modelView.popPose();
 		RenderSystem.applyModelViewMatrix();
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public int getFontWidth (int height, String s) {
 		double scale=height/(double)Minecraft.getInstance().font.lineHeight;
@@ -96,15 +94,15 @@ public abstract class GLInterface implements IInterface {
 	@Override
 	public void drawLine (Point a, Point b, Color c1, Color c2) {
 		RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-		float normalx=b.x-a.x,normaly=b.y-a.y;
-		float scale=(float)Math.sqrt(normalx*normalx+normaly*normaly);
-		normalx/=scale;
-		normaly/=scale;
+		float normalX=b.x-a.x,normalY=b.y-a.y;
+		float scale=(float)Math.sqrt(normalX*normalX+normalY*normalY);
+		normalX/=scale;
+		normalY/=scale;
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		bufferbuilder.begin(Mode.LINES,DefaultVertexFormat.POSITION_COLOR_NORMAL);
-			bufferbuilder.vertex(a.x*256/255f,a.y*256/255f,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).normal(normalx,normaly,0).endVertex();
-			bufferbuilder.vertex(b.x*256/255f,b.y*256/255f,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).normal(normalx,normaly,0).endVertex();
+			bufferbuilder.vertex(a.x*256/255f,a.y*256/255f,getZLevel()).color(c1.getRed()/255.0f,c1.getGreen()/255.0f,c1.getBlue()/255.0f,c1.getAlpha()/255.0f).normal(normalX,normalY,0).endVertex();
+			bufferbuilder.vertex(b.x*256/255f,b.y*256/255f,getZLevel()).color(c2.getRed()/255.0f,c2.getGreen()/255.0f,c2.getBlue()/255.0f,c2.getAlpha()/255.0f).normal(normalX,normalY,0).endVertex();
 		tessellator.end();
 	}
 
@@ -283,7 +281,7 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Set OpenGL to the state used by the rendering methods.
 	 * Should be called before rendering.
-	 * @param matrix whether to set up the modelview matrix
+	 * @param matrix whether to set up the model-view matrix
 	 */
 	public void begin (boolean matrix) {
 		if (matrix) {
@@ -291,9 +289,9 @@ public abstract class GLInterface implements IInterface {
 			float[] array ={2/(float)getScreenWidth(),0,0,-1, 0,-2/(float)getScreenHeight(),0,1, 0,0,-1/3000f,0, 0,0,0,1};
 			FloatBuffer buffer=FloatBuffer.allocate(16).put(array).flip();
 			RenderSystem.getProjectionMatrix().loadTransposed(buffer);
-			PoseStack modelview=RenderSystem.getModelViewStack();
-			modelview.pushPose();
-			modelview.setIdentity();
+			PoseStack modelView=RenderSystem.getModelViewStack();
+			modelView.pushPose();
+			modelView.setIdentity();
 			RenderSystem.applyModelViewMatrix();
 		}
 		RenderSystem.enableBlend();
@@ -306,7 +304,7 @@ public abstract class GLInterface implements IInterface {
 	/**
 	 * Restore OpenGL to the state expected by Minecraft.
 	 * Should be called after rendering.
-	 * @param matrix whether to restore the modelview matrix
+	 * @param matrix whether to restore the model-view matrix
 	 */
 	public void end (boolean matrix) {
 		RenderSystem.enableCull();

@@ -17,6 +17,7 @@ public class UseItemEvent extends EventCancellable {
         return item;
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     public EventCancellable call() {
         return super.call();

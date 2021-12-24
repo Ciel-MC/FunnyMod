@@ -85,11 +85,6 @@ public class EnumSetting<E extends Enum<E>> extends SavableSetting<E> implements
 		if (index<0) index=array.length-1;
 		setValue(array[index]);
 	}
-//
-//	@Override
-//	public E fromString(String value) {
-//		return Enum.valueOf(settingClass, value);
-//	}
 
 	@Override
 	public TwoWayFunction<E, String> getConverter() {

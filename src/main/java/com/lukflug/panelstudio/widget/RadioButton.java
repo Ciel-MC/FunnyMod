@@ -17,7 +17,8 @@ public abstract class RadioButton extends FocusableComponent {
 	/**
 	 * The enum setting to be used.
 	 */
-	protected final IEnumSetting setting;
+	@SuppressWarnings("rawtypes")
+    protected final IEnumSetting setting;
 	/**
 	 * The radio renderer to be used.
 	 */
@@ -38,7 +39,8 @@ public abstract class RadioButton extends FocusableComponent {
 	 * @param animation the animation for state transitions
 	 * @param horizontal whether list is horizontal
 	 */
-	public RadioButton (IEnumSetting setting, IRadioRenderer renderer, Animation animation, boolean horizontal) {
+	@SuppressWarnings("rawtypes")
+    public RadioButton (IEnumSetting setting, IRadioRenderer renderer, Animation animation, boolean horizontal) {
 		super(setting);
 		this.setting=setting;
 		this.renderer=renderer;

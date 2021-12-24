@@ -15,7 +15,7 @@ public interface IModule extends ILabeled {
 	 * Returns a toggleable indicating whether the module is enabled, which may be null.
 	 * @return whether the module is enabled
 	 */
-	IToggleable isEnabled();
+	IToggleable getToggleable();
 	
 	/**
 	 * Get list of settings in module.

@@ -3,10 +3,16 @@ package hk.eric.funnymod.modules;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.funnymod.event.EventHandler;
+import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 
-public abstract class ToggleableModule extends Module implements CanToggle {
+import java.util.ArrayList;
+import java.util.List;
 
+public abstract class ToggleableModule extends Module implements Toggleable {
+
+    private final List<EventHandler<?>> onOffHandlers = new ArrayList<>();
     private boolean enabled;
 
     public ToggleableModule(String displayName, String description) {
@@ -30,7 +36,7 @@ public abstract class ToggleableModule extends Module implements CanToggle {
     }
 
     @Override
-    public IToggleable isEnabled() {
+    public IToggleable getToggleable() {
         return new IToggleable() {
             @Override
             public void toggle() {
@@ -54,6 +60,14 @@ public abstract class ToggleableModule extends Module implements CanToggle {
         return getEnabled();
     }
 
+    protected void registerOnOffHandler(EventHandler<?> eventHandler) {
+        onOffHandlers.add(eventHandler);
+    }
+
+    private boolean getEnabled() {
+        return enabled;
+    }
+
     public void setEnabled(boolean enabled) {
         if (enabled != this.enabled) {
             this.enabled = enabled;
@@ -65,13 +79,13 @@ public abstract class ToggleableModule extends Module implements CanToggle {
         }
     }
 
-    private boolean getEnabled() {
-        return enabled;
+    public void onEnable() {
+        onOffHandlers.forEach(EventManager.getInstance()::register);
     }
 
-    public void onEnable(){}
-
-    public void onDisable(){}
+    public void onDisable() {
+        onOffHandlers.forEach(EventManager.getInstance()::unregister);
+    }
 
     @Override
     public ObjectNode save() {

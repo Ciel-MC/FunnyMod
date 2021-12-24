@@ -1,11 +1,11 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Color;
+import com.lukflug.panelstudio.base.IInterface;
+
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import com.lukflug.panelstudio.base.IInterface;
 
 /**
  * Theme wrapper to prevent allocation of unnecessary objects.
@@ -215,65 +215,46 @@ public final class OptimizedTheme implements ITheme {
 	 * @return the renderer
 	 */
 	private static <S,T,U> U getRenderer (Map<ParameterTuple<S,T>,U> table, Supplier<U> init, S type, int logicalLevel, int graphicalLevel, T container) {
-		ParameterTuple<S,T> key=new ParameterTuple<S,T>(type,logicalLevel,graphicalLevel,container);
+		ParameterTuple<S,T> key= new ParameterTuple<>(type, logicalLevel, graphicalLevel, container);
 		U value=table.getOrDefault(key,null);
 		if (value==null) table.put(key,value=init.get());
 		return value;
 	}
 
-	
+
 	/**
 	 * Tuple containing all theme method arguments required
-	 * @author lukflug
+	 *
 	 * @param <S> first renderer parameter type, usually state type, but also icon and embed
 	 * @param <T> second renderer parameter type, container
+	 * @author lukflug
 	 */
-	private static class ParameterTuple<S,T> {
-		/**
-		 * The first renderer parameter.
-		 */
-		private final S type;
-		/**
-		 * The logical nesting level.
-		 */
-		private final int logicalLevel;
-		/**
-		 * The panel nesting level.
-		 */
-		private final int graphicalLevel;
-		/**
-		 * The second renderer parameter.
-		 */
-		private final T container;
-		
+	private record ParameterTuple<S, T>(S type, int logicalLevel, int graphicalLevel, T container) {
 		/**
 		 * Constructor.
-		 * @param type the first renderer parameter
-		 * @param logicalLevel the logical nesting level
+		 *
+		 * @param type           the first renderer parameter
+		 * @param logicalLevel   the logical nesting level
 		 * @param graphicalLevel the panel nesting level
-		 * @param container the second renderer parameter
+		 * @param container      the second renderer parameter
 		 */
-		public ParameterTuple (S type, int logicalLevel, int graphicalLevel, T container) {
-			this.type=type;
-			this.logicalLevel=logicalLevel;
-			this.graphicalLevel=graphicalLevel;
-			this.container=container;
+		private ParameterTuple {
 		}
-		
+
 		@Override
 		public int hashCode() {
 			return toString().hashCode();
 		}
-		
+
 		@Override
-		public boolean equals (Object o) {
+		public boolean equals(Object o) {
 			if (o instanceof ParameterTuple) return toString().equals(o.toString());
 			else return false;
 		}
-		
+
 		@Override
 		public String toString() {
-			return "("+type+","+logicalLevel+","+graphicalLevel+","+container+")";
+			return "(" + type + "," + logicalLevel + "," + graphicalLevel + "," + container + ")";
 		}
 	}
 }

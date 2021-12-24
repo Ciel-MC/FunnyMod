@@ -1,12 +1,12 @@
 package com.lukflug.panelstudio.container;
 
-import java.awt.Point;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.component.IHorizontalComponent;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
+
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Container with components arranged horizontally.
@@ -42,7 +42,7 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 		    Context subContext=getSubContext(context,componentPosition,componentWidth);
 			function.accept(subContext,component);
 			if (subContext.focusReleased()) context.releaseFocus();
-			else if (subContext.foucsRequested()) context.requestFocus();
+			else if (subContext.focusRequested()) context.requestFocus();
 		    x.addAndGet(component.getWidth(context.getInterface())+renderer.getBorder());
 		    spentWeight.addAndGet(component.getWeight());
 		    if (subContext.getSize().height>height.get()) height.set(subContext.getSize().height);
@@ -53,11 +53,11 @@ public class HorizontalContainer extends Container<IHorizontalComponent> {
 	/**
 	 * Create sub-context for child component.
 	 * @param context the current context
-	 * @param posx the horizontal position of the child component
+	 * @param posX the horizontal position of the child component
 	 * @param width the width of the child component
 	 * @return the context for the child component
 	 */
-	protected Context getSubContext (Context context, int posx, int width) {
-		return new Context(context,width,new Point(posx,renderer.getTop()),context.hasFocus(),true);
+	protected Context getSubContext (Context context, int posX, int width) {
+		return new Context(context,width,new Point(posX,renderer.getTop()),context.hasFocus(),true);
 	}
 }

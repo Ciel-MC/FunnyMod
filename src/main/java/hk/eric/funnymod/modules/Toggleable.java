@@ -1,6 +1,6 @@
 package hk.eric.funnymod.modules;
 
-public interface CanToggle {
+public interface Toggleable {
 
     void toggle();
 

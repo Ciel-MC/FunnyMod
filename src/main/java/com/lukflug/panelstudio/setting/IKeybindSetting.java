@@ -18,7 +18,7 @@ public interface IKeybindSetting extends ISetting<Integer> {
     void setKey(int key);
     
     /**
-     * Get the name of the key that is binded.
+     * Get the name of the key that is bound.
      * @return name of the key
      */
     String getKeyName();

@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.setting;
 
 import com.lukflug.panelstudio.base.IBoolean;
+import hk.eric.funnymod.utils.Constants;
 
 /**
  * Represent object with label and description.
@@ -27,6 +28,6 @@ public interface ILabeled {
 	 * @return the visibility of the setting
 	 */
 	default IBoolean isVisible() {
-		return ()->true;
+		return Constants.alwaysTrue;
 	}
 }

@@ -20,9 +20,12 @@ import java.util.Map;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity {
-    @Shadow @Final private static Map<Pose, EntityDimensions> POSES;
-
-    @Shadow @Final public static EntityDimensions STANDING_DIMENSIONS;
+    @Shadow
+    @Final
+    public static EntityDimensions STANDING_DIMENSIONS;
+    @Shadow
+    @Final
+    private static Map<Pose, EntityDimensions> POSES;
 
     protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level level) {
         super(entityType, level);
@@ -33,10 +36,10 @@ public abstract class PlayerMixin extends LivingEntity {
                     from = @At("HEAD"),
                     to = @At("TAIL")
             ),
-            at = @At(value = "INVOKE",target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V")
     )
     public void redirectSetSprinting(Player player, boolean sprinting) {
-        player.setSprinting(KeepSprintModule.getToggle().isOn()||sprinting);
+        player.setSprinting(KeepSprintModule.getToggle().isOn() || sprinting);
     }
 
     /**
@@ -51,7 +54,7 @@ public abstract class PlayerMixin extends LivingEntity {
                 case CROUCHING -> EntityDimensions.scalable(.6F, HeightModule.getHeight(HeightModule.HeightType.SNEAKING_HITBOX));
                 default -> POSES.getOrDefault(pose, STANDING_DIMENSIONS);
             };
-        }else {
+        } else {
             return POSES.getOrDefault(pose, STANDING_DIMENSIONS);
         }
     }
@@ -67,9 +70,9 @@ public abstract class PlayerMixin extends LivingEntity {
                 return 0.4f;
             }
             case CROUCHING -> {
-                return HeightModule.getToggle().isOn()? HeightModule.getHeight(HeightModule.HeightType.SNEAKING_EYE_HEIGHT):1.27f;
+                return HeightModule.getToggle().isOn() ? HeightModule.getHeight(HeightModule.HeightType.SNEAKING_EYE_HEIGHT) : 1.27f;
             }
         }
-        return HeightModule.getToggle().isOn()? HeightModule.getHeight(HeightModule.HeightType.NORMAL_EYE_HEIGHT):1.62f;
+        return HeightModule.getToggle().isOn() ? HeightModule.getHeight(HeightModule.HeightType.NORMAL_EYE_HEIGHT) : 1.62f;
     }
 }

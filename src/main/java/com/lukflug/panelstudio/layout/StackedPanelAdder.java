@@ -70,13 +70,13 @@ public class StackedPanelAdder implements IComponentAdder,IScrollSize {
 		content=new VerticalContainer(label,theme.getContainerRenderer(-1,-1,true));
 		IResizable size=getResizable(width);
 		IScrollSize scrollSize=getScrollSize(size);
-		container.addComponent(ResizableComponent.createResizableComponent(new Button<Void>(label,()->null,theme.getButtonRenderer(Void.class,-1,-1,true)),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()),new RendererTuple<Void>(Void.class,new ThemeTuple(theme,-1,-1)),theme.getResizeRenderer(),size,scrollSize,position,width,true,configName),isVisible);
+		container.addComponent(ResizableComponent.createResizableComponent(new Button<>(label, () -> null, theme.getButtonRenderer(Void.class, -1, -1, true)),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()), new RendererTuple<>(Void.class, new ThemeTuple(theme, -1, -1)),theme.getResizeRenderer(),size,scrollSize,position,width,true,configName),isVisible);
 		util=new ChildUtil(width,animation,new PopupTuple(popupPos,false,this));
 	}
 	
 	@Override
 	public <S extends IComponent,T extends IComponent> void addComponent (S title, T content, ThemeTuple theme, Point position, int width, Supplier<Animation> animation) {
-		util.addContainer(new Labeled(content.getTitle(),null,()->content.isVisible()),title,content,()->null,Void.class,this.content,this,theme,mode);
+		util.addContainer(new Labeled(content.getTitle(),null, content::isVisible),title,content,()->null,Void.class,this.content,this,theme,mode);
 	}
 
 	@Override

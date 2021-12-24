@@ -115,7 +115,7 @@ public abstract class HUDComponent implements IFixedComponent {
 
 	@Override
 	public void saveConfig (IInterface inter, IPanelConfig config) {
-		config.savePositon(position);
+		config.savePosition(position);
 	}
 
 	@Override

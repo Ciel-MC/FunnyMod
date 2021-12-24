@@ -7,7 +7,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class MCQPPreventDropModule extends ToggleableModule {
 
     private static MCQPPreventDropModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPPreventDropKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPPreventDropKeybind", null, -1, () -> instance.toggle(), true);
 
     public MCQPPreventDropModule() {
         super("MCQPPreventDrop", "Prevents you from dropping hotbar items");
@@ -16,7 +16,7 @@ public class MCQPPreventDropModule extends ToggleableModule {
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
 }

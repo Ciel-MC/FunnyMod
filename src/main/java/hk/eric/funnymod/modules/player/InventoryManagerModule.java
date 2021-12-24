@@ -2,7 +2,6 @@ package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
-import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
@@ -35,7 +34,7 @@ public class InventoryManagerModule extends ToggleableModule {
     private static InventoryManagerModule instance;
     public static final BooleanSettingWithSubSetting MCQPDropEnabled = new BooleanSettingWithSubSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
     public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", null, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", null, -1, () -> instance.toggle(), true);
 
     private static final EventHandler<TickEvent> inventoryManager = new EventHandler<>() {
         @Override
@@ -59,10 +58,12 @@ public class InventoryManagerModule extends ToggleableModule {
         settings.add(dropHotbar);
         settings.add(MCQPDropEnabled);
         settings.add(keybind);
+
+        registerOnOffHandler(inventoryManager);
     }
 
     public static IToggleable getToggle() {
-        return instance.isEnabled();
+        return instance.getToggleable();
     }
 
     public static void addToMCQPThrow(String name) {
@@ -71,18 +72,6 @@ public class InventoryManagerModule extends ToggleableModule {
 
     public static void removeFromMCQPThrow(String name) {
         MCQPList.remove(name);
-    }
-
-    @Override
-    public void onEnable() {
-        super.onEnable();
-        EventManager.getInstance().register(inventoryManager);
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
-        EventManager.getInstance().unregister(inventoryManager);
     }
 
     public static void updateMCQPThrow() {

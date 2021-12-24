@@ -34,7 +34,7 @@ public abstract class Animation {
 	}
 	
 	/**
-	 * Set a value immediately, without an transition animation.
+	 * Set a value immediately, without a transition animation.
 	 * @param value the new value
 	 */
 	public void initValue (double value) {
@@ -43,7 +43,7 @@ public abstract class Animation {
 	}
 	
 	/**
-	 * The the current value.
+	 * The current value.
 	 * @return an interpolated value between {@link #value} and {@link #lastValue} depending on the current time
 	 */
 	public double getValue() {

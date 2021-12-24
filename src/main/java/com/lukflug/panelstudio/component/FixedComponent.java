@@ -73,7 +73,7 @@ public class FixedComponent<T extends IComponent> extends ComponentProxy<T> impl
 
 	@Override
 	public void saveConfig (IInterface inter, IPanelConfig config) {
-		config.savePositon(position);
+		config.savePosition(position);
 		if (state!=null) config.saveState(state.isOn());
 	}
 

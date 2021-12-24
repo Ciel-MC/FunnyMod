@@ -14,7 +14,6 @@ import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -54,14 +53,16 @@ public class NormalAuraMode implements AuraMode {
     @Override
     public TriConsumer<LivingEntity, LocalPlayer, Consumer<Packet<?>>> getAttack() {
         return (entity, player, packetSender) -> {
-            Pair<Float, Float> yawPitch = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY() + entity.getBoundingBox().getYsize() / 2, entity.getZ());
+            Pair<Float, Float> yawPitch = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY(), entity.getZ());
             float rotY = yawPitch.getSecond(), rotX = yawPitch.getFirst();
             Vec3 from = player.getEyePosition(1);
-            Vec3 to = entity.position().add(0, entity.getBoundingBox().getYsize() / 2, 0);
-            BlockHitResult result = player.level.clip(new ClipContext(from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
+            Vec3 to = entity.position().add(0, entity.getY() - entity.getBbHeight(), 0);
+            HitResult result = player.pick(3,1,false);
+//            BlockHitResult result = player.level.clip(new ClipContext(from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
             if (result.getType() == HitResult.Type.BLOCK) {
-                if (!player.level.getBlockState(result.getBlockPos()).getBlock().getClass().equals(WallSignBlock.class)) {
-                    packetSender.accept(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, result.getBlockPos(), Direction.fromYRot(rotY)));
+                BlockHitResult blockHitResult = (BlockHitResult) result;
+                if (!player.level.getBlockState(blockHitResult.getBlockPos()).getBlock().getClass().equals(WallSignBlock.class)) {
+                    packetSender.accept(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockHitResult.getBlockPos(), Direction.fromYRot(rotY)));
                 }
             } else {
                 packetSender.accept(new ServerboundMovePlayerPacket.Rot(rotY, rotX, player.isOnGround()));

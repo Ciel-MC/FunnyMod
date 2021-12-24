@@ -32,7 +32,7 @@ public final class ThemeTuple {
 	}
 	
 	/**
-	 * Create a new theme tuple from a old one.
+	 * Create a new theme tuple from an old one.
 	 * @param previous the base tuple
 	 * @param logicalDiff the difference in logical level
 	 * @param graphicalDiff the difference in panel level

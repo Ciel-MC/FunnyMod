@@ -5,10 +5,10 @@ import baritone.api.IBaritone;
 import baritone.api.event.events.ChatEvent;
 import baritone.api.event.events.PlayerUpdateEvent;
 import baritone.api.event.events.SprintStateEvent;
-import baritone.api.event.events.type.EventState;
 import com.mojang.authlib.GameProfile;
 import hk.eric.funnymod.chat.ChatManager;
-import hk.eric.funnymod.event.events.PlayerMoveEvent;
+import hk.eric.funnymod.event.EventState;
+import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
@@ -35,26 +35,31 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = LocalPlayer.class,priority = 99999)
+@Mixin(value = LocalPlayer.class, priority = 99999)
 public abstract class LocalPlayerMixin extends AbstractClientPlayer {
+
+    @Shadow
+    public Input input;
+    @Shadow
+    @Final
+    private ClientRecipeBook recipeBook;
 
     public LocalPlayerMixin(ClientLevel clientLevel, GameProfile gameProfile) {
         super(clientLevel, gameProfile);
     }
 
-    @Shadow public abstract void setSprinting(boolean bl);
+    @Shadow
+    public abstract void setSprinting(boolean bl);
 
-    @Shadow public abstract boolean isUsingItem();
+    @Shadow
+    public abstract boolean isUsingItem();
 
-    @Shadow @Final private ClientRecipeBook recipeBook;
-
-    @Shadow public Input input;
-
-    @Shadow public abstract void tick();
+    @Shadow
+    public abstract void tick();
 
     @Override
     public float getSpeed() {
-        return SprintModule.getToggle().isOn()? (float) (super.getSpeed() * SprintModule.speed.getNumber()) : super.getSpeed();
+        return SprintModule.getToggle().isOn() ? (float) (super.getSpeed() * SprintModule.speed.getNumber()) : super.getSpeed();
     }
 
     @Inject(method = "drop", at = @At("HEAD"), cancellable = true)
@@ -67,7 +72,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
             }
         }
     }
-
 
 
     @Redirect(method = "aiStep",
@@ -101,7 +105,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
     @Redirect(method = "*", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/Input;hasForwardImpulse()Z"))
     public boolean redirectHasForwardImpulse(Input instance) {
-        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? MathUtil.compare_force(instance.getMoveVector(),1.0E-5) == 1 : instance.hasForwardImpulse();
+        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn() ? MathUtil.compare_force(instance.getMoveVector(), 1.0E-5) == 1 : instance.hasForwardImpulse();
     }
 
     /**
@@ -112,7 +116,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     private boolean hasEnoughImpulseToStartSprinting() {
         double threshold = .8;
         Vec2 moveVector = this.input.getMoveVector();
-        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn()? (this.isUnderWater() ? input.hasForwardImpulse() : MathUtil.compare_force(moveVector,.8) == 1) : (this.isUnderWater() ? this.input.hasForwardImpulse() : (double)this.input.forwardImpulse >= threshold);
+        return SprintModule.omnidirectional.isOn() && SprintModule.getToggle().isOn() ? (this.isUnderWater() ? input.hasForwardImpulse() : MathUtil.compare_force(moveVector, .8) == 1) : (this.isUnderWater() ? this.input.hasForwardImpulse() : (double) this.input.forwardImpulse >= threshold);
     }
 
     //Baritone integration
@@ -143,9 +147,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
             )
     )
     private void onPreUpdate(CallbackInfo ci) {
-        IBaritone baritone = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
-        if (baritone != null) {
-            baritone.getGameEventHandler().onPlayerUpdate(new PlayerUpdateEvent(EventState.PRE));
+        IBaritone b = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
+        if (b != null) {
+            b.getGameEventHandler().onPlayerUpdate(new PlayerUpdateEvent(baritone.api.event.events.type.EventState.PRE));
         }
     }
 
@@ -159,9 +163,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
             )
     )
     private void onPostUpdate(CallbackInfo ci) {
-        IBaritone baritone = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
-        if (baritone != null) {
-            baritone.getGameEventHandler().onPlayerUpdate(new PlayerUpdateEvent(EventState.POST));
+        IBaritone b = BaritoneAPI.getProvider().getBaritoneForPlayer((LocalPlayer) (Object) this);
+        if (b != null) {
+            b.getGameEventHandler().onPlayerUpdate(new PlayerUpdateEvent(baritone.api.event.events.type.EventState.POST));
         }
     }
 
@@ -181,7 +185,12 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     }
 
     @Inject(method = "move", at = @At("HEAD"))
-    private void hookMove(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
-        new PlayerMoveEvent(moverType, vec3).call();
+    private void hookMoveStart(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
+        new MotionEvent(moverType, vec3, EventState.PRE).call();
+    }
+
+    @Inject(method = "move", at = @At("TAIL"))
+    private void hookMoveEnd(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
+        new MotionEvent(moverType, vec3, EventState.POST).call();
     }
 }

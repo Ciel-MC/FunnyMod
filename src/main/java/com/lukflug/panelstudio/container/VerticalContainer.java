@@ -29,7 +29,7 @@ public class VerticalContainer extends Container<IComponent> {
 			Context subContext=getSubContext(context,posy.get());
 			function.accept(subContext,component);
 			if (subContext.focusReleased()) context.releaseFocus();
-			else if (subContext.foucsRequested()) context.requestFocus();
+			else if (subContext.focusRequested()) context.requestFocus();
 			posy.addAndGet(subContext.getSize().height+renderer.getBorder());
 		});
 		context.setHeight(posy.get()-renderer.getBorder()+renderer.getBottom());
