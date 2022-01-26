@@ -5,6 +5,7 @@ import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.INumberSetting;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * Returns color component consisting of sliders.
@@ -36,7 +37,7 @@ public class ColorSliderComponent extends ColorComponent {
 	 * @return the component
 	 */
 	public IComponent getRainbowComponent (ThemeTuple theme, IBooleanSetting toggle) {
-		return new ToggleButton(toggle,theme.getButtonRenderer(Boolean.class,false));
+		return new ToggleButton(toggle, Getter.fixed(theme.getButtonRenderer(Boolean.class,false)));
 	}
 	
 	/**
@@ -48,6 +49,6 @@ public class ColorSliderComponent extends ColorComponent {
 	 */
 	@SuppressWarnings("rawtypes")
 	public IComponent getColorComponent (ThemeTuple theme, int value, INumberSetting number) {
-		return new NumberSlider(number,theme.getSliderRenderer(false));
+		return new NumberSlider(number, Getter.fixed(theme.getSliderRenderer(false)));
 	}
 }

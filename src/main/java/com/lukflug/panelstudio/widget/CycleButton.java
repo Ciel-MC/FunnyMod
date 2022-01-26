@@ -5,6 +5,7 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * Component representing an enumeration-valued setting which cycles.
@@ -19,24 +20,24 @@ public class CycleButton extends FocusableComponent {
 	/**
 	 * The renderer to be used.
 	 */
-	protected final IButtonRenderer<String> renderer;
+	protected final Getter<IButtonRenderer<String>> rendererGetter;
 	
 	/**
 	 * Constructor.
 	 * @param setting the setting in question
-	 * @param renderer the renderer for this component
+	 * @param rendererGetter the renderer for this component
 	 */
 	@SuppressWarnings("rawtypes")
-    public CycleButton (IEnumSetting setting, IButtonRenderer<String> renderer) {
+    public CycleButton (IEnumSetting setting, Getter<IButtonRenderer<String>> rendererGetter) {
 		super(setting);
 		this.setting=setting;
-		this.renderer=renderer;
+		this.rendererGetter = rendererGetter;
 	}
 
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),setting.getValueName());
+		rendererGetter.get().renderButton(context,getTitle(),hasFocus(context),setting.getValueName());
 	}
 	
 	@Override
@@ -49,6 +50,6 @@ public class CycleButton extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return rendererGetter.get().getDefaultHeight();
 	}
 }

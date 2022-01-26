@@ -13,6 +13,7 @@ import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ToggleButton;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -84,7 +85,7 @@ public class PanelLayout implements ILayout {
 		Point pos=start;
 		AtomicInteger skipY=new AtomicInteger(this.skipY);
 		client.getCategories().forEach(category->{
-			Button<Void> categoryTitle= new Button<>(category, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
+			Button<Void> categoryTitle= new Button<>(category, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, 0, 0, true)));
 			VerticalContainer categoryContent=new VerticalContainer(category,theme.getContainerRenderer(0,0,false));
 			gui.addComponent(categoryTitle,categoryContent,new ThemeTuple(theme,0,0),new Point(pos),width,animation);
 			pos.translate(skipX,skipY.get());
@@ -93,8 +94,8 @@ public class PanelLayout implements ILayout {
 				ChildMode mode=layoutType.apply(0);
 				int graphicalLevel=(mode==ChildMode.DOWN)?1:0;
 				FocusableComponent moduleTitle;
-				if (module.getToggleable()==null) moduleTitle= new Button<>(module, () -> null, theme.getButtonRenderer(Void.class, 1, 1, mode == ChildMode.DOWN));
-				else moduleTitle=new ToggleButton(module,module.getToggleable(),theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN));
+				if (module.getToggleable()==null) moduleTitle= new Button<>(module, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, 1, 1, mode == ChildMode.DOWN)));
+				else moduleTitle=new ToggleButton(module,module.getToggleable(),Getter.fixed(theme.getButtonRenderer(Boolean.class,1,1,mode==ChildMode.DOWN)));
 				VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 				if (module.getToggleable()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
 				else util.addContainer(module,moduleTitle,moduleContainer,()->module.getToggleable().isOn(),Boolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),layoutType.apply(0));
@@ -116,9 +117,9 @@ public class PanelLayout implements ILayout {
 		int nextLevel=(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		int colorLevel=(colorType.apply(theme.logicalLevel-1)==ChildMode.DOWN)?theme.graphicalLevel:0;
 		boolean isContainer=(setting instanceof HasSubSettings)&&(layoutType.apply(theme.logicalLevel-1)==ChildMode.DOWN);
-		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
+		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer ? (() -> ((HasSubSettings<?>) setting).getCurrentSubSettings() != null) : Getter.fixed(false));
 		if (component instanceof VerticalContainer colorContainer) {
-			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType.apply(theme.logicalLevel - 1) == ChildMode.DOWN));
+			Button<T> button= new Button<>(setting, setting::getSettingState, Getter.fixed(theme.getButtonRenderer(setting.getSettingClass(), colorType.apply(theme.logicalLevel - 1) == ChildMode.DOWN)));
 			util.addContainer(setting,button,colorContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType.apply(theme.logicalLevel-1));
 			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {

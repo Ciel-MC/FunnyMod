@@ -1,8 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.util.function.IntPredicate;
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
@@ -12,6 +9,11 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.KeybindComponent;
 import com.lukflug.panelstudio.widget.TextField;
+import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.funnymod.utils.classes.getters.Getter;
+
+import java.util.function.IntPredicate;
+import java.util.function.Supplier;
 
 /**
  * Default implementation of the component generator.
@@ -44,8 +46,8 @@ public class ComponentGenerator implements IComponentGenerator {
 	}
 	
 	@Override
-	public IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer)) {
+	public IComponent getKeybindComponent (IKeybindSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new KeybindComponent(setting, new CachedLambdaGetter<>(theme::getKeybindRenderer, isContainer, 2).toGetter()) {
 			@Override
 			public int transformKey (int scancode) {
 				return keybindKey.test(scancode)?0:scancode;
@@ -54,8 +56,8 @@ public class ComponentGenerator implements IComponentGenerator {
 	}
 	
 	@Override
-	public IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new TextField(setting,keys,0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
+	public IComponent getStringComponent (IStringSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new TextField(setting,keys,0,new SimpleToggleable(false), new CachedLambdaGetter<>(bl -> theme.getTextRenderer(false, bl), isContainer, 2).toGetter()) {
 			@Override
 			public boolean allowCharacter(char character) {
 				return charFilter.test(character);

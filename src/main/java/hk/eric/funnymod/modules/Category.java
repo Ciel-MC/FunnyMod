@@ -7,7 +7,7 @@ import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.modules.combat.CriticalsModule;
 import hk.eric.funnymod.modules.combat.KillAuraModule;
 import hk.eric.funnymod.modules.combat.VelocityModule;
-import hk.eric.funnymod.modules.debug.DebugHudModule;
+import hk.eric.funnymod.modules.debug.DebugModule;
 import hk.eric.funnymod.modules.mcqp.MCQPAura.MCQPAuraModule;
 import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.misc.BindModule;
@@ -87,11 +87,12 @@ public enum Category implements ICategory {
 				new MCQPFastReviveModule(),
 				new MCQPHudModule(),
 				new MCQPNoGhostHitModule(),
+				new MCQPatchModule(),
 				new MCQPPreventDropModule()
 		);
 		if (FunnyModClient.debug) {
 			addModule(DEBUG,
-					new DebugHudModule()
+					new DebugModule()
 			);
 		}
 		for (Category value : values()) {

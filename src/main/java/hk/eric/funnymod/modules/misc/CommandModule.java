@@ -26,7 +26,7 @@ public class CommandModule extends ToggleableModule {
     };
 
     private static CommandModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CommandKeybind", null, -1,()-> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CommandKeybind", null, -1,()-> instance.toggle(), true);
 
     private static final EventHandler<PlayerChatEvent> commandHandler = new EventHandler<>() {
         @Override
@@ -44,9 +44,10 @@ public class CommandModule extends ToggleableModule {
     public CommandModule() {
         super("Command", "Commands", true);
         instance = this;
-        registerOnOffHandler(commandHandler);
+
         settings.add(keybind);
 
+        registerOnOffHandler(commandHandler);
     }
 
     public static IToggleable getToggle() {

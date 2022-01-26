@@ -1,25 +1,25 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.references;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class LinkedAtomicFloatImpl extends AtomicFloat {
+public class LinkedFloatReferenceImpl extends FloatReference {
 
     private final Consumer<Float> setter;
     private final Supplier<Float> getter;
 
-    public LinkedAtomicFloatImpl(Consumer<Float> setter, Supplier<Float> getter) {
+    public LinkedFloatReferenceImpl(Consumer<Float> setter, Supplier<Float> getter) {
         this.setter = setter;
         this.getter = getter;
     }
 
     @Override
-    public float get() {
+    public Float get() {
         return getter.get();
     }
 
     @Override
-    public void set(float value) {
+    public void set(Float value) {
         setter.accept(value);
     }
 

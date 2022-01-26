@@ -1,8 +1,8 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.classes.pairs;
 
 public class Pair<T, U> {
-    public T first;
-    public U second;
+    protected T first;
+    protected U second;
 
     public Pair(T first, U second) {
         this.first = first;

@@ -4,10 +4,7 @@ import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.combat.KillAuraModule;
-import hk.eric.funnymod.utils.EntityUtil;
-import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.PlayerUtil;
-import hk.eric.funnymod.utils.RenderUtils;
+import hk.eric.funnymod.utils.*;
 import hk.eric.funnymod.utils.classes.ThreeDimensionalLine;
 import hk.eric.funnymod.utils.classes.XYRot;
 import hk.eric.funnymod.utils.classes.minecraftPlus.BetterBlockPos;
@@ -17,6 +14,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -25,14 +23,17 @@ import java.awt.*;
 import java.util.List;
 import java.util.Queue;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class InfiniteKillAuraMode extends KillauraMode {
 
     private int packetThisTick = 0;
 
-    private static final Set<ThreeDimensionalLine> linesToDraw = new HashSet<>();
-    private static final Set<AABB> boxesToDraw = new HashSet<>();
+    public static final Set<ThreeDimensionalLine> linesToDraw = new HashSet<>();
+    public static final Set<AABB> boxesToDraw = new HashSet<>();
 
     final Comparator<LivingEntity> armorEntitySorter = Comparator.comparingInt(EntityUtil::rateArmor);
     final Comparator<LivingEntity> healthEntitySorter = Comparator.comparingDouble(LivingEntity::getHealth).reversed();
@@ -57,34 +58,40 @@ public class InfiniteKillAuraMode extends KillauraMode {
     public void attack(LivingEntity entity) {
         LocalPlayer player = FunnyModClient.mc.player;
         assert player != null;
-        Node path = AStarPathFinder.search(BetterBlockPos.fromEntity(player).asNode(), BetterBlockPos.fromEntity(entity).asNode(), KillAuraModule.infiniteAuraMaxStep.getValue(), true, true);
-        if (path == null) return;
+        moveTo(player,entity, KillAuraModule.infiniteAuraMaxStep.getValue(), this::sendPacket, pathAsList -> canFinish(pathAsList.size() + 2), (node, node2) -> node.distanceFloat(node2, true) < 5, true);
+        sendPacket(ServerboundInteractPacket.createAttackPacket(entity, false));
+        player.swing(InteractionHand.MAIN_HAND);
+        player.resetAttackStrengthTicker();
+    }
+
+    public static void moveTo(LocalPlayer player, Entity entity, int maxStep, Consumer<Packet<?>> sender, Function<List<Node>, Boolean> canGo, BiFunction<Node, Node, Boolean> ended, boolean returnOnFail) {
+        Node path = AStarPathFinder.search(BetterBlockPos.fromEntity(player).asNode(), BetterBlockPos.fromEntity(entity).asNode(), maxStep, true, ended, !returnOnFail);
+        if (path == null) {
+            return;
+        }
         List<Node> pathAsList = path.asList();
         pathAsList.remove(pathAsList.size() - 1);
-        if (!canFinish(pathAsList.size() + 2)) return;
+        if (!canGo.apply(pathAsList)) return;
         Queue<Node> nodes = new ArrayDeque<>(pathAsList);
+        if (nodes.isEmpty()) return;
         Node oldNode = nodes.remove();
+        linesToDraw.clear();
+        boxesToDraw.clear();
+        boxesToDraw.add(entity.getDimensions(entity.getPose()).makeBoundingBox(entity.position()));
         while (!nodes.isEmpty()) {
             Node node = nodes.poll();
             Vec3 pos = node.getPos().toCenteredVec3();
             Vec3 oPos = oldNode.getPos().toCenteredVec3();
             double oX = oPos.x, oY = oPos.y, oZ = oPos.z;
             double x = pos.x() ,y = pos.y(), z = pos.z();
-            linesToDraw.add(new ThreeDimensionalLine(oX, oY, oZ, x, y, z));
+            linesToDraw.add(ThreeDimensionalLine.of(oldNode.getPos().toVec3(), node.getPos().toVec3()));
             boxesToDraw.add(player.getDimensions(player.getPose()).makeBoundingBox(pos));
-            if (!nodes.isEmpty()) {
-                sendPacket(PacketUtil.createPos(x, y, z, true));
-            }else {
-                XYRot rot = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY() + entity.getBbHeight()/2, entity.getZ());
-                sendPacket(PacketUtil.createPosRot(x, y, z, rot.getYaw(), rot.getPitch(), true));
-            }
+            Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
+            XYRot rot = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
+            linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 6))));
+            sender.accept(PacketUtil.createPosRot(x, y, z, rot.getYaw(), rot.getPitch(), true));
             oldNode = node;
         }
-        //TODO: Optimize Sides (combine long lines of the same direction)
-        //TODO: Dont move on last step, and set Rot on the second to last step
-        sendPacket(ServerboundInteractPacket.createAttackPacket(entity, false));
-        player.swing(InteractionHand.MAIN_HAND);
-        player.resetAttackStrengthTicker();
     }
 
     @Override
@@ -97,8 +104,8 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     @Override
     public void tick(TickEvent event) {
-        linesToDraw.clear();
-        boxesToDraw.clear();
+//        linesToDraw.clear();
+//        boxesToDraw.clear();
         packetThisTick = 0;
     }
 

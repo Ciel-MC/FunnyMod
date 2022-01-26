@@ -1,4 +1,7 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.maps;
+
+import hk.eric.funnymod.utils.classes.TypedPairList;
+import hk.eric.funnymod.utils.classes.pairs.Pair;
 
 import java.util.HashMap;
 

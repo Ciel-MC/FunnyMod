@@ -15,27 +15,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class BooleanSettingWithSubSetting extends BooleanSetting implements HasSubSettingsImpl<Boolean> {
+public class BooleanSettingWithSubSettings extends BooleanSetting implements HasSubSettingsImpl<Boolean> {
 
     private final Map<Boolean, List<ISetting<?>>> subSettings = new HashMap<>();
     private final List<ISetting<?>> globalSubSettings = new ArrayList<>();
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value, ISetting<?>... subSettings) {
+    public BooleanSettingWithSubSettings(String displayName, String configName, String description, Boolean value, ISetting<?>... subSettings) {
         super(displayName, configName, description, value);
         addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value, ISetting<?>... subSettings) {
+    public BooleanSettingWithSubSettings(String displayName, String configName, String description, IBoolean visible, Boolean value, ISetting<?>... subSettings) {
         super(displayName, configName, description, visible, value);
         addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
+    public BooleanSettingWithSubSettings(String displayName, String configName, String description, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
         super(displayName, configName, description, value, onChange);
         addSubSettings(true, subSettings);
     }
 
-    public BooleanSettingWithSubSetting(String displayName, String configName, String description, IBoolean visible, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
+    public BooleanSettingWithSubSettings(String displayName, String configName, String description, IBoolean visible, Boolean value, Consumer<Boolean> onChange, ISetting<?>... subSettings) {
         super(displayName, configName, description, visible, value, onChange);
         addSubSettings(true, subSettings);
     }

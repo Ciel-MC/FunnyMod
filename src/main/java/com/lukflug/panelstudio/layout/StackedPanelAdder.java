@@ -1,8 +1,5 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Point;
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.AnimatedToggleable;
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.IBoolean;
@@ -23,6 +20,10 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ResizableComponent;
+import hk.eric.funnymod.utils.classes.getters.Getter;
+
+import java.awt.*;
+import java.util.function.Supplier;
 
 /**
  * Component adder that stacks component on top of each other in a single panel.
@@ -70,7 +71,7 @@ public class StackedPanelAdder implements IComponentAdder,IScrollSize {
 		content=new VerticalContainer(label,theme.getContainerRenderer(-1,-1,true));
 		IResizable size=getResizable(width);
 		IScrollSize scrollSize=getScrollSize(size);
-		container.addComponent(ResizableComponent.createResizableComponent(new Button<>(label, () -> null, theme.getButtonRenderer(Void.class, -1, -1, true)),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()), new RendererTuple<>(Void.class, new ThemeTuple(theme, -1, -1)),theme.getResizeRenderer(),size,scrollSize,position,width,true,configName),isVisible);
+		container.addComponent(ResizableComponent.createResizableComponent(new Button<>(label, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, -1, -1, true))),content,()->null,new AnimatedToggleable(new SimpleToggleable(true),animation.get()), new RendererTuple<>(Void.class, new ThemeTuple(theme, -1, -1)),theme.getResizeRenderer(),size,scrollSize,position,width,true,configName),isVisible);
 		util=new ChildUtil(width,animation,new PopupTuple(popupPos,false,this));
 	}
 	

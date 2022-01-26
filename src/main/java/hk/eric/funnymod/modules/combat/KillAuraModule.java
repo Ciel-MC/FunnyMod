@@ -6,15 +6,13 @@ import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
-import hk.eric.funnymod.gui.setting.BooleanSetting;
-import hk.eric.funnymod.gui.setting.EnumSetting;
-import hk.eric.funnymod.gui.setting.IntegerSetting;
-import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.gui.setting.*;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.combat.killaura.KillauraMode;
 import hk.eric.funnymod.modules.combat.killaura.KillauraModes;
+import hk.eric.funnymod.utils.classes.pathFind.AStarPathFinder;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -28,12 +26,16 @@ public class KillAuraModule extends ToggleableModule {
     public static final EnumSettingWithSubSettings<KillAuraMode> killAuraMode = new EnumSettingWithSubSettings<>("Killaura Mode", "KillAuraMode", "Mode", KillAuraMode.TELEPORT, KillAuraMode.class);
     public static final EnumSetting<KillAuraType> type = new EnumSetting<>("Type", "KillAuraType", "The type of the tick to attack", KillAuraType.PRE, KillAuraType.class);
     public static final EnumSetting<SortType> sortType = new EnumSetting<>("Sort Type", "InfiniteAuraSortType", "How to sort enemies", SortType.HEALTH, SortType.class);
+
     public static final IntegerSetting infiniteAuraRange = new IntegerSetting("Range", "InfiniteAuraRange", "The range of the aura", 1, 500, 100);
     public static final IntegerSetting infiniteAuraMaxStep = new IntegerSetting("Max steps", "InfiniteAuraMaxStep", "The most amount of blocks that will be searched for each entity", 1, 2000, 500);
     public static final IntegerSetting infiniteAuraPacketLimit = new IntegerSetting("Packet Limit", "InfiniteAuraPacketLimit", "The limit of packets to send per tick", -1, 5000, 500);
     public static final IntegerSetting infiniteAuraTargetLimit = new IntegerSetting("Target Limit", "InfiniteAuraTargetLimit", "Maximum numbers of target to attack", 1, 50, 1);
+    public static final IntegerSetting infiniteAuraPacketRate = new IntegerSetting("Packet Rate", "InfiniteAuraPacketRate", "The rate which movement packets are sent, the lower the setting, the more is send, higher numbers could cause you to be lagged back", 1, 5, 2);
+    public static final EnumSetting<AStarPathFinder.distanceAccuracy> infiniteAuraDistanceCalculationAccuracy = new EnumSetting<>("Distance Calculation Accuracy", "InfiniteAuraDistanceCalculationAccuracy", "The accuracy used to calculate the path for infinite aura", AStarPathFinder.distanceAccuracy.FLOAT, AStarPathFinder.distanceAccuracy.class);
+
     public static final BooleanSetting noAttackCooldown = new BooleanSetting("No attack cooldown", "KillAuraNoCooldown", "Assume no 1.9+ attack cooldown", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KillAuraKeybind", null, () -> true, -1, () -> instance.toggle(), true);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KillAuraKeybind", null, -1, () -> instance.toggle(), true);
 
     private static final EventHandler<MotionEvent> aura = new EventHandler<>(){
         @Override
@@ -70,7 +72,7 @@ public class KillAuraModule extends ToggleableModule {
     };
 
     public KillAuraModule() {
-        super("KillAura", null, () -> true);
+        super("KillAura", null);
         instance = this;
         settings.add(killAuraMode);
         settings.add(type);
@@ -101,7 +103,7 @@ public class KillAuraModule extends ToggleableModule {
     }
 
     private static KillauraMode getMode() {
-        return KillauraModes.getMode(instance, killAuraMode);
+        return KillauraModes.getMode(killAuraMode);
     }
 
     public static IToggleable getToggle() {
@@ -126,7 +128,7 @@ public class KillAuraModule extends ToggleableModule {
         TELEPORT
     }
 
-    public enum Swing {
+    public enum Swing { //Todo: add setting
         //Only show swing client side
         CLIENT,
         //Only send swing packet

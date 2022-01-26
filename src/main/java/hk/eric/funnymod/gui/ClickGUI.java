@@ -26,6 +26,7 @@ import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.Theme;
 import hk.eric.funnymod.modules.ToggleableModule;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 import net.minecraft.ChatFormatting;
 import org.lwjgl.glfw.GLFW;
 
@@ -200,20 +201,20 @@ public class ClickGUI extends MinecraftHUDGUI {
 		IComponentGenerator cycleGenerator=new ComponentGenerator(keybindKey,charFilter,keys) {
 			@SuppressWarnings("rawtypes")
 			@Override
-			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-				return new CycleSwitch(setting,theme.getCycleSwitchRenderer(isContainer));
+			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+				return new CycleSwitch(setting,theme.getCycleSwitchRenderer(isContainer.get()));
 			}
 		};
 		// Use all the fancy widgets with text boxes
 		IComponentGenerator csgoGenerator=new ComponentGenerator(keybindKey,charFilter,keys) {
 			@Override
-			public IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-				return new ToggleSwitch(setting,theme.getToggleSwitchRenderer(isContainer));
+			public IComponent getBooleanComponent (IBooleanSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+				return new ToggleSwitch(setting,theme.getToggleSwitchRenderer(isContainer.get()));
 			}
 			
 			@SuppressWarnings("rawtypes")
 			@Override
-			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+			public IComponent getEnumComponent (IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
 				return new DropDownList(setting,theme,isContainer,false,keys,new IScrollSize(){},adder::addPopup) {
 					@Override
 					protected Animation getAnimation() {
@@ -244,12 +245,12 @@ public class ClickGUI extends MinecraftHUDGUI {
 			
 			@SuppressWarnings("rawtypes")
 			@Override
-			public IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+			public IComponent getNumberComponent (INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
 				return new Spinner(setting,theme,isContainer,true,keys);
 			}
 			
 			@Override
-			public IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+			public IComponent getColorComponent (IColorSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
 				return new ColorPickerComponent(setting,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 			}
 		};

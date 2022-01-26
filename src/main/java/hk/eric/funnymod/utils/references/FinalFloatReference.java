@@ -1,20 +1,20 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.references;
 
-public class FinalAtomicFloat extends AtomicFloat {
+public class FinalFloatReference extends FloatReference {
 
-    private final float value;
+    private final float aFloat;
 
-    public FinalAtomicFloat(float value) {
-        this.value = value;
+    public FinalFloatReference(float value) {
+        this.aFloat = value;
     }
 
     @Override
-    public float get() {
-        return value;
+    public Float get() {
+        return aFloat;
     }
 
     @Override
-    public void set(float value) {
+    public void set(Float value) {
         throw new UnsupportedOperationException("Cannot set value of a Final Atomic class");
     }
 

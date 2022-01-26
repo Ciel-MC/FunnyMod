@@ -21,8 +21,9 @@ public abstract class ToggleableModule extends Module implements Toggleable {
 
     public ToggleableModule(String displayName, String description, boolean enabled) {
         super(displayName, description);
-        this.enabled = enabled;
-        if (enabled) onEnable();
+        if (this.enabled != enabled) {
+            toggle();
+        }
     }
 
     public ToggleableModule(String displayName, String description, IBoolean visible) {
@@ -62,6 +63,11 @@ public abstract class ToggleableModule extends Module implements Toggleable {
 
     protected void registerOnOffHandler(EventHandler<?> eventHandler) {
         onOffHandlers.add(eventHandler);
+        if (enabled) {
+            EventManager.getInstance().register(eventHandler);
+        }else {
+            EventManager.getInstance().unregister(eventHandler);
+        }
     }
 
     private boolean getEnabled() {

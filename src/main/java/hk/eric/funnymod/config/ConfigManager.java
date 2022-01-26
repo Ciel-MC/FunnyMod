@@ -1,5 +1,6 @@
 package hk.eric.funnymod.config;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.setting.IModule;
@@ -62,10 +63,14 @@ public class ConfigManager {
         }
     }
 
-    private static ObjectNode loadFromFile(String configName) throws IOException {
+    private static ObjectNode loadFromFile(String configName) throws IOException, ConfigLoadingFailedException {
         File configFile = getConfigFile(configName);
         LogManager.getLogger().info("Reading from file: " + configFile.toPath());
         String config = new String(Base64.getDecoder().decode(Files.readAllBytes(configFile.toPath())));
+        JsonNode jsonNode = mapper.readTree(config);
+        if (!(jsonNode instanceof ObjectNode)) {
+            throw new ConfigLoadingFailedException();
+        }
         return (ObjectNode) mapper.readTree(config);
     }
 

@@ -12,6 +12,7 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ClosableComponent;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.util.function.Supplier;
 
@@ -54,7 +55,7 @@ public record ChildUtil(int width, Supplier<Animation> animation,
 			case DOWN -> parent.addComponent(new ClosableComponent<>(title, container, state, getAnimatedToggleable(animation.get()), theme.getPanelRenderer(stateClass), false));
 			case POPUP, DRAG_POPUP -> {
 				toggle = new SimpleToggleable(false);
-				Button<T> button = new Button<>(new Labeled(label.getDisplayName(), label.getDescription(), () -> drawTitle && label.isVisible().isOn()), state, theme.getButtonRenderer(stateClass, true));
+				Button<T> button = new Button<>(new Labeled(label.getDisplayName(), label.getDescription(), () -> drawTitle && label.isVisible().isOn()), state, Getter.fixed(theme.getButtonRenderer(stateClass, true)));
 				if (popupType.dynamicPopup)
 					popup = ClosableComponent.createDynamicPopup(button, container, state, animation.get(), new RendererTuple<>(stateClass, theme), popupType.popupSize, toggle, width);
 				else

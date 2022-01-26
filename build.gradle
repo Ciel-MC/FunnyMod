@@ -1,9 +1,4 @@
 //file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GroovyAssignabilityCheck
-//file:noinspection GrUnresolvedAccess
-//file:noinspection GrUnresolvedAccess
 //file:noinspection GrUnresolvedAccess
 plugins {
     id 'fabric-loom' version '0.10.+'
@@ -37,6 +32,8 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+//    modImplementation("me.saturn.instantkill:instantkill:1.0.0")
 
     //TCP networking
     include(modImplementation("hk.eric.simpleTCP:SimpleTCP:${project.simpleTCP_version}"))

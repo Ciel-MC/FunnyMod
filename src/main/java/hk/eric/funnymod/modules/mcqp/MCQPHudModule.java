@@ -63,10 +63,10 @@ public class MCQPHudModule extends ToggleableModule implements HasComponents {
     public static final BooleanSetting trackXPBoostTime = new BooleanSetting("Track XP Boost Time", "MCQPHudTrackXPBoost","Tracks your time left on xp boosts",true, (b) -> {
         if (b) EventManager.getInstance().register(xpBoostTime); else EventManager.getInstance().unregister(xpBoostTime);
     });
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPHudKeybind", null, () -> true, -1, () -> instance.toggle(), true);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPHudKeybind", null, -1, () -> instance.toggle(), true);
 
     public MCQPHudModule() {
-        super("MCQPHud", "Displays information for MCQP", () -> true);
+        super("MCQPHud", "Displays information for MCQP");
         instance = this;
         settings.add(trackXPBoostTime);
         settings.add(keybind);

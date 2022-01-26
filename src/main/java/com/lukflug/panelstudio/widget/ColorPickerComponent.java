@@ -2,6 +2,7 @@ package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * Full color picker with field and slider.
@@ -19,10 +20,10 @@ public class ColorPickerComponent extends ColorComponent {
 
 	@Override
 	public void populate (ThemeTuple theme) {
-		addComponent(new ToggleButton(new RainbowToggle(),theme.getButtonRenderer(Boolean.class,false)));
+		addComponent(new ToggleButton(new RainbowToggle(), Getter.fixed(theme.getButtonRenderer(Boolean.class,false))));
 		addComponent(new ColorPicker(setting,theme.theme.getColorPickerRenderer()));
-		addComponent(new NumberSlider(new ColorNumber(0),theme.getSliderRenderer(false)));
-		addComponent(new NumberSlider(new ColorNumber(3),theme.getSliderRenderer(false)));
+		addComponent(new NumberSlider(new ColorNumber(0), Getter.fixed(theme.getSliderRenderer(false))));
+		addComponent(new NumberSlider(new ColorNumber(3), Getter.fixed(theme.getSliderRenderer(false))));
 	}
 
 }

@@ -9,6 +9,11 @@ import hk.eric.funnymod.utils.Constants;
  */
 @FunctionalInterface
 public interface ILabeled {
+
+	static ILabeled of(String displayName) {
+		return () -> displayName;
+	}
+
 	/**
 	 * Get display name of the object.
 	 * @return the display name

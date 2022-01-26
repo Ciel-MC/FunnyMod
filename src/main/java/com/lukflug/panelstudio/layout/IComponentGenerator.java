@@ -1,26 +1,15 @@
 package com.lukflug.panelstudio.layout;
 
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.Animation;
 import com.lukflug.panelstudio.base.SimpleToggleable;
 import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.setting.IBooleanSetting;
-import com.lukflug.panelstudio.setting.IColorSetting;
-import com.lukflug.panelstudio.setting.IEnumSetting;
-import com.lukflug.panelstudio.setting.IKeybindSetting;
-import com.lukflug.panelstudio.setting.INumberSetting;
-import com.lukflug.panelstudio.setting.ISetting;
-import com.lukflug.panelstudio.setting.IStringSetting;
+import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.ThemeTuple;
-import com.lukflug.panelstudio.widget.Button;
-import com.lukflug.panelstudio.widget.ColorSliderComponent;
-import com.lukflug.panelstudio.widget.CycleButton;
-import com.lukflug.panelstudio.widget.ITextFieldKeys;
-import com.lukflug.panelstudio.widget.KeybindComponent;
-import com.lukflug.panelstudio.widget.NumberSlider;
-import com.lukflug.panelstudio.widget.TextField;
-import com.lukflug.panelstudio.widget.ToggleButton;
+import com.lukflug.panelstudio.widget.*;
+import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.funnymod.utils.classes.getters.Getter;
+
+import java.util.function.Supplier;
 
 /**
  * Interface defining what components to use for settings.
@@ -38,7 +27,8 @@ public interface IComponentGenerator {
 	 * @return the component to be used
 	 */
 	@SuppressWarnings("rawtypes")
-	default IComponent getComponent(ISetting<?> setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	default IComponent getComponent(ISetting<?> setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		System.out.println("Generating component for " + setting.getClass().getSimpleName());
 		if (setting instanceof IBooleanSetting) {
 			return getBooleanComponent((IBooleanSetting)setting,animation,adder,theme,colorLevel,isContainer);
 		} else if (setting instanceof INumberSetting) {
@@ -52,10 +42,10 @@ public interface IComponentGenerator {
 		} else if (setting instanceof IStringSetting) {
 			return getStringComponent((IStringSetting)setting,animation,adder,theme,colorLevel,isContainer);
 		} else {
-			return new Button<>(setting, () -> null, theme.getButtonRenderer(Void.class, isContainer));
+			return new Button<>(setting, () -> null, new CachedLambdaGetter<>(bl -> theme.getButtonRenderer(String.class, bl), isContainer, 2).toGetter());
 		}
 	}
-	
+
 	/**
 	 * Get component from a given boolean setting object.
 	 * @param setting the setting object.
@@ -66,10 +56,10 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
-	default IComponent getBooleanComponent(IBooleanSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new ToggleButton(setting,theme.getButtonRenderer(Boolean.class,isContainer));
+	default IComponent getBooleanComponent(IBooleanSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new ToggleButton(setting, new CachedLambdaGetter<>(bl -> theme.getButtonRenderer(Boolean.class, bl), isContainer, 2).toGetter());
 	}
-	
+
 	/**
 	 * Get component from a given number setting object.
 	 * @param setting the setting object.
@@ -81,10 +71,10 @@ public interface IComponentGenerator {
 	 * @return the component to be used
 	 */
 	@SuppressWarnings("rawtypes")
-	default IComponent getNumberComponent(INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new NumberSlider(setting,theme.getSliderRenderer(isContainer));
+	default IComponent getNumberComponent(INumberSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new NumberSlider(setting,new CachedLambdaGetter<>(theme::getSliderRenderer, isContainer, 2).toGetter());
 	}
-	
+
 	/**
 	 * Get component from a given enum setting object.
 	 * @param setting the setting object.
@@ -96,10 +86,10 @@ public interface IComponentGenerator {
 	 * @return the component to be used
 	 */
 	@SuppressWarnings("rawtypes")
-	default IComponent getEnumComponent(IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new CycleButton(setting,theme.getButtonRenderer(String.class,isContainer));
+	default IComponent getEnumComponent(IEnumSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new CycleButton(setting,new CachedLambdaGetter<>(str -> theme.getButtonRenderer(String.class, str), isContainer, 2).toGetter());
 	}
-	
+
 	/**
 	 * Get component from a given color setting object.
 	 * @param setting the setting object.
@@ -110,10 +100,10 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
-	default IComponent getColorComponent(IColorSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	default IComponent getColorComponent(IColorSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
 		return new ColorSliderComponent(setting,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel));
 	}
-	
+
 	/**
 	 * Get component from a given keybind setting object.
 	 * @param setting the setting object.
@@ -124,10 +114,10 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
-	default IComponent getKeybindComponent(IKeybindSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
-		return new KeybindComponent(setting,theme.getKeybindRenderer(isContainer));
+	default IComponent getKeybindComponent(IKeybindSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
+		return new KeybindComponent(setting, new CachedLambdaGetter<>(theme::getKeybindRenderer, isContainer, 2).toGetter());
 	}
-	
+
 	/**
 	 * Get component from a given string setting object.
 	 * @param setting the setting object.
@@ -138,7 +128,7 @@ public interface IComponentGenerator {
 	 * @param isContainer whether this component is a title bar
 	 * @return the component to be used
 	 */
-	default IComponent getStringComponent(IStringSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, boolean isContainer) {
+	default IComponent getStringComponent(IStringSetting setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
 		return new TextField(setting, new ITextFieldKeys() {
 			@Override
 			public boolean isBackspaceKey (int scancode) {
@@ -194,7 +184,7 @@ public interface IComponentGenerator {
 			public boolean isAllKey (int scancode) {
 				return false;
 			}
-		},0,new SimpleToggleable(false),theme.getTextRenderer(false,isContainer)) {
+		},0,new SimpleToggleable(false), new CachedLambdaGetter<>(bl -> theme.getTextRenderer(false, bl), isContainer, 2).toGetter()) {
 			@Override
 			public boolean allowCharacter (char character) {
 				return false;

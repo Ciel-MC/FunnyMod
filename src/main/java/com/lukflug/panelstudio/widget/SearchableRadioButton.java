@@ -10,6 +10,7 @@ import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
@@ -60,7 +61,7 @@ public abstract class SearchableRadioButton extends VerticalContainer {
 			public String getValueName() {
 				return setting.getValueName();
 			}
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
+		},keys,0,new SimpleToggleable(false), Getter.fixed(theme.getTextRenderer(true,container))) {
 			@Override
 			public boolean allowCharacter(char character) {
 				return SearchableRadioButton.this.allowCharacter(character);

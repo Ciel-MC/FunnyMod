@@ -1,4 +1,6 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.maps;
+
+import hk.eric.funnymod.utils.classes.TypedPairList;
 
 import java.util.EnumMap;
 import java.util.Map;

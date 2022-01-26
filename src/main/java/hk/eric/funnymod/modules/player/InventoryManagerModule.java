@@ -5,7 +5,7 @@ import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
-import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSetting;
+import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -32,7 +32,7 @@ public class InventoryManagerModule extends ToggleableModule {
     private static final Set<String> MCQPEnabled = new HashSet<>();
 
     private static InventoryManagerModule instance;
-    public static final BooleanSettingWithSubSetting MCQPDropEnabled = new BooleanSettingWithSubSetting("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
+    public static final BooleanSettingWithSubSettings MCQPDropEnabled = new BooleanSettingWithSubSettings("MCQP掉落", "InvManMCQPDrop", "Drops MCQP junks", false);
     public static final BooleanSetting dropHotbar = new BooleanSetting("Drop Hotbar", "InvManDropHotbar", "Also drop items in hotbar", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "InvManKeybind", null, -1, () -> instance.toggle(), true);
 

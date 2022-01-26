@@ -6,6 +6,7 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.theme.ITextFieldRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -46,7 +47,7 @@ public abstract class TextField extends FocusableComponent {
 	/**
 	 * The renderer to be used.
 	 */
-	protected final ITextFieldRenderer renderer;
+	protected final Getter<ITextFieldRenderer> rendererGetter;
 	
 	/**
 	 * Constructor.
@@ -54,33 +55,33 @@ public abstract class TextField extends FocusableComponent {
 	 * @param keys the keyboard predicates
 	 * @param position the current text cursor position
 	 * @param insertMode whether input is being overwritten (true) or inserted (false)
-	 * @param renderer the renderer to be used
+	 * @param rendererGetter the renderer to be used
 	 */
-	public TextField (IStringSetting setting, ITextFieldKeys keys, int position, IToggleable insertMode, ITextFieldRenderer renderer) {
+	public TextField (IStringSetting setting, ITextFieldKeys keys, int position, IToggleable insertMode, Getter<ITextFieldRenderer> rendererGetter) {
 		super(setting);
 		this.setting=setting;
 		this.keys=keys;
 		this.position=position;
 		this.insertMode=insertMode;
-		this.renderer=renderer;
+		this.rendererGetter = rendererGetter;
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		boxPosition=renderer.renderTextField(context,getTitle(),hasFocus(context),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
+		boxPosition= rendererGetter.get().renderTextField(context,getTitle(),hasFocus(context),setting.getValue(),getPosition(),getSelect(),boxPosition,insertMode.isOn());
 	}
-	
+
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
 		if (button==IInterface.LBUTTON && context.isClicked(button)) {
-			int pos=renderer.transformToCharPos(context,getTitle(),setting.getValue(),boxPosition);
+			int pos= rendererGetter.get().transformToCharPos(context,getTitle(),setting.getValue(),boxPosition);
 			if (pos>=0) setPosition(context.getInterface(),pos);
 			unselect();
 		} else if (!hasFocus(context)) unselect();
 	}
-	
+
 	@Override
 	public void handleKey (Context context, int scancode) {
 		super.handleKey(context,scancode);
@@ -164,7 +165,7 @@ public abstract class TextField extends FocusableComponent {
 			}
 		}
 	}
-	
+
 	@Override
 	public void handleChar (Context context, char character) {
 		super.handleChar(context,character);
@@ -187,13 +188,13 @@ public abstract class TextField extends FocusableComponent {
 			position=pos+1;
 		}
 	}
-	
+
 	@Override
 	public void releaseFocus() {
 		super.releaseFocus();
 		unselect();
 	}
-	
+
 	@Override
 	public void exit() {
 		super.exit();
@@ -202,7 +203,7 @@ public abstract class TextField extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return rendererGetter.get().getDefaultHeight();
 	}
 	
 	/**

@@ -1,4 +1,6 @@
-package hk.eric.funnymod.utils.classes;
+package hk.eric.funnymod.utils.maps;
+
+import hk.eric.funnymod.utils.classes.TypedPairList;
 
 public interface TwoDimensionalMap<K1, K2, V> {
     V put(K1 k1, K2 k2, V v);

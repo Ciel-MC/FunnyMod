@@ -2,6 +2,7 @@ package hk.eric.funnymod.utils.classes.pathFind;
 
 
 import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.utils.MathUtil;
 import hk.eric.funnymod.utils.classes.minecraftPlus.BetterBlockPos;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,16 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Node {
+    public static final double D1 = 1.0D;
+    public static final double D2 = Math.sqrt(2.0D);
+    public static final double D3 = Math.sqrt(3.0D);
+    public static final float D1F = 1.0F;
+    public static final float D2F = (float)D2;
+    public static final float D3F = (float)D3;
+    public static final int D1I = 1;
+    public static final int D2I = (int)D2;
+    public static final int D3I = (int)D3;
+
     private Node parent;
     private final BetterBlockPos position;
 
@@ -91,11 +102,44 @@ public class Node {
         return this.getPos().hashCode();
     }
 
-    public int distance(Node node) {
+    public int distanceInt(Node node, boolean diagonal) {
         int xDiff = Math.abs(node.getPos().getX() - this.getPos().getX());
         int yDiff = Math.abs(node.getPos().getY() - this.getPos().getY());
         int zDiff = Math.abs(node.getPos().getZ() - this.getPos().getZ());
-        return xDiff + yDiff + zDiff;
+        if (diagonal) {
+            return xDiff + yDiff + zDiff;
+        }else {
+            int dmin = MathUtil.min(xDiff, yDiff, zDiff);
+            int dmax = MathUtil.max(xDiff, yDiff, zDiff);
+            int dmid = xDiff + yDiff + zDiff - dmin - dmax;
+            return (D3I - D2I) * dmin + (D2I - D1I) * dmid + D1I * dmax;
+        }
+    }
+    public float distanceFloat(Node node, boolean diagonal) {
+        int xDiff = Math.abs(node.getPos().getX() - this.getPos().getX());
+        int yDiff = Math.abs(node.getPos().getY() - this.getPos().getY());
+        int zDiff = Math.abs(node.getPos().getZ() - this.getPos().getZ());
+        if (diagonal) {
+            return xDiff + yDiff + zDiff;
+        }else {
+            int dmin = MathUtil.min(xDiff, yDiff, zDiff);
+            int dmax = MathUtil.max(xDiff, yDiff, zDiff);
+            int dmid = xDiff + yDiff + zDiff - dmin - dmax;
+            return (D3F - D2F) * dmin + (D2F - D1F) * dmid + D1F * dmax;
+        }
+    }
+    public double distanceDouble(Node node, boolean diagonal) {
+        int xDiff = Math.abs(node.getPos().getX() - this.getPos().getX());
+        int yDiff = Math.abs(node.getPos().getY() - this.getPos().getY());
+        int zDiff = Math.abs(node.getPos().getZ() - this.getPos().getZ());
+        if (diagonal) {
+            return xDiff + yDiff + zDiff;
+        }else {
+            int dmin = MathUtil.min(xDiff, yDiff, zDiff);
+            int dmax = MathUtil.max(xDiff, yDiff, zDiff);
+            int dmid = xDiff + yDiff + zDiff - dmin - dmax;
+            return (D3 - D2) * dmin + (D2 - D1) * dmid + D1 * dmax;
+        }
     }
 
     public List<Node> asList() {

@@ -8,6 +8,7 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * Button with two values that can be toggled by the left mouse button.
@@ -21,7 +22,7 @@ public class ToggleButton extends FocusableComponent {
 	/**
 	 * Renderer for this component.
 	 */
-	protected final IButtonRenderer<Boolean> renderer;
+	protected final Getter<IButtonRenderer<Boolean>> renderer;
 	
 	/**
 	 * Constructor.
@@ -29,7 +30,7 @@ public class ToggleButton extends FocusableComponent {
 	 * @param toggle the toggle
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleButton (ILabeled label, IToggleable toggle, IButtonRenderer<Boolean> renderer) {
+	public ToggleButton (ILabeled label, IToggleable toggle, Getter<IButtonRenderer<Boolean>> renderer) {
 		super(label);
 		this.toggle=toggle;
 		this.renderer=renderer;
@@ -41,14 +42,14 @@ public class ToggleButton extends FocusableComponent {
 	 * @param setting the setting in question
 	 * @param renderer the renderer for this component
 	 */
-	public ToggleButton (IBooleanSetting setting, IButtonRenderer<Boolean> renderer) {
+	public ToggleButton (IBooleanSetting setting, Getter<IButtonRenderer<Boolean>> renderer) {
 		this(setting,setting,renderer);
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),toggle.isOn());
+		renderer.get().renderButton(context,getTitle(),hasFocus(context),toggle.isOn());
 	}
 	
 	@Override
@@ -61,6 +62,6 @@ public class ToggleButton extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return renderer.get().getDefaultHeight();
 	}
 }

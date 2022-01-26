@@ -20,6 +20,7 @@ import com.lukflug.panelstudio.widget.RadioButton;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.ToggleButton;
 import hk.eric.funnymod.utils.Constants;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.function.Function;
@@ -126,7 +127,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
-		Button<Void> title= new Button<>(label, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
+		Button<Void> title= new Button<>(label, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, 0, 0, true)));
 		HorizontalContainer window=new HorizontalContainer(label,theme.getContainerRenderer(0,horizontal?1:0,true));
 		IEnumSetting catSelect;
 		if (horizontal) {
@@ -179,7 +180,7 @@ public class CSGOLayout implements ILayout,IScrollSize {
 						public boolean isOn() {
 							return module.getToggleable().isOn();
 						}
-					},animation,gui,new ThemeTuple(theme,1,2),2,false));
+					},animation,gui,new ThemeTuple(theme,1,2),2,Getter.fixed(false)));
 					module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 				});
 			} else {
@@ -188,8 +189,8 @@ public class CSGOLayout implements ILayout,IScrollSize {
 				category.getModules().forEach(module->{
 					int graphicalLevel=1;
 					FocusableComponent moduleTitle;
-					if (module.getToggleable()==null) moduleTitle= new Button<>(module, () -> null, theme.getButtonRenderer(Void.class, 1, 1, true));
-					else moduleTitle=new ToggleButton(module,module.getToggleable(),theme.getButtonRenderer(Boolean.class,1,1,true));
+					if (module.getToggleable()==null) moduleTitle= new Button<>(module, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, 1, 1, true)));
+					else moduleTitle=new ToggleButton(module,module.getToggleable(), Getter.fixed(theme.getButtonRenderer(Boolean.class,1,1,true)));
 					VerticalContainer moduleContainer=new VerticalContainer(module,theme.getContainerRenderer(1,graphicalLevel,false));
 					if (module.getToggleable()==null) util.addContainer(module,moduleTitle,moduleContainer,()->null,Void.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
 					else util.addContainer(module,moduleTitle,moduleContainer,()->module.getToggleable().isOn(),Boolean.class,categoryContent,gui,new ThemeTuple(theme,1,graphicalLevel),ChildMode.DOWN);
@@ -210,10 +211,15 @@ public class CSGOLayout implements ILayout,IScrollSize {
 	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
-		boolean isContainer=setting instanceof HasSubSettings;
-		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
+		boolean isContainer = setting instanceof HasSubSettings;
+		IComponent component;
+		if (isContainer) {
+			component=components.getComponent(setting,animation,gui,theme,colorLevel, () -> ((HasSubSettings<?>) setting).getCurrentSubSettings() != null);
+		} else {
+			component=components.getComponent(setting,animation,gui,theme,colorLevel, Getter.fixed(false));
+		}
 		if (component instanceof VerticalContainer colorContainer) {
-			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN));
+			Button<T> button= new Button<>(setting, setting::getSettingState, Getter.fixed(theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN)));
 			util.addContainer(setting,button,colorContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
 			if (setting instanceof HasSubSettings<?> subSettingsSetting) subSettingsSetting.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
 		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {

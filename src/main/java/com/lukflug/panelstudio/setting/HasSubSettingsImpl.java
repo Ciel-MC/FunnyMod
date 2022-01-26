@@ -25,7 +25,17 @@ public interface HasSubSettingsImpl<T> extends HasSubSettings<T> {
 
     @Override
     default Stream<ISetting<?>> getSubSettings(T state) {
-        return ArrayUtil.combineAndStream(getGlobalSubSettings(), getSubSettingsMap().get(state));
+        if (getGlobalSubSettings() != null && !getGlobalSubSettings().isEmpty()) {
+            List<ISetting<?>> settings;
+            if (getSubSettingsMap() != null && getSubSettingsMap().containsKey(state) && (settings = getSubSettingsMap().get(state)) != null && !settings.isEmpty()) {
+                return Stream.concat(getGlobalSubSettings().stream(), settings.stream());
+            }
+            return getGlobalSubSettings().stream();
+        }
+        if (getSubSettingsMap() != null && getSubSettingsMap().containsKey(state)) {
+            return getSubSettingsMap().get(state).stream();
+        }
+        return null;
     }
 
     @Override
@@ -66,7 +76,7 @@ public interface HasSubSettingsImpl<T> extends HasSubSettings<T> {
     }
 
     @Override
-    default Stream<ISetting<?>> geGlobalSubSettings() {
+    default Stream<ISetting<?>> streamGlobalSubSettings() {
         return getGlobalSubSettings().stream();
     }
 }

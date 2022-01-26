@@ -14,6 +14,8 @@ import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -49,7 +51,7 @@ public abstract class DropDownList extends HorizontalContainer {
 	 * @param popupAdder consumer to handle adding list pop-up
 	 */
 	@SuppressWarnings("rawtypes")
-	public DropDownList (IEnumSetting setting, ThemeTuple theme, boolean container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
+	public DropDownList (IEnumSetting setting, ThemeTuple theme, Getter<Boolean> container, boolean allowSearch, ITextFieldKeys keys, IScrollSize popupSize, Consumer<IFixedComponent> popupAdder) {
 		super(setting,new IContainerRenderer(){});
 		AtomicReference<String> searchTerm= new AtomicReference<>(null);
 		TextField textField=new TextField(new IStringSetting() {
@@ -85,11 +87,11 @@ public abstract class DropDownList extends HorizontalContainer {
 				return setting.getValueName();
 			}
 
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
+		},keys,0,new SimpleToggleable(false),new CachedLambdaGetter<>(str -> theme.getTextRenderer(false, str), container, 2).toGetter()) {
 			@Override
 			public void handleButton (Context context, int button) {
 				super.handleButton(context,button);
-				rect=renderer.getTextArea(context,getTitle());
+				rect= rendererGetter.get().getTextArea(context,getTitle());
 				if (button==IInterface.LBUTTON && context.isClicked(button)) transferFocus=true;
 			}
 			
@@ -105,7 +107,7 @@ public abstract class DropDownList extends HorizontalContainer {
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		ThemeTuple popupTheme=new ThemeTuple(theme.theme,theme.logicalLevel,0);
-		Button<Void> title= new Button<>(new Labeled("", null, () -> false), () -> null, popupTheme.getButtonRenderer(Void.class, false));
+		Button<Void> title= new Button<>(new Labeled("", null, () -> false), () -> null, Getter.fixed(popupTheme.getButtonRenderer(Void.class, false)));
 		RadioButton content=new RadioButton(new IEnumSetting() {
 			final ILabeled[] values=Arrays.stream(setting.getAllowedValues()).map(value->new Labeled(value.getDisplayName(),value.getDescription(),()->{
 				if (!value.isVisible().isOn()) return false;
@@ -183,8 +185,8 @@ public abstract class DropDownList extends HorizontalContainer {
 		};
 		IFixedComponent popup=ClosableComponent.createStaticPopup(title,content,()->null,getAnimation(), new RendererTuple<>(Void.class, popupTheme),popupSize,toggle,()->rect.width,false,"",true);
 		popupAdder.accept(popup);
-		IPopupPositioner positioner= (inter, popup1, component, panel) -> new Point(component.x,component.y+component.height);
-		Button<Void> button= new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.DOWN, container)) {
+		IPopupPositioner positioner= (inter, popup1, component, panel) -> new Point(component.x,component.y + component.height);
+		Button<Void> button= new Button<>(new Labeled(null, null), () -> null, new CachedLambdaGetter<>(bl -> theme.getSmallButtonRenderer(ITheme.DOWN, bl), container, 2)) {
 			@Override
 			public void handleButton(Context context, int button) {
 				super.handleButton(context, button);

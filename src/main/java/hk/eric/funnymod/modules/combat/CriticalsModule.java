@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 public class CriticalsModule extends ToggleableModule {
 
     private static CriticalsModule instance;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CriticalsKeybind", null, () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "CriticalsKeybind", null, -1, () -> instance.toggle());
 
     private static final EventHandler<AttackEvent> attackEventHandler = new EventHandler<>(EventPriority.LOWEST) {
         @Override
@@ -32,7 +32,7 @@ public class CriticalsModule extends ToggleableModule {
     };
 
     public CriticalsModule() {
-        super("Criticals", "Automatically crits", () -> true);
+        super("Criticals", "Automatically crits");
         instance = this;
         registerOnOffHandler(attackEventHandler);
         settings.add(keybind);

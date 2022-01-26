@@ -21,7 +21,7 @@ public interface HasSubSettings<T> {
 
     void removeGlobalSubSetting(ISetting<?> subSetting);
 
-    Stream<ISetting<?>> geGlobalSubSettings();
+    Stream<ISetting<?>> streamGlobalSubSettings();
 
     void addSubSetting(T state, ISetting<?> subSetting);
 

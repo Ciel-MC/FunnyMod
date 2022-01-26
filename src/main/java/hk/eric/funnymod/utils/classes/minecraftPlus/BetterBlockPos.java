@@ -208,6 +208,10 @@ public class BetterBlockPos extends BlockPos {
         return new Vec3(this.getX() + 0.5, this.getY(), this.getZ() + 0.5);
     }
 
+    public Vec3 toVec3() {
+        return new Vec3(this.getX(), this.getY() - .5, this.getZ());
+    }
+
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     public BetterBlockPos clone() {
         return new BetterBlockPos(this.getX(), this.getY(), this.getZ());

@@ -22,10 +22,10 @@ public class MCQPAutoFarmModule extends ToggleableModule {
     private int ticks = 0;
     private boolean wasPathing = false;
     private BetterBlockPos target;
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoFarmKeybind", null, () -> true, -1, () -> instance.toggle(), true);
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoFarmKeybind", null, -1, () -> instance.toggle(), true);
 
     public MCQPAutoFarmModule() {
-        super("MCQPAutoFarm", "Automatically farms on MCQP", () -> true);
+        super("MCQPAutoFarm", "Automatically farms on MCQP");
         instance = this;
         settings.add(keybind);
     }

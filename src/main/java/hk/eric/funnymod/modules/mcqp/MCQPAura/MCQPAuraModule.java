@@ -8,7 +8,7 @@ import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.DoubleSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
-import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSetting;
+import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.ToggleableModule;
@@ -22,7 +22,7 @@ public class MCQPAuraModule extends ToggleableModule {
     private static MCQPAuraModule instance;
     public static final EnumSettingWithSubSettings<Mode> mode = new EnumSettingWithSubSettings<>("Mode", "MCQPAuraMode", "Mode for MCQPAura", Mode.NORMAL, Mode.class);
     //Normal settings
-    public static final BooleanSettingWithSubSetting cycleAttack = new BooleanSettingWithSubSetting("Cycle","MCQPAuraCycle","Cycle different entities on each tick",false);
+    public static final BooleanSettingWithSubSettings cycleAttack = new BooleanSettingWithSubSettings("Cycle","MCQPAuraCycle","Cycle different entities on each tick",false);
     public static final IntegerSetting cycleTime = new IntegerSetting("CycleTime","MCQPAuraCycleTime","Time to cycle", 1, 5, 2);
     public static final DoubleSetting range = new DoubleSetting("Range", "MCQPAuraRange", "The range of the aura", 1, 20, 10, .1);
     public static final IntegerSetting maxTarget = new IntegerSetting("Max Target", "MCQPAuraTargets", "How many entity to attack in 1 tick", 1, 20, 5);

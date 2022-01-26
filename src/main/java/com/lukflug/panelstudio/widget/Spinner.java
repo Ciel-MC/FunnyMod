@@ -13,6 +13,8 @@ import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
+import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * A spinner for fine-tuning numerical settings.
@@ -23,12 +25,12 @@ public class Spinner extends HorizontalContainer {
 	 * Constructor.
 	 * @param setting the number setting to be used
 	 * @param theme the theme to be used
-	 * @param container whether this is a title bar
+	 * @param isContainer whether this is a title bar
 	 * @param allowInput whether text input is allowed
 	 * @param keys the keyboard predicates for the text box
 	 */
 	@SuppressWarnings("rawtypes")
-	public Spinner (INumberSetting setting, ThemeTuple theme, boolean container, boolean allowInput, ITextFieldKeys keys) {
+	public Spinner (INumberSetting setting, ThemeTuple theme, Getter<Boolean> isContainer, boolean allowInput, ITextFieldKeys keys) {
 		super(setting,new IContainerRenderer(){});
 		TextField textField=new TextField(new IStringSetting() {
 			private String value=null;
@@ -69,7 +71,7 @@ public class Spinner extends HorizontalContainer {
 				if (value==null) lastTime=System.currentTimeMillis();
 				value= string;
 			}
-		},keys,0,new SimpleToggleable(false),theme.getTextRenderer(true,container)) {
+		},keys,0,new SimpleToggleable(false), new CachedLambdaGetter<>(bl -> theme.getTextRenderer(true, bl), isContainer, 2).toGetter()) {
 			@Override
 			public boolean allowCharacter(char character) {
 				if (!allowInput) return false;
@@ -78,7 +80,7 @@ public class Spinner extends HorizontalContainer {
 		};
 		addComponent(new HorizontalComponent<>(textField,0,1));
 		VerticalContainer buttons=new VerticalContainer(setting,new IContainerRenderer(){});
-		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.UP, container)) {
+		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null,  new CachedLambdaGetter<>(bl -> theme.getSmallButtonRenderer(ITheme.UP, bl), isContainer, 2)) {
 			@Override
 			public void handleButton(Context context, int button) {
 				super.handleButton(context, button);
@@ -94,7 +96,7 @@ public class Spinner extends HorizontalContainer {
 				return textField.getHeight() / 2;
 			}
 		});
-		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null, theme.getSmallButtonRenderer(ITheme.DOWN, container)) {
+		buttons.addComponent(new Button<>(new Labeled(null, null), () -> null, new CachedLambdaGetter<>(bl -> theme.getSmallButtonRenderer(ITheme.DOWN, bl), isContainer, 2)) {
 			@Override
 			public void handleButton(Context context, int button) {
 				super.handleButton(context, button);

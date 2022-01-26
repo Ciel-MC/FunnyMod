@@ -1,11 +1,12 @@
 package com.lukflug.panelstudio.widget;
 
-import java.util.function.Supplier;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
+
+import java.util.function.Supplier;
 
 /**
  * Button widget class.
@@ -19,28 +20,28 @@ public class Button<T> extends FocusableComponent {
 	/**
 	 * Renderer for this component.
 	 */
-	protected final IButtonRenderer<T> renderer;
+	protected final Getter<IButtonRenderer<T>> rendererGetter;
 
 	/**
 	 * Constructor.
 	 * @param label the label for the component
 	 * @param state the button state supplier
-	 * @param renderer the renderer for this component
+	 * @param rendererGetter the renderer for this component
 	 */
-	public Button (ILabeled label, Supplier<T> state, IButtonRenderer<T> renderer) {
+	public Button (ILabeled label, Supplier<T> state, Getter<IButtonRenderer<T>> rendererGetter) {
 		super(label);
-		this.renderer=renderer;
+		this.rendererGetter = rendererGetter;
 		this.state=state;
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),state.get());
+		rendererGetter.get().renderButton(context,getTitle(),hasFocus(context),state.get());
 	}
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return rendererGetter.get().getDefaultHeight();
 	}
 }

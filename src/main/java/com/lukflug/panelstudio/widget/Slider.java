@@ -1,12 +1,13 @@
 package com.lukflug.panelstudio.widget;
 
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
+
+import java.awt.*;
 
 /**
  * Base class for components that are sliders.
@@ -20,23 +21,23 @@ public abstract class Slider extends FocusableComponent {
 	/**
 	 * The renderer to be used.
 	 */
-	protected final ISliderRenderer renderer;
+	protected final Getter<ISliderRenderer> rendererGetter;
 	
 	/**
 	 * Constructor.
 	 * @param label the label for the component
-	 * @param renderer renderer for the slider
+	 * @param rendererGetter renderer getter for the slider
 	 */
-	public Slider(ILabeled label, ISliderRenderer renderer) {
+	public Slider(ILabeled label, Getter<ISliderRenderer> rendererGetter) {
 		super(label);
-		this.renderer=renderer;
+		this.rendererGetter = rendererGetter;
 	}
 
 	@Override
 	public void render (Context context) {
 		super.render(context);
 		if (attached) {
-			Rectangle rect=renderer.getSlideArea(context,getTitle(),getDisplayState());
+			Rectangle rect= rendererGetter.get().getSlideArea(context,getTitle(),getDisplayState());
 			double value=(context.getInterface().getMouse().x-rect.x)/(double)(rect.width-1);
 			if (value<0) value=0;
 			else if (value>1) value=1;
@@ -45,13 +46,13 @@ public abstract class Slider extends FocusableComponent {
 		if (!context.getInterface().getButton(IInterface.LBUTTON)) {
 			attached=false;
 		}
-		renderer.renderSlider(context,getTitle(),getDisplayState(),hasFocus(context),getValue());
+		rendererGetter.get().renderSlider(context,getTitle(),getDisplayState(),hasFocus(context),getValue());
 	}
 	
 	@Override
 	public void handleButton (Context context, int button) {
 		super.handleButton(context,button);
-		if (button==IInterface.LBUTTON && context.isClicked(button) && renderer.getSlideArea(context,getTitle(),getDisplayState()).contains(context.getInterface().getMouse())) {
+		if (button==IInterface.LBUTTON && context.isClicked(button) && rendererGetter.get().getSlideArea(context,getTitle(),getDisplayState()).contains(context.getInterface().getMouse())) {
 			attached=true;
 		}
 	}
@@ -64,7 +65,7 @@ public abstract class Slider extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return rendererGetter.get().getDefaultHeight();
 	}
 
 	/**

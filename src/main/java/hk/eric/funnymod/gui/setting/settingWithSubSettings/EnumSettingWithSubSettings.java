@@ -71,6 +71,17 @@ public class EnumSettingWithSubSettings<E extends Enum<E>> extends EnumSetting<E
     }
 
     @Override
+    public void addSubSetting(E state, ISetting<?> subSetting) {
+        subSetting.setIsVisible(() -> getValue() == state);
+        if (subSettings.containsKey(state)) {
+            subSettings.get(state).add(subSetting);
+        }else {
+            subSettings.put(state, new ArrayList<>());
+            subSettings.get(state).add(subSetting);
+        }
+    }
+
+    @Override
     public ObjectNode save() {
         ObjectNode node = super.save();
         SettingUtil.getSavableStream(getAllSubSettings()).forEach((setting) -> node.set(setting.getConfigName(), setting.save()));

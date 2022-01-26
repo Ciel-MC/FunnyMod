@@ -1,5 +1,7 @@
 package hk.eric.funnymod.utils.classes;
 
+import hk.eric.funnymod.utils.classes.pairs.Pair;
+
 import java.util.ArrayList;
 import java.util.Collection;
 

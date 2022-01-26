@@ -19,6 +19,8 @@
     "LivingEntityMixin",
     "LocalPlayerMixin",
     "MultiPlayerGameModeMixin",
+    "OpenClientboundChatPacket",
+    "OpenClientboundOpenScreenPacket",
     "OpenEntityRenderDispatcher",
     "OpenGui",
     "OpenLevel",

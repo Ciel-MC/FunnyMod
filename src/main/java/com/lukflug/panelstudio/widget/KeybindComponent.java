@@ -4,6 +4,7 @@ import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 /**
  * Button representing a keybind.
@@ -17,23 +18,23 @@ public class KeybindComponent extends FocusableComponent {
 	/**
 	 * The renderer to be used.
 	 */
-	protected final IButtonRenderer<String> renderer;
+	protected final Getter<IButtonRenderer<String>> rendererGetter;
 	
 	/**
 	 * Constructor.
 	 * @param keybind the keybind in question
-	 * @param renderer the renderer for this component
+	 * @param rendererGetter the renderer for this component
 	 */
-	public KeybindComponent (IKeybindSetting keybind, IButtonRenderer<String> renderer) {
+	public KeybindComponent (IKeybindSetting keybind, Getter<IButtonRenderer<String>> rendererGetter) {
 		super(keybind);
 		this.keybind=keybind;
-		this.renderer=renderer;
+		this.rendererGetter = rendererGetter;
 	}
 	
 	@Override
 	public void render (Context context) {
 		super.render(context);
-		renderer.renderButton(context,getTitle(),hasFocus(context),keybind.getKeyName());
+		rendererGetter.get().renderButton(context,getTitle(),hasFocus(context),keybind.getKeyName());
 	}
 	
 	@Override
@@ -53,7 +54,7 @@ public class KeybindComponent extends FocusableComponent {
 
 	@Override
 	protected int getHeight() {
-		return renderer.getDefaultHeight();
+		return rendererGetter.get().getDefaultHeight();
 	}
 	
 	/**

@@ -19,6 +19,7 @@ import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.SearchableRadioButton;
 import hk.eric.funnymod.utils.Constants;
+import hk.eric.funnymod.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -116,7 +117,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void populateGUI (IComponentAdder gui, IComponentGenerator components, IClient client, ITheme theme) {
-		Button<Void> title= new Button<>(titleLabel, () -> null, theme.getButtonRenderer(Void.class, 0, 0, true));
+		Button<Void> title= new Button<>(titleLabel, () -> null, Getter.fixed(theme.getButtonRenderer(Void.class, 0, 0, true)));
 		HorizontalContainer window=new HorizontalContainer(titleLabel,theme.getContainerRenderer(0,0,true));
 		Supplier<Stream<IModule>> modules=()->client.getCategories().flatMap(ICategory::getModules).sorted(comparator);
 		IEnumSetting modSelect=addContainer(searchLabel,modules.get().map(mod->mod),window,new ThemeTuple(theme,0,1),button->wrapColumn(button,new ThemeTuple(theme,0,1),1));
@@ -159,7 +160,7 @@ public class SearchableLayout implements ILayout,IScrollSize {
 				public boolean isOn() {
 					return module.getToggleable().isOn();
 				}
-			},animation,gui,new ThemeTuple(theme,1,2),2,false));
+			},animation,gui,new ThemeTuple(theme,1,2),2,Getter.fixed(false)));
 			module.getSettings().forEach(setting->addSettingsComponent(setting,container,gui,components,new ThemeTuple(theme,2,2)));
 		});
 	}
@@ -175,16 +176,16 @@ public class SearchableLayout implements ILayout,IScrollSize {
 	 */
 	protected <T> void addSettingsComponent (ISetting<T> setting, VerticalContainer container, IComponentAdder gui, IComponentGenerator components, ThemeTuple theme) {
 		int colorLevel=(colorType==ChildMode.DOWN)?theme.graphicalLevel:0;
-		boolean isContainer=setting instanceof HasSubSettings;
-		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer);
+		boolean isContainer=setting instanceof HasSubSettings hasSubSettings && hasSubSettings.getCurrentSubSettings() != null;
+		IComponent component=components.getComponent(setting,animation,gui,theme,colorLevel,isContainer ? (() -> ((HasSubSettings<?>) setting).getCurrentSubSettings() != null) : Getter.fixed(false));
 		if (component instanceof VerticalContainer colorContainer) {
-			Button<T> button= new Button<>(setting, setting::getSettingState, theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN));
+			Button<T> button= new Button<>(setting, setting::getSettingState, Getter.fixed(theme.getButtonRenderer(setting.getSettingClass(), colorType == ChildMode.DOWN)));
 			util.addContainer(setting,button,colorContainer, setting::getSettingState,setting.getSettingClass(),container,gui,new ThemeTuple(theme.theme,theme.logicalLevel,colorLevel),colorType);
-			if (setting instanceof HasSubSettings<?> hasSubSettings) hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
-		} else if (setting instanceof HasSubSettings<?> hasSubSettings) {
+			if (isContainer) ((HasSubSettings<?>)setting).getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,colorContainer,gui,components,new ThemeTuple(theme.theme,theme.logicalLevel+1,colorLevel+1)));
+		} else if (isContainer) {
 			VerticalContainer settingContainer=new VerticalContainer(setting,theme.getContainerRenderer(false));
 			util.addContainer(setting,component,settingContainer, setting::getSettingState,setting.getSettingClass(),container,gui,theme,ChildMode.DOWN);
-			hasSubSettings.getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
+			((HasSubSettings<?>)setting).getSubSettings().forEach(subSetting->addSettingsComponent(subSetting,settingContainer,gui,components,new ThemeTuple(theme,1,1)));
 		} else {
 			container.addComponent(component);
 		}

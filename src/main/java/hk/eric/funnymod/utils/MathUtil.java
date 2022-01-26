@@ -251,6 +251,14 @@ public class MathUtil {
         return number;
     }
 
+    public static int min(int a, int b, int c) {
+        return Math.min(a, Math.min(b, c));
+    }
+
+    public static int max(int a, int b, int c) {
+        return Math.max(a, Math.max(b, c));
+    }
+
     // Private function for table lookup
     private static float sinLookup(int a) {
         return a>=0 ? sin[a%(modulus)] : -sin[-a%(modulus)];

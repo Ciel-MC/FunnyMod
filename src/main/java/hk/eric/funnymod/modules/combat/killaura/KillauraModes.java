@@ -7,8 +7,12 @@ public class KillauraModes {
 
     private static final KillauraMode infinite = new InfiniteKillAuraMode();
 
-    public static KillauraMode getMode(KillAuraModule module, EnumSetting<KillAuraModule.KillAuraMode> setting) {
-        return switch (setting.getValue()) {
+    public static KillauraMode getMode(EnumSetting<KillAuraModule.KillAuraMode> setting) {
+        return getMode(setting.getValue());
+    }
+
+    public static KillauraMode getMode(KillAuraModule.KillAuraMode mode) {
+        return switch (mode) {
             case NORMAL -> null;
             case TELEPORT -> infinite;
         };

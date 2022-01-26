@@ -1,6 +1,20 @@
 package hk.eric.funnymod.utils.classes;
 
+import net.minecraft.world.phys.Vec3;
+
 public record ThreeDimensionalLine(double x1, double y1, double z1, double x2, double y2, double z2) {
+
+    public static ThreeDimensionalLine of(Vec3 pos1, double x2, double y2, double z2) {
+        return new ThreeDimensionalLine(pos1.x, pos1.y, pos1.z, x2, y2, z2);
+    }
+
+    public static ThreeDimensionalLine of(double x1, double y1, double z1, Vec3 pos2) {
+        return new ThreeDimensionalLine(x1, y1, z1, pos2.x, pos2.y, pos2.z);
+    }
+
+    public static ThreeDimensionalLine of(Vec3 pos1, Vec3 pos2) {
+        return new ThreeDimensionalLine(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z);
+    }
 
     @Override
     public boolean equals(Object obj) {

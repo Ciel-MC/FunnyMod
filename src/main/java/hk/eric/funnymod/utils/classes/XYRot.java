@@ -1,6 +1,8 @@
 package hk.eric.funnymod.utils.classes;
 
-public class XYRot extends Pair<Float, Float>{
+import hk.eric.funnymod.utils.classes.pairs.Pair;
+
+public class XYRot extends Pair<Float, Float> {
 
     public XYRot() {
     }

@@ -3,7 +3,7 @@ package hk.eric.funnymod.modules.mcqp.MCQPAura;
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.MathUtil;
 import hk.eric.funnymod.utils.PlayerUtil;
-import hk.eric.funnymod.utils.classes.Pair;
+import hk.eric.funnymod.utils.classes.pairs.Pair;
 import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
 import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
 import net.minecraft.client.player.LocalPlayer;
