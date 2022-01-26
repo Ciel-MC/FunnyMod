@@ -33,6 +33,9 @@ public class KillAuraModule extends ToggleableModule {
     public static final IntegerSetting infiniteAuraTargetLimit = new IntegerSetting("Target Limit", "InfiniteAuraTargetLimit", "Maximum numbers of target to attack", 1, 50, 1);
     public static final IntegerSetting infiniteAuraPacketRate = new IntegerSetting("Packet Rate", "InfiniteAuraPacketRate", "The rate which movement packets are sent, the lower the setting, the more is send, higher numbers could cause you to be lagged back", 1, 5, 2);
     public static final EnumSetting<AStarPathFinder.distanceAccuracy> infiniteAuraDistanceCalculationAccuracy = new EnumSetting<>("Distance Calculation Accuracy", "InfiniteAuraDistanceCalculationAccuracy", "The accuracy used to calculate the path for infinite aura", AStarPathFinder.distanceAccuracy.FLOAT, AStarPathFinder.distanceAccuracy.class);
+    public static final EnumSettingWithSubSettings<TeleportBypass> infiniteAuraBypass = new EnumSettingWithSubSettings<>("Infinite Aura Bypass", "KillAuraInfiniteAuraBypass", "Choose Bypass mode", TeleportBypass.PAPER, TeleportBypass.class);
+
+    public static final IntegerSetting infiniteAuraPaperDistance = new IntegerSetting("Distance", "KillAuraInfiniteAuraPaperDistance", "The max distance you can move in 1 tick(10 on paper by default)", 1, 50, 10);
 
     public static final BooleanSetting noAttackCooldown = new BooleanSetting("No attack cooldown", "KillAuraNoCooldown", "Assume no 1.9+ attack cooldown", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KillAuraKeybind", null, -1, () -> instance.toggle(), true);
@@ -77,7 +80,9 @@ public class KillAuraModule extends ToggleableModule {
         settings.add(killAuraMode);
         settings.add(type);
         settings.add(sortType);
-        killAuraMode.addSubSettings(KillAuraMode.TELEPORT, infiniteAuraRange, infiniteAuraMaxStep, infiniteAuraPacketLimit, infiniteAuraTargetLimit);
+        killAuraMode.addSubSettings(KillAuraMode.TELEPORT, infiniteAuraRange, infiniteAuraMaxStep, infiniteAuraPacketLimit, infiniteAuraTargetLimit, infiniteAuraBypass);
+        infiniteAuraBypass.addSubSettings(TeleportBypass.PAPER, infiniteAuraPaperDistance);
+
         settings.add(noAttackCooldown);
         settings.add(keybind);
 
@@ -136,6 +141,11 @@ public class KillAuraModule extends ToggleableModule {
         //Send swing packet and show swing client side
         BOTH,
         //Don't send swing packet or show swing client side
+        NONE
+    }
+
+    public enum TeleportBypass {
+        PAPER,
         NONE
     }
 }

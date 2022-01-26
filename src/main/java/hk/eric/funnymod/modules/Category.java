@@ -8,6 +8,7 @@ import hk.eric.funnymod.modules.combat.CriticalsModule;
 import hk.eric.funnymod.modules.combat.KillAuraModule;
 import hk.eric.funnymod.modules.combat.VelocityModule;
 import hk.eric.funnymod.modules.debug.DebugModule;
+import hk.eric.funnymod.modules.exploit.BowInstantKillModule;
 import hk.eric.funnymod.modules.mcqp.MCQPAura.MCQPAuraModule;
 import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.misc.BindModule;
@@ -36,6 +37,7 @@ public enum Category implements ICategory {
 	VISUAL("Visual"),
 	WORLD("World"),
 	MISC("Misc"),
+	EXPLOIT("Exploit"),
 	MCQP("文靜"),
 	DEBUG("Debug");
 
@@ -78,6 +80,9 @@ public enum Category implements ICategory {
 				new BindModule(),
 				new CommandModule(),
 				new TooltipScrollingModule()
+		);
+		addModule(EXPLOIT,
+				new BowInstantKillModule()
 		);
 		addModule(MCQP,
 				new MCQPAutoForgeModule(),
@@ -133,7 +138,7 @@ public enum Category implements ICategory {
 	public static IClient getClient() {
 		return () -> Arrays.stream(
 				FunnyModClient.debug?
-						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, MCQP, DEBUG} :
-						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, MCQP});
+						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, EXPLOIT, MCQP, DEBUG} :
+						new Category[]{COMBAT, MOVEMENT, PLAYER, VISUAL, WORLD, MISC, EXPLOIT, MCQP});
 	}
 }

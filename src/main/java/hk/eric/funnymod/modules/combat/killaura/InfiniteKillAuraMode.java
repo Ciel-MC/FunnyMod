@@ -50,6 +50,17 @@ public class InfiniteKillAuraMode extends KillauraMode {
     public Stream<LivingEntity> process(Stream<LivingEntity> entityStream) {
         return entityStream
                 .filter(e -> EntityUtil.distanceToEntitySquared(e, FunnyModClient.mc.player) <= KillAuraModule.infiniteAuraRange.getValue() * KillAuraModule.infiniteAuraRange.getValue())
+                .filter(e -> {
+                    if (KillAuraModule.infiniteAuraBypass.getValue() != KillAuraModule.TeleportBypass.PAPER) {
+                        return true;
+                    }else {
+                        return switch (KillAuraModule.infiniteAuraDistanceCalculationAccuracy.getValue()) {
+                            case INTEGER -> BetterBlockPos.fromEntity(e).asNode().distanceInt(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                            case FLOAT -> BetterBlockPos.fromEntity(e).asNode().distanceFloat(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                            case DOUBLE -> BetterBlockPos.fromEntity(e).asNode().distanceDouble(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                        };
+                    }
+                })
                 .sorted(getEntityComparator(FunnyModClient.mc.player, KillAuraModule.sortType.getValue()))
                 .limit(KillAuraModule.infiniteAuraTargetLimit.getValue());
     }

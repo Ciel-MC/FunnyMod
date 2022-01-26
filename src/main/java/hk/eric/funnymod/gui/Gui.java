@@ -1,8 +1,8 @@
 package hk.eric.funnymod.gui;
 
-import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.EventListener;
 import hk.eric.funnymod.event.EventManager;
+import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.KeyEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.Category;

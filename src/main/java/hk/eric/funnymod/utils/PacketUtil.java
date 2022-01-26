@@ -4,6 +4,7 @@ import hk.eric.funnymod.FunnyModClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import org.apache.logging.log4j.LogManager;
 
 public class PacketUtil {
@@ -34,5 +35,10 @@ public class PacketUtil {
 
     public static ServerboundMovePlayerPacket.StatusOnly createLook(boolean onGround) {
         return new ServerboundMovePlayerPacket.StatusOnly(onGround);
+    }
+
+    public static ServerboundPlayerCommandPacket createPlayerCommand(ServerboundPlayerCommandPacket.Action action) {
+        assert mc.player != null;
+        return new ServerboundPlayerCommandPacket(mc.player, action);
     }
 }
