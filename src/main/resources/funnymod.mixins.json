@@ -26,6 +26,7 @@
     "OpenLevel",
     "OpenLivingEntity",
     "OpenMinecraft",
+    "OpenServerboundMovePlayerPacket",
     "OpenTimer",
     "OpenVec3",
     "PlayerMixin",

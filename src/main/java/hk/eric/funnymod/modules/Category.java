@@ -20,6 +20,7 @@ import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
 import hk.eric.funnymod.modules.player.HeightModule;
 import hk.eric.funnymod.modules.player.InventoryManagerModule;
+import hk.eric.funnymod.modules.player.NoFallModule;
 import hk.eric.funnymod.modules.player.NoJumpDelayModule;
 import hk.eric.funnymod.modules.visual.AnimationModule;
 import hk.eric.funnymod.modules.visual.EspModule;
@@ -64,6 +65,7 @@ public enum Category implements ICategory {
 		addModule(PLAYER,
 				new InventoryManagerModule(),
 				new HeightModule(),
+				new NoFallModule(),
 				new NoJumpDelayModule()
 		);
 		addModule(VISUAL,

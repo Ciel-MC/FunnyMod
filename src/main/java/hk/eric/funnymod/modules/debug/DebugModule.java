@@ -98,6 +98,8 @@ public class DebugModule extends ToggleableModule implements HasComponents {
                 context.getInterface().drawString(pos, 10, "Packets Sent Per Second: " + ppsSend, new Color(0, 255, 0));
                 pos.translate(0, 10);
                 context.getInterface().drawString(pos, 10, "Packets Received Per Second: " + ppsReceived, new Color(255, 0, 0));
+                pos.translate(0, 10);
+                context.getInterface().drawString(pos, 10, "Fall distance: " + getPlayer().fallDistance, getPlayer().fallDistance > 3 ? new Color(255, 0, 0) : new Color(0, 255, 0));
             }
 
             @Override

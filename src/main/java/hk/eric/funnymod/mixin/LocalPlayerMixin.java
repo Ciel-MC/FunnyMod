@@ -12,7 +12,9 @@ import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
+import hk.eric.funnymod.modules.player.NoFallModule;
 import hk.eric.funnymod.utils.MathUtil;
+import hk.eric.funnymod.utils.classes.Result;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.client.ClientRecipeBook;
@@ -60,6 +62,16 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
     @Override
     public float getSpeed() {
         return SprintModule.getToggle().isOn() ? (float) (super.getSpeed() * SprintModule.speed.getNumber()) : super.getSpeed();
+    }
+
+    @Override
+    public boolean isOnGround() {
+        Result<Boolean> result;
+        if ((result = NoFallModule.shouldGround.get()).isChanged()) {
+            return result.get();
+        }else{
+            return this.onGround;
+        }
     }
 
     @Inject(method = "drop", at = @At("HEAD"), cancellable = true)
