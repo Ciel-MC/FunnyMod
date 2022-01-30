@@ -4,7 +4,6 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.setting.ILabeled;
 import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.event.EventHandler;
-import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.EnumSetting;
@@ -37,48 +36,59 @@ public class MCQPAutoForgeModule extends ToggleableModule {
     private static Thread currentAutoForgeThread;
     private static int xp = 0;
 
-    private static final EventHandler<TickEvent> forgeTickHandler = new EventHandler<>() {
+    private static final EventHandler<TickEvent.Post> forgeTickHandler = new EventHandler<>() {
         @Override
-        public void handle(TickEvent tickEvent) {
-            if (tickEvent.getState() == EventState.POST) {
-                if (enableFullAuto.isOn() && state == FullAutoState.READY) {
-                    currentAutoForgeThread = new Thread(() -> {
-                        state = FullAutoState.IN_PROGRESS;
-                        ItemStack item = getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-                        if (item.getMaxDamage() - item.getDamageValue() <= 3) {
-                            ChatManager.sendMessage("已經沒有耐久度了 总共获得" + xp + "经验");
+        public void handle(TickEvent.Post tickEvent) {
+            if (enableFullAuto.isOn() && state == FullAutoState.READY) {
+                currentAutoForgeThread = new Thread(() -> {
+                    state = FullAutoState.IN_PROGRESS;
+                    ItemStack item = getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+                    if (item.getMaxDamage() - item.getDamageValue() <= 3) {
+                        ChatManager.sendMessage("已經沒有耐久度了 总共获得" + xp + "经验");
+                        enableFullAuto.toggle();
+                        return;
+                    }
+                    String npcName = switch (forgeType.getValue()) {
+                        case HIGH_LEVEL, TOP_LEVEL -> leveled.getValue().getForgerName();
+                        case BULK -> bulkMaterial.getValue().getForgerName();
+                        case SPECIAL -> specialMaterial.getValue().getForgerName();
+                    };
+                    NPCUtil.clickNPCByName(npcName, EntityType.PLAYER, MouseUtil.MouseButton.RIGHT);
+                    WaitUtils.waitForNewScreen();
+                    if (!enableFullAuto.isOn()) return;
+                    String itemName = ((forgeType.getValue() == MajorForgeTypes.SPECIAL) ? "" : forgeType.getValue().getName()) + (forgeType.getValue().getSetting().getValue().toString());
+                    if (!clickForge("新加工介面", null, itemName, "下一頁 ->")) {
+                        ChatManager.sendMessage(Component.text("鑄造失败", NamedTextColor.RED));
+                        enableFullAuto.toggle();
+                    }
+                    WaitUtils.waitForChat(chatReceivedEvent -> {
+                        String message = chatReceivedEvent.getMessage().getString();
+                        if (message.contains("加工經驗 +")) {
+                            xp += Integer.parseInt(message.substring(message.indexOf("+") + 1));
+                            return true;
+                        } else if (message.matches(notEnoughPattern.pattern())) {
+                            ChatManager.sendMessage("鑄造已完成, 总共获得" + xp + "经验");
                             enableFullAuto.toggle();
-                            return;
+                            xp = 0;
+                            return true;
+                        } else {
+                            return false;
                         }
-                        NPCUtil.clickNPCByName("§b加工師傅-淬煉匠", EntityType.PLAYER, MouseUtil.MouseButton.RIGHT);
-                        WaitUtils.waitForNewScreen();
-                        if (!enableFullAuto.isOn()) return;
-                        String itemName = forgeType.getValue().getName() + (forgeType.getValue() == MajorForgeTypes.BULK ? bulkMaterial.getValue().getName() : leveled.getValue().getName());
-                        if (!clickForge("新加工介面", null, itemName, "下一頁 ->")) {
-                            ChatManager.sendMessage(Component.text("鑄造失败", NamedTextColor.RED));
-                            enableFullAuto.toggle();
-                        }
-                        WaitUtils.waitForChat(chatReceivedEvent -> {
-                            String message = chatReceivedEvent.getMessage().getString();
-                            if (message.contains("加工經驗 +")) {
-                                xp += Integer.parseInt(message.substring(message.indexOf("+") + 1));
-                                return true;
-                            }else if (message.matches(notEnoughPattern.pattern())){
-                                ChatManager.sendMessage("鑄造已完成, 总共获得" + xp + "经验");
-                                enableFullAuto.toggle();
-                                xp = 0;
-                                return true;
-                            }else {
-                                return false;
-                            }
-                        });
-                        state = FullAutoState.READY;
                     });
-                    currentAutoForgeThread.start();
-                }
+                    state = FullAutoState.READY;
+                });
+                currentAutoForgeThread.start();
+            }
+        }
+    };
+
+    private static final EventHandler<TickEvent.Post> autoCaptchaHandler = new EventHandler<>() {
+        @Override
+        public void handle(TickEvent.Post event) {
+            {
                 if (autoCaptcha.isOn()) {
                     if (ContainerUtil.titleContains("§b鑄造加工"))
-                    findAndClick(Items.IRON_INGOT, "[鑄造]");
+                        findAndClick(Items.IRON_INGOT, "[鑄造]");
                 }
             }
         }
@@ -97,8 +107,9 @@ public class MCQPAutoForgeModule extends ToggleableModule {
         }
     });
     public static final EnumSettingWithSubSettings<MajorForgeTypes> forgeType = new EnumSettingWithSubSettings<>("Forge Type", "MCQPAutoForgeForgeType", null, MajorForgeTypes.HIGH_LEVEL, MajorForgeTypes.class, e -> ILabeled.of(e.getName()));
-    public static final EnumSetting<MajorForgeTypes.LEVELED> leveled = new EnumSetting<>("Material", "MCQPAutoForgeLeveledMaterial", null, MajorForgeTypes.LEVELED.GOLD_INGOT, MajorForgeTypes.LEVELED.class);
-    public static final EnumSetting<MajorForgeTypes.BULK_MAT> bulkMaterial = new EnumSetting<>("Material", "MCQPAutoForgeBulkMaterial", null, MajorForgeTypes.BULK_MAT.GOLD_INGOT, MajorForgeTypes.BULK_MAT.class);
+    public static final EnumSetting<MajorForgeTypes.LEVELED> leveled = new EnumSetting<>("Material", "MCQPAutoForgeLeveledMaterial", null, MajorForgeTypes.LEVELED.GOLD_INGOT, MajorForgeTypes.LEVELED.class, e -> ILabeled.of(e.getName()));
+    public static final EnumSetting<MajorForgeTypes.BULK_MAT> bulkMaterial = new EnumSetting<>("Material", "MCQPAutoForgeBulkMaterial", null, MajorForgeTypes.BULK_MAT.GOLD_INGOT, MajorForgeTypes.BULK_MAT.class, e -> ILabeled.of(e.getName()));
+    public static final EnumSetting<MajorForgeTypes.SPECIAL_MAT> specialMaterial = new EnumSetting<>("Material", "MCQPAutoForgeSpecialMaterial", null, MajorForgeTypes.SPECIAL_MAT.EVENT_CHEST, MajorForgeTypes.SPECIAL_MAT.class, e -> ILabeled.of(e.getName()));
 
     public static final BooleanSetting autoCaptcha = new BooleanSetting("Auto Captcha", "MCQPAutoForgeModule.autoCaptcha", "Automatically completes the captcha", true);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAutoForgeKeybind", null, -1, () -> instance.toggle(), true);
@@ -112,12 +123,19 @@ public class MCQPAutoForgeModule extends ToggleableModule {
         forgeType.addGlobalSubSetting(leveled);
         leveled.setIsVisible(() -> forgeType.getValue() == MajorForgeTypes.HIGH_LEVEL || forgeType.getValue() == MajorForgeTypes.TOP_LEVEL);
         forgeType.addSubSetting(MajorForgeTypes.BULK, bulkMaterial);
+        forgeType.addSubSetting(MajorForgeTypes.SPECIAL, specialMaterial);
+
+        MajorForgeTypes.TOP_LEVEL.setSetting(leveled);
+        MajorForgeTypes.HIGH_LEVEL.setSetting(leveled);
+        MajorForgeTypes.BULK.setSetting(bulkMaterial);
+        MajorForgeTypes.SPECIAL.setSetting(specialMaterial);
 
         settings.add(autoCaptcha);
 
         settings.add(keybind);
 
         registerOnOffHandler(forgeTickHandler);
+        registerOnOffHandler(autoCaptchaHandler);
     }
 
     private static boolean clickForge(String title, @Nullable Item item, String itemName, String nextItemName) {
@@ -126,14 +144,14 @@ public class MCQPAutoForgeModule extends ToggleableModule {
             if (findAndClick(item, itemName)) {
                 System.out.println("Clicked " + itemName);
                 return true;
-            }else {
+            } else {
                 System.out.println("Failed to click " + itemName);
                 Slot slot;
-                if ((slot = find(Items.ARROW,nextItemName)) != null) {
+                if ((slot = find(Items.ARROW, nextItemName)) != null) {
                     click(slot);
                     WaitUtils.waitForNewScreen();
                     return clickForge(title, item, itemName, nextItemName);
-                }else {
+                } else {
                     return false;
                 }
             }
@@ -151,19 +169,30 @@ public class MCQPAutoForgeModule extends ToggleableModule {
     }
 
     public enum MajorForgeTypes {
-        HIGH_LEVEL("高級"),
-        TOP_LEVEL("頂級"),
-        BULK("大量"),
+        HIGH_LEVEL("高級", leveled),
+        TOP_LEVEL("頂級", leveled),
+        BULK("大量", bulkMaterial),
+        SPECIAL("特殊", specialMaterial),
         ;
 
         private final String name;
+        private EnumSetting<?> setting;
 
-        MajorForgeTypes(String name) {
+        MajorForgeTypes(String name, EnumSetting<?> setting) {
             this.name = name;
+            this.setting = setting;
         }
 
         public String getName() {
             return name;
+        }
+
+        public EnumSetting<?> getSetting() {
+            return setting;
+        }
+
+        public void setSetting(EnumSetting<?> setting) {
+            this.setting = setting;
         }
 
         public enum LEVELED {
@@ -176,25 +205,39 @@ public class MCQPAutoForgeModule extends ToggleableModule {
             SAPPHIRE("藍寶石"),
             COAL("煤炭"),
             OAK_WOOD("橡木"),
-            FIR_WOOD("杉木"),
+            SPRUCE_WOOD("杉木"),
             BIRCH_WOOD("樺木"),
             JUNGLE_WOOD("叢林"),
             ACACIA_WOOD("相思木"),
             DARK_OAK_WOOD("黑橡木"),
             DIAMOND("鑽石"),
-            FEATHER("羽毛"),
-            WOOL("羊毛"),
-            LEATHER("皮革"),
+            FEATHER("羽毛", "加工師傅-皮毛加工處"),
+            WOOL("羊毛", "加工師傅-皮毛加工處"),
+            LEATHER("皮革", "加工師傅-皮毛加工處"),
             ;
 
             private final String name;
+            private final String forgerName;
 
             LEVELED(String name) {
-                this.name = name;
+                this(name, "§b加工師傅-淬煉匠");
             }
 
+            LEVELED(String name, String forgerName) {
+                this.name = name;
+                this.forgerName = forgerName;
+            }
 
             public String getName() {
+                return name;
+            }
+
+            public String getForgerName() {
+                return forgerName;
+            }
+
+            @Override
+            public String toString() {
                 return name;
             }
         }
@@ -208,12 +251,58 @@ public class MCQPAutoForgeModule extends ToggleableModule {
             ;
 
             private final String name;
+            private final String forgerName;
 
             BULK_MAT(String name) {
+                this(name, "§b加工師傅-淬煉匠");
+            }
+
+            BULK_MAT(String name, String forgerName) {
                 this.name = name;
+                this.forgerName = forgerName;
             }
 
             public String getName() {
+                return name;
+            }
+
+            public String getForgerName() {
+                return forgerName;
+            }
+
+            @Override
+            public String toString() {
+                return name;
+            }
+        }
+
+        public enum SPECIAL_MAT {
+            EVENT_CHEST("惡魔邪念寶箱", "加工師傅-洛恩");
+
+            private final String name;
+            private final String forgerName;
+
+            SPECIAL_MAT(String name) {
+                this(name, "§b加工師傅-淬煉匠");
+            }
+
+            SPECIAL_MAT(String name, String forgerName) {
+                this.name = name;
+                this.forgerName = forgerName;
+            }
+
+
+
+            public String getName() {
+                return name;
+            }
+
+            public String getForgerName() {
+                return forgerName;
+            }
+
+            @Override
+            public String toString() {
                 return name;
             }
         }

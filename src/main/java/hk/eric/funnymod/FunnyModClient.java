@@ -33,7 +33,10 @@ public class FunnyModClient implements ClientModInitializer {
     *  Freecam
     *  Slot locking
     *  Speed module
-    *  Stat change preview*/
+    *  Stat change preview
+    *  Chat ping
+    *  Name change
+    *  No effect*/
 
     public static final Minecraft mc = Minecraft.getInstance();
 

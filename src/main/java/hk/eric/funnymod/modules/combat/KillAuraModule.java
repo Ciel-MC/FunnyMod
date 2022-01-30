@@ -65,12 +65,10 @@ public class KillAuraModule extends ToggleableModule {
         }
     };
 
-    private static final EventHandler<TickEvent> tickEventHandler = new EventHandler<>() {
+    private static final EventHandler<TickEvent.Pre> tickEventHandler = new EventHandler<>() {
         @Override
-        public void handle(TickEvent event) {
-            if(event.getState() == EventState.PRE) {
-                getMode().tick(event);
-            }
+        public void handle(TickEvent.Pre event) {
+            getMode().tick(event);
         }
     };
 

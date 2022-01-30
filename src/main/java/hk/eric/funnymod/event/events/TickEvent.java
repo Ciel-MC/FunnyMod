@@ -12,6 +12,18 @@ public class TickEvent extends Event implements HasState {
         this.state = state;
     }
 
+    public static class Pre extends TickEvent {
+        public Pre() {
+            super(EventState.PRE);
+        }
+    }
+
+    public static class Post extends TickEvent {
+        public Post() {
+            super(EventState.POST);
+        }
+    }
+
     @Override
     public EventState getState() {
         return state;

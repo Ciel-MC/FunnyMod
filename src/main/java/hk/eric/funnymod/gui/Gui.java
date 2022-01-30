@@ -2,7 +2,6 @@ package hk.eric.funnymod.gui;
 
 import hk.eric.funnymod.event.EventListener;
 import hk.eric.funnymod.event.EventManager;
-import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.KeyEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.Category;
@@ -17,8 +16,8 @@ public class Gui {
 
     public void init() {
         Category.init();
-        ClientTickEvents.START_CLIENT_TICK.register((startTick)->new TickEvent(EventState.PRE).call());
-        ClientTickEvents.END_CLIENT_TICK.register((endTick)->new TickEvent(EventState.POST).call());
+        ClientTickEvents.START_CLIENT_TICK.register((startTick)->new TickEvent.Pre().call());
+        ClientTickEvents.END_CLIENT_TICK.register((endTick)->new TickEvent.Post().call());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!initialized) {
                 gui = new ClickGUI();

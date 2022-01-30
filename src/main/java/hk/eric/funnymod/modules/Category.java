@@ -23,6 +23,7 @@ import hk.eric.funnymod.modules.visual.AnimationModule;
 import hk.eric.funnymod.modules.visual.EspModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
 import hk.eric.funnymod.modules.visual.TabGUIModule;
+import hk.eric.funnymod.modules.world.ChatterModule;
 import hk.eric.funnymod.modules.world.TimerModule;
 
 import java.util.*;
@@ -73,6 +74,7 @@ public enum Category implements ICategory {
 				new AnimationModule()
 		);
 		addModule(WORLD,
+				new ChatterModule(),
 				new TimerModule()
 		);
 		addModule(MISC,
