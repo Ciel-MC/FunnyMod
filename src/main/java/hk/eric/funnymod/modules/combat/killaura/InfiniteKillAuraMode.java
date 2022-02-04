@@ -115,8 +115,6 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     @Override
     public void tick(TickEvent event) {
-//        linesToDraw.clear();
-//        boxesToDraw.clear();
         packetThisTick = 0;
     }
 

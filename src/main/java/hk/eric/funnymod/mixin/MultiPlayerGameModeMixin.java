@@ -31,7 +31,7 @@ public class MultiPlayerGameModeMixin {
             at = {@At("HEAD")},
             method = {"releaseUsingItem"}
     )
-    private void onStopUsingItem(Player player, CallbackInfo ci) {
+    private void onReleaseUsingItem(Player player, CallbackInfo ci) {
         if (BowInstantKillModule.getToggle().isOn() && player.getInventory().getSelected().getItem().equals(Items.BOW)) {
             PacketUtil.sendPacket(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.START_SPRINTING));
             for(int i = 0; i < BowInstantKillModule.cycles.getValue(); ++i) {
