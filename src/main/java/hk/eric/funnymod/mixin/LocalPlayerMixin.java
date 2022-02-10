@@ -7,7 +7,6 @@ import baritone.api.event.events.PlayerUpdateEvent;
 import baritone.api.event.events.SprintStateEvent;
 import com.mojang.authlib.GameProfile;
 import hk.eric.funnymod.chat.ChatManager;
-import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
@@ -23,10 +22,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -196,13 +193,13 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         return !baritone.getPathingBehavior().isPathing() && capabilities.mayfly;
     }
 
-    @Inject(method = "move", at = @At("HEAD"))
-    private void hookMoveStart(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
-        new MotionEvent(moverType, vec3, EventState.PRE).call();
+    @Inject(method = "aiStep", at = @At("HEAD"))
+    private void hookMoveStart(CallbackInfo ci) {
+        new MotionEvent.Pre().call();
     }
 
-    @Inject(method = "move", at = @At("TAIL"))
-    private void hookMoveEnd(MoverType moverType, Vec3 vec3, CallbackInfo ci) {
-        new MotionEvent(moverType, vec3, EventState.POST).call();
+    @Inject(method = "aiStep", at = @At("TAIL"))
+    private void hookMoveEnd(CallbackInfo ci) {
+        new MotionEvent.Post().call();
     }
 }

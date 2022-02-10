@@ -17,6 +17,10 @@ public interface HasSubSettings<T> {
         }
     }
 
+    default void addSubSettings(ISetting<?> child) {
+        addGlobalSubSetting(child);
+    }
+
     void addGlobalSubSetting(ISetting<?> subSetting);
 
     void removeGlobalSubSetting(ISetting<?> subSetting);

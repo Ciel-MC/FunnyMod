@@ -107,10 +107,10 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     @Override
     public void render(Render3DEvent event) {
-        RenderUtils.startLines(Color.CYAN,100, true);
-        linesToDraw.forEach(line -> RenderUtils.drawLine(event.getStack(), line));
-        boxesToDraw.forEach(box -> RenderUtils.drawAABB(event.getStack(), box));
-        RenderUtils.endLines(true);
+        RenderUtil.startLines(Color.CYAN,100, true);
+        linesToDraw.forEach(line -> RenderUtil.drawLine(event.getStack(), line));
+        boxesToDraw.forEach(box -> RenderUtil.drawAABB(event.getStack(), box));
+        RenderUtil.endLines(true);
     }
 
     @Override

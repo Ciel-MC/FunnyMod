@@ -6,12 +6,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.viaversion.fabric.mc117.ViaFabric;
 import hk.eric.funnymod.event.FabricEventAdapter;
 import hk.eric.funnymod.gui.Gui;
-import hk.eric.funnymod.mixin.MixinConfigPlugin;
+import hk.eric.funnymod.mixin.ConfigPluginMixin;
 import hk.eric.simpleTCP.client.TCPClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
 import static net.fabricmc.api.EnvType.CLIENT;
 
@@ -20,7 +22,7 @@ public class FunnyModClient implements ClientModInitializer {
 
     public static final String MOD_ID = "funnymod";
     public static final String MOD_NAME = "Funny Mod";
-    public static final boolean debug = true;
+    public static boolean debug = FabricLoader.getInstance().isDevelopmentEnvironment();
     private static boolean initialized = false;
     private static IBaritone baritone;
     private static PoseStack poseStack;
@@ -36,13 +38,15 @@ public class FunnyModClient implements ClientModInitializer {
     *  Stat change preview
     *  Chat ping
     *  Name change
-    *  No effect*/
+    *  No effect
+    *  Better command system
+    *  Fastplace*/
 
     public static final Minecraft mc = Minecraft.getInstance();
 
     @Override
     public void onInitializeClient() {
-        if (!MixinConfigPlugin.isEnabled) return;
+        if (!ConfigPluginMixin.isEnabled) return;
         ViaFabric.config.setClientSideEnabled(true);
         new Gui().init();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -69,5 +73,9 @@ public class FunnyModClient implements ClientModInitializer {
 
     public static IBaritone getBaritone() {
         return baritone;
+    }
+
+    public static LocalPlayer player() {
+        return mc.player;
     }
 }

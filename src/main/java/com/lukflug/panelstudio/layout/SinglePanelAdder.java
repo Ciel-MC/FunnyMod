@@ -1,18 +1,7 @@
 package com.lukflug.panelstudio.layout;
 
-import java.awt.Point;
-import java.util.function.Supplier;
-
-import com.lukflug.panelstudio.base.AnimatedToggleable;
-import com.lukflug.panelstudio.base.Animation;
-import com.lukflug.panelstudio.base.Context;
-import com.lukflug.panelstudio.base.IBoolean;
-import com.lukflug.panelstudio.base.SimpleToggleable;
-import com.lukflug.panelstudio.component.HorizontalComponent;
-import com.lukflug.panelstudio.component.IComponent;
-import com.lukflug.panelstudio.component.IFixedComponent;
-import com.lukflug.panelstudio.component.IResizable;
-import com.lukflug.panelstudio.component.IScrollSize;
+import com.lukflug.panelstudio.base.*;
+import com.lukflug.panelstudio.component.*;
 import com.lukflug.panelstudio.container.HorizontalContainer;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.setting.ILabeled;
@@ -21,6 +10,9 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.ResizableComponent;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
+
+import java.awt.*;
+import java.util.function.Supplier;
 
 /**
  * Component adder that adds panels side-by-side in a single frame.
@@ -36,7 +28,7 @@ public class SinglePanelAdder implements IComponentAdder {
 	 */
 	protected final IBoolean isVisible;
 	/**
-	 * Title bar container.
+	 * TitleEvent bar container.
 	 */
 	protected final HorizontalContainer title;
 	/**

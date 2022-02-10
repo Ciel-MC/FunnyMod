@@ -11,7 +11,7 @@ public class MotionEvent extends Event implements HasState {
     private final Vec3 movement;
     private final EventState state;
 
-    public MotionEvent(MoverType moverType, Vec3 movement, EventState state) {
+    private MotionEvent(MoverType moverType, Vec3 movement, EventState state) {
         this.moverType = moverType;
         this.movement = movement;
         this.state = state;
@@ -28,5 +28,25 @@ public class MotionEvent extends Event implements HasState {
 
     public Vec3 getMovement() {
         return movement;
+    }
+
+    public static class Pre extends MotionEvent {
+        public Pre(MoverType moverType, Vec3 movement) {
+            super(moverType, movement, EventState.PRE);
+        }
+
+        public Pre() {
+            super(null, null, null);
+        }
+    }
+
+    public static class Post extends MotionEvent {
+        public Post(MoverType moverType, Vec3 movement) {
+            super(moverType, movement, EventState.POST);
+        }
+
+        public Post() {
+            super(null, null, null);
+        }
     }
 }

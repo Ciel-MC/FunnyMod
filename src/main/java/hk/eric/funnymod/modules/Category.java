@@ -14,10 +14,7 @@ import hk.eric.funnymod.modules.mcqp.*;
 import hk.eric.funnymod.modules.misc.BindModule;
 import hk.eric.funnymod.modules.misc.CommandModule;
 import hk.eric.funnymod.modules.misc.TooltipScrollingModule;
-import hk.eric.funnymod.modules.movement.AntiVineModule;
-import hk.eric.funnymod.modules.movement.KeepSprintModule;
-import hk.eric.funnymod.modules.movement.NoSlowModule;
-import hk.eric.funnymod.modules.movement.SprintModule;
+import hk.eric.funnymod.modules.movement.*;
 import hk.eric.funnymod.modules.player.*;
 import hk.eric.funnymod.modules.visual.AnimationModule;
 import hk.eric.funnymod.modules.visual.EspModule;
@@ -56,11 +53,14 @@ public enum Category implements ICategory {
 		);
 		addModule(MOVEMENT,
 				new AntiVineModule(),
+				new FlightModule(),
 				new SprintModule(),
 				new NoSlowModule(),
 				new KeepSprintModule()
 		);
 		addModule(PLAYER,
+				new AutoFishModule(),
+				new FastplaceModule(),
 				new InventoryManagerModule(),
 				new HeightModule(),
 				new NoFallModule(),

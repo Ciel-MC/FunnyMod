@@ -69,7 +69,7 @@ public class CommandModule extends ToggleableModule {
                             try {
                                 ConfigManager.load(strings.poll());
                             } catch (ConfigLoadingFailedException e) {
-                                ChatManager.sendMessage("Some of all of the settings failed to load.");
+                                ChatManager.sendMessage("Some or all of the settings failed to load.");
                             }
                         }
                         default -> ChatManager.sendMessage("Available options: save, load");

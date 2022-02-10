@@ -1,13 +1,10 @@
 package com.lukflug.panelstudio.theme;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-
 import com.lukflug.panelstudio.base.Context;
 import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.setting.ILabeled;
+
+import java.awt.*;
 
 /**
  * Theme replacing the look of Windows 3.1.

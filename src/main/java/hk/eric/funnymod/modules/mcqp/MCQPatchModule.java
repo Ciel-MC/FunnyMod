@@ -49,7 +49,7 @@ public class MCQPatchModule extends ToggleableModule {
     });
     public static final KeybindSetting noMoveBind = new KeybindSetting("Moven't Toggle", "MCQPatchNoMoveToggle", "Toggle MCQPatch NoMove", -1, no_move::toggle);
     public static final BooleanSetting no_hits = new BooleanSetting("No hits", "MCQPatchNoHit", "No vanilla hits", false);
-    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPatchKeybind", null, () -> true, -1, () -> instance.toggle());
+    public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPatchKeybind", null, () -> true, -1, () -> instance.toggle(), true);
 
     public MCQPatchModule() {
         super("MCQPatch", "Toggles some bypass for MCQP", () -> true);

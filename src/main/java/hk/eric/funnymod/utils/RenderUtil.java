@@ -13,7 +13,7 @@ import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public interface RenderUtils {
+public interface RenderUtil {
 
     Tesselator tesselator = Tesselator.getInstance();
     BufferBuilder buffer = tesselator.getBuilder();
@@ -23,10 +23,10 @@ public interface RenderUtils {
 
     static void glColor(Color color, float alpha) {
         float[] colorComponents = color.getColorComponents(null);
-        RenderUtils.color[0] = colorComponents[0];
-        RenderUtils.color[1] = colorComponents[1];
-        RenderUtils.color[2] = colorComponents[2];
-        RenderUtils.color[3] = alpha;
+        RenderUtil.color[0] = colorComponents[0];
+        RenderUtil.color[1] = colorComponents[1];
+        RenderUtil.color[2] = colorComponents[2];
+        RenderUtil.color[3] = alpha;
     }
 
     static void setupLines(Color color, float alpha, float lineWidth, boolean ignoreDepth) {

@@ -21,6 +21,7 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ import java.util.Set;
 public class InventoryManagerModule extends ToggleableModule {
 
     private final Set<String> autoThrow = new HashSet<>();
-    private static final List<String> MCQPList = List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸");
+    private static final List<String> MCQPList = new ArrayList<>(List.of("普通強化石","中級強化石","高級強化石","超級強化石","抽取鍛晶","職人的鑲嵌槌","稀有素質捲軸", "史詩素質捲軸"));
     private static final Set<String> MCQPEnabled = new HashSet<>();
 
     private static InventoryManagerModule instance;
@@ -76,7 +77,7 @@ public class InventoryManagerModule extends ToggleableModule {
 
     public static void updateMCQPThrow() {
         MCQPDropEnabled.removeAllSubSettings();
-        MCQPList.forEach(s -> MCQPDropEnabled.addSubSettings(true, new BooleanSetting(s, "InvManMCQPDrop" + s, "Drop " + s, false, (bool)->{
+        MCQPList.forEach(s -> MCQPDropEnabled.addSubSettings(new BooleanSetting(s, "InvManMCQPDrop" + s, "Drop " + s, false, (bool)->{
             if (bool) {
                 MCQPEnabled.add(s);
             }else {
@@ -113,4 +114,8 @@ public class InventoryManagerModule extends ToggleableModule {
         }
     }
 
+    @Override
+    public void onEnable() {
+        super.onEnable();
+    }
 }

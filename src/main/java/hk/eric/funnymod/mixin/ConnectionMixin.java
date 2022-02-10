@@ -18,17 +18,19 @@ public abstract class ConnectionMixin {
 
     @Inject(method = "sendPacket", at = @At("HEAD"), cancellable = true)
     public void injectSendPacket(Packet<?> packet, @Nullable GenericFutureListener<? extends Future<? super Void>> genericFutureListener, CallbackInfo ci) {
-        DebugModule.countSend();
         if (new PacketEvent.SendPacketEvent(packet).call().isCancelled()) {
             ci.cancel();
+        }else {
+            DebugModule.countSend();
         }
     }
 
     @Inject(method = "channelRead0(Lio/netty/channel/ChannelHandlerContext;Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"), cancellable = true)
     public void injectChannelRead0(ChannelHandlerContext ctx, Packet<?> packet, CallbackInfo ci) {
-        DebugModule.countReceive();
         if (new PacketEvent.ReceivePacketEvent(packet).call().isCancelled()) {
             ci.cancel();
+        }else {
+            DebugModule.countReceive();
         }
     }
 
