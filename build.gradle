@@ -45,7 +45,7 @@ dependencies {
 
     //Integrate with viaversion
     include(modImplementation("com.viaversion.viafabric:viafabric:${project.viafabric_version}"))
-    include(modImplementation("com.viaversion.viafabric:viafabric-mc117:${project.viafabric_version}"))
+    include(modImplementation("com.viaversion.viafabric:viafabric-mc118:${project.viafabric_version}"))
     include(modImplementation("com.viaversion.viaversion:viaversion:${project.viaversion_version}"))
     include(modImplementation("org.yaml.snakeyml:snakeyaml:${project.snakeyaml_version}"))
 
@@ -64,7 +64,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 16
+def targetJavaVersion = 17
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
