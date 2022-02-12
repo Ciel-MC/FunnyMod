@@ -12,10 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AbstractContainerMenuMixin {
     @Inject(method = "clicked", at = @At("HEAD"))
     public void injectClicked(int i, int j, ClickType clickType, Player player, CallbackInfo ci) {
-        try {
-            throw new RuntimeException("This is a test");
-        } catch (Exception e) {
-//            e.printStackTrace();
-        }
+
     }
 }

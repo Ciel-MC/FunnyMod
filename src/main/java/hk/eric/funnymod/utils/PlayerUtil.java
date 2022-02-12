@@ -18,6 +18,10 @@ public class PlayerUtil {
         return getRotFromCoordinate(source.getX(), source.getEyeY(), source.getZ(), x, y, z);
     }
 
+    public static XYRot getRotFromCoordinate(Vec3 source, double x, double y, double z) {
+        return getRotFromCoordinate(source.x(), source.y(), source.z(), x, y, z);
+    }
+
     public static XYRot getRotFromCoordinate(double x, double y, double z, double x1, double y1, double z1) {
         double xDiff = x1 - x;
         double yDiff = y1 - y;
@@ -69,5 +73,10 @@ public class PlayerUtil {
 
     public static void rightClick() {
         ((OpenMinecraft) Minecraft.getInstance()).invokeStartUseItem();
+    }
+
+    public static void setRot(XYRot xyRot) {
+        player().setYRot(xyRot.getYRot());
+        player().setXRot(xyRot.getXRot());
     }
 }

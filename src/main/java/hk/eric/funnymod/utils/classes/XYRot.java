@@ -42,4 +42,12 @@ public class XYRot extends Pair<Float, Float> {
     public void setPitch(float x){
         this.setXRot(x);
     }
+
+    @Override
+    public String toString() {
+        return "XYRot{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
+    }
 }

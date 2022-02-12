@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-public class ConfigPluginMixin implements IMixinConfigPlugin {
+public class MixinConfigPlugin implements IMixinConfigPlugin {
     //
 //    public static TCPClient client = new TCPClient(new FunnyModPacketHandler());
     public static boolean isEnabled;

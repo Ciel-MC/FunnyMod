@@ -69,7 +69,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
     public void attack(LivingEntity entity) {
         LocalPlayer player = FunnyModClient.mc.player;
         assert player != null;
-        moveTo(player,entity, KillAuraModule.infiniteAuraMaxStep.getValue(), this::sendPacket, pathAsList -> canFinish(pathAsList.size() + 2), (node, node2) -> node.distanceFloat(node2, true) < 5, true);
+        moveTo(player,entity, KillAuraModule.infiniteAuraMaxStep.getValue(), this::sendPacket, pathAsList -> canFinish(pathAsList.size() + 2), (node, node2) -> node.distanceFloat(node2, true) < 3, true);
         sendPacket(ServerboundInteractPacket.createAttackPacket(entity, false));
         player.swing(InteractionHand.MAIN_HAND);
         player.resetAttackStrengthTicker();
@@ -98,8 +98,8 @@ public class InfiniteKillAuraMode extends KillauraMode {
             linesToDraw.add(ThreeDimensionalLine.of(oldNode.getPos().toVec3(), node.getPos().toVec3()));
             boxesToDraw.add(player.getDimensions(player.getPose()).makeBoundingBox(pos));
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
-            XYRot rot = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY() + entity.getEyeHeight(), entity.getZ());
-            linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 6))));
+            XYRot rot = PlayerUtil.getRotFromCoordinate(eyePos, entity.getX(), entity.getY() + entity.getEyeHeight() / 2, entity.getZ());
+            linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
             sender.accept(PacketUtil.createPosRot(x, y, z, rot.getYaw(), rot.getPitch(), true));
             oldNode = node;
         }

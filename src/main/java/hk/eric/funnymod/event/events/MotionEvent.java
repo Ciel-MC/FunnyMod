@@ -36,7 +36,7 @@ public class MotionEvent extends Event implements HasState {
         }
 
         public Pre() {
-            super(null, null, null);
+            super(null, null, EventState.PRE);
         }
     }
 
@@ -46,7 +46,7 @@ public class MotionEvent extends Event implements HasState {
         }
 
         public Post() {
-            super(null, null, null);
+            super(null, null, EventState.POST);
         }
     }
 }

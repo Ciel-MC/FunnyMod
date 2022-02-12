@@ -43,6 +43,17 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         }
     };
 
+//    private static final EventHandler<TickEvent.Pre> tickEventPreHandler = new EventHandler<>() {
+//        @Override
+//        public void handle(TickEvent.Pre event) {
+//            if (getLevel() == null) return;
+//            StreamSupport.stream(((OpenLevel) getLevel()).callGetEntities().getAll().spliterator(), false).filter(entity -> !(entity instanceof LocalPlayer)).min(Comparator.comparingDouble(entity -> entity.distanceTo(getPlayer()))).ifPresent(entity -> {
+//                XYRot xyRot = PlayerUtil.getRotFromCoordinate(getPlayer(), entity.getX(), entity.getY(), entity.getZ());
+//                PlayerUtil.setRot(xyRot);
+//            });
+//        }
+//    };
+
     private static final Timer timer = new Timer();
     private static DebugModule instance;
     public static final BooleanSetting logReceivePacket = new BooleanSetting("Log receive packet", "logReceivePacket", "Logs all packets received by the client", false);
@@ -63,6 +74,7 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         settings.add(keybind);
 
         registerOnOffHandler(packetEventHandler);
+//        registerOnOffHandler(tickEventPreHandler);
     }
 
     public static IToggleable getToggle() {

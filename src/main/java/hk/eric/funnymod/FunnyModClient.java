@@ -6,7 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.viaversion.fabric.mc117.ViaFabric;
 import hk.eric.funnymod.event.FabricEventAdapter;
 import hk.eric.funnymod.gui.Gui;
-import hk.eric.funnymod.mixin.ConfigPluginMixin;
+import hk.eric.funnymod.mixin.MixinConfigPlugin;
 import hk.eric.simpleTCP.client.TCPClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.Environment;
@@ -27,26 +27,11 @@ public class FunnyModClient implements ClientModInitializer {
     private static IBaritone baritone;
     private static PoseStack poseStack;
 
-    /*TODO:
-    *  Item Aura - Like infinite aura, but picks up items
-    *  No break delay
-    *  Auto farm
-    *  Mob ESP - Semi done
-    *  Freecam
-    *  Slot locking
-    *  Speed module
-    *  Stat change preview
-    *  Chat ping
-    *  Name change
-    *  No effect
-    *  Better command system
-    *  Fastplace*/
-
     public static final Minecraft mc = Minecraft.getInstance();
 
     @Override
     public void onInitializeClient() {
-        if (!ConfigPluginMixin.isEnabled) return;
+        if (!MixinConfigPlugin.isEnabled) return;
         ViaFabric.config.setClientSideEnabled(true);
         new Gui().init();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

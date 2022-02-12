@@ -13,7 +13,7 @@
     "ClientPacketListenerMixin",
     "ConnectionMixin",
     "GameRendererMixin",
-    "InventoryScreenMixin",
+    "AbstractContainerScreenMixin",
     "KeyboardMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
