@@ -33,7 +33,7 @@ public class NormalAuraMode implements AuraMode {
         return (entities, player, range) -> {
             if (cycle >= MCQPAuraModule.cycleTime.getValue()) cycle = 0;
             List<LivingEntity> entityToAttack = entities.filter(entity -> {
-                if (EntityUtil.isHostile(entity) || EntityUtil.isPassive(entity)) {
+                if (EntityUtil.isHostile(entity) || EntityUtil.isPassive(entity) || EntityUtil.isNeutral(entity)) {
                     if (!entity.isAlive() || entity.getHealth() <= 0) return false;
                     return MathUtil.compareDistance3D(player.getX(), player.getY(), player.getZ(), entity.getX(), entity.getY() + entity.getBbHeight()/2, entity.getZ(), range) == -1;
                 }
