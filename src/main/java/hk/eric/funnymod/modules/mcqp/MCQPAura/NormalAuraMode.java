@@ -3,15 +3,14 @@ package hk.eric.funnymod.modules.mcqp.MCQPAura;
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.MathUtil;
 import hk.eric.funnymod.utils.PlayerUtil;
-import hk.eric.funnymod.utils.classes.pairs.Pair;
 import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
 import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
+import hk.eric.funnymod.utils.classes.pairs.Pair;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
-import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.WallSignBlock;
@@ -66,8 +65,8 @@ public class NormalAuraMode implements AuraMode {
                 }
             } else {
                 packetSender.accept(new ServerboundMovePlayerPacket.Rot(rotY, rotX, player.isOnGround()));
-                packetSender.accept(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
+            player.swing(InteractionHand.MAIN_HAND);
         };
     }
 
