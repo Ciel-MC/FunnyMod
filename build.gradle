@@ -12,7 +12,10 @@ group = project.maven_group
 repositories {
     flatDir {
         dirs '/home/eric/PanelStudio/panelstudio-mc17/build/libs'
-        dirs '/home/eric/Idea-Libraries'
+    }
+    maven {
+        allowInsecureProtocol(true)
+        url = "http://172.105.231.97"
     }
     maven {
         name = "meteor-maven-snapshots"
@@ -40,13 +43,12 @@ dependencies {
     include(modImplementation("net.kyori:adventure-platform-fabric:${project.adventure_platform_version}"))
 
     //Integrate with baritone
-    include("baritone:baritone-unoptimized-fabric:${project.baritone_version}")
-    modImplementation("baritone:baritone-api-fabric:${project.baritone_version}")
+    include(modImplementation("baritone:baritone-unoptimized-fabric:${project.baritone_version}"))
 
     //Integrate with viaversion
     include(modImplementation("com.viaversion.viafabric:viafabric:${project.viafabric_version}"))
-    include(modImplementation("com.viaversion.viafabric:viafabric-mc117:${project.viafabric_version}"))
-    include(modImplementation("com.viaversion.viaversion:viaversion:${project.viaversion_version}"))
+    modImplementation("com.viaversion.viafabric:viafabric-mc117:${project.viafabric_version}")
+    modImplementation("com.viaversion.viaversion:viaversion:${project.viaversion_version}")
     include(modImplementation("org.yaml.snakeyml:snakeyaml:${project.snakeyaml_version}"))
 
     //For Json
