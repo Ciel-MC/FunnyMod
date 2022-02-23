@@ -39,6 +39,10 @@ public class MCQPAutoForgeModule extends ToggleableModule {
     private static final EventHandler<TickEvent.Post> forgeTickHandler = new EventHandler<>() {
         @Override
         public void handle(TickEvent.Post tickEvent) {
+            if (autoCaptcha.isOn()) {
+                if (ContainerUtil.titleContains("§b鑄造加工"))
+                    findAndClick(Items.IRON_INGOT, "[鑄造]");
+            }
             if (enableFullAuto.isOn() && state == FullAutoState.READY) {
                 currentAutoForgeThread = new Thread(() -> {
                     state = FullAutoState.IN_PROGRESS;
@@ -86,10 +90,7 @@ public class MCQPAutoForgeModule extends ToggleableModule {
         @Override
         public void handle(TickEvent.Post event) {
             {
-                if (autoCaptcha.isOn()) {
-                    if (ContainerUtil.titleContains("§b鑄造加工"))
-                        findAndClick(Items.IRON_INGOT, "[鑄造]");
-                }
+
             }
         }
     };
@@ -277,7 +278,12 @@ public class MCQPAutoForgeModule extends ToggleableModule {
         }
 
         public enum SPECIAL_MAT {
-            EVENT_CHEST("惡魔邪念寶箱", "加工師傅-洛恩");
+            EVENT_CHEST("惡魔邪念寶箱", "加工師傅-洛恩"),
+            GOLD_INGOT("金錠", "加工師傅-沃爾德"),
+            SILVER_INGOT("銀錠", "加工師傅-沃爾德"),
+            COPPER_INGOT("銅錠", "加工師傅-沃爾德"),
+            IRON_INGOT("鐵錠", "加工師傅-沃爾德"),
+            COAL("煤炭", "加工師傅-沃爾德");
 
             private final String name;
             private final String forgerName;
