@@ -29,10 +29,10 @@ public class WaitUtils {
         }
     };
 
-    public static List<Predicate<TitleEvents>> waitingForTitle = new LinkedList<>();
-    public static final EventHandler<TitleEvents> waitForTitle = new EventHandler<>() {
+    public static List<Predicate<TitleEvents.TitleEvent>> waitingForTitle = new LinkedList<>();
+    public static final EventHandler<TitleEvents.TitleEvent> waitForTitle = new EventHandler<>() {
         @Override
-        public void handle(TitleEvents event) {
+        public void handle(TitleEvents.TitleEvent event) {
             waitingForTitle.removeIf((predicate) -> predicate.test(event));
         }
     };
@@ -79,7 +79,7 @@ public class WaitUtils {
     }
 
     @Blocking
-    public static void waitForTitle(Predicate<TitleEvents> predicate) {
+    public static void waitForTitle(Predicate<TitleEvents.TitleEvent> predicate) {
         waitingForTitle.add(predicate);
         while (waitingForTitle.contains(predicate)) {
             try {
