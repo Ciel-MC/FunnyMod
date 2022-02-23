@@ -33,7 +33,7 @@ public class PacketUtil {
         return new ServerboundMovePlayerPacket.PosRot(x, y, z, yaw, pitch, onGround);
     }
 
-    public static ServerboundMovePlayerPacket.StatusOnly createLook(boolean onGround) {
+    public static ServerboundMovePlayerPacket.StatusOnly createStatusOnly(boolean onGround) {
         return new ServerboundMovePlayerPacket.StatusOnly(onGround);
     }
 
