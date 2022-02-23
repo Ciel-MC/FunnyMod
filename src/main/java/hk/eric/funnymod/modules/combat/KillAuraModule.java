@@ -3,10 +3,12 @@ package hk.eric.funnymod.modules.combat;
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
-import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
-import hk.eric.funnymod.gui.setting.*;
+import hk.eric.funnymod.gui.setting.BooleanSetting;
+import hk.eric.funnymod.gui.setting.EnumSetting;
+import hk.eric.funnymod.gui.setting.IntegerSetting;
+import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.ToggleableModule;
@@ -40,11 +42,11 @@ public class KillAuraModule extends ToggleableModule {
     public static final BooleanSetting noAttackCooldown = new BooleanSetting("No attack cooldown", "KillAuraNoCooldown", "Assume no 1.9+ attack cooldown", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KillAuraKeybind", null, -1, () -> instance.toggle(), true);
 
-    private static final EventHandler<MotionEvent> aura = new EventHandler<>(){
+    private static final EventHandler<TickEvent> aura = new EventHandler<>(){
         @Override
-        public void handle(MotionEvent motionEvent) {
+        public void handle(TickEvent tickEvent) {
             if (!noAttackCooldown.isOn() && getPlayer().getAttackStrengthScale(0.0f) < 1.0f) return;
-            if (shouldAttack(motionEvent.getState())) {
+            if (shouldAttack(tickEvent.getState())) {
                 KillauraMode mode = getMode();
                 mode.process(
                         StreamSupport.stream(((OpenLevel)getLevel()).callGetEntities().getAll().spliterator(), false)
@@ -131,7 +133,7 @@ public class KillAuraModule extends ToggleableModule {
         TELEPORT
     }
 
-    public enum Swing { //Todo: add setting
+    public enum Swing {
         //Only show swing client side
         CLIENT,
         //Only send swing packet
