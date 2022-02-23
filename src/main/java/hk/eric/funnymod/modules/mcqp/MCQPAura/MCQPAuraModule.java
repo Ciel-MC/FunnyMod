@@ -54,6 +54,8 @@ public class MCQPAuraModule extends ToggleableModule {
         super("MCQPAura", "Killaura for MCQP");
         instance = this;
         settings.add(mode);
+        settings.add(attackPlayer);
+        settings.add(playerKeybind);
         mode.addSubSetting(Mode.NORMAL,cycleAttack);
         cycleAttack.addSubSetting(true,cycleTime);
         mode.addSubSetting(Mode.NORMAL,range);
