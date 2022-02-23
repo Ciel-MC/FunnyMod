@@ -6,6 +6,7 @@ import hk.eric.funnymod.event.events.PacketEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
+import hk.eric.funnymod.utils.PacketUtil;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundCommandSuggestionPacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
@@ -22,8 +23,9 @@ public class MCQPatchModule extends ToggleableModule {
             if (no_recommendation.isOn() && packet instanceof ServerboundCommandSuggestionPacket suggestionPacket && (suggestionPacket.getCommand().split(" ").length > 1 || suggestionPacket.getCommand().length() > 10)) {
                 event.setCancelled(true);
             }
-            if (no_move.isOn() && packet instanceof ServerboundMovePlayerPacket) {
+            if (no_move.isOn() && packet instanceof ServerboundMovePlayerPacket && !(packet instanceof ServerboundMovePlayerPacket.StatusOnly)) {
                 event.setCancelled(true);
+                PacketUtil.sendPacket(PacketUtil.createStatusOnly(getPlayer().isOnGround()));
             }
         }
     };
