@@ -11,6 +11,7 @@ import com.lukflug.panelstudio.setting.IClient;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.PacketEvent;
+import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.FloatSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
@@ -18,7 +19,8 @@ import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.MathUtil;
 import net.minecraft.world.entity.Entity;
-import org.lwjgl.glfw.GLFW;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.util.Collections;
@@ -28,6 +30,8 @@ import java.util.TimerTask;
 import java.util.function.Supplier;
 
 public class DebugModule extends ToggleableModule implements HasComponents {
+
+    private static final Logger logger = LogManager.getLogger("FunnyMod Debug");
 
     public static int ppsSend = 0;
     public static int ppsReceived = 0;
@@ -40,6 +44,13 @@ public class DebugModule extends ToggleableModule implements HasComponents {
             }else if (event instanceof PacketEvent.ReceivePacketEvent && logReceivePacket.isOn()) {
                 System.out.println("[FunnyMod] Receive Packet: " + event.getPacket().getClass().getSimpleName());
             }
+        }
+    };
+
+    private static final EventHandler<Render3DEvent> render3DEventHandler = new EventHandler<>() {
+        @Override
+        public void handle(Render3DEvent event) {
+            
         }
     };
 
@@ -60,7 +71,8 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     public static final BooleanSetting logSendPacket = new BooleanSetting("Log send packet", "logSendPacket", "Logs all packets sent by the client", false);
     public static final FloatSetting launchStrength = new FloatSetting("Launch Strength", "DebugLaunchStrength", "The strength you're launched at", 0, 10, 2, 0.1f);
     public static final FloatSetting launchYBoost = new FloatSetting("Y boost", "DebugYBoost", "The amount of Y boost that's given with the launch", 0, 10, .5f, 0.1f);
-    public static final KeybindSetting launch = new KeybindSetting("Launch", "DebugLaunchKeybind", "Launches you forward", GLFW.GLFW_KEY_G, ()->launchEntity(getPlayer()));
+    public static final KeybindSetting launch = new KeybindSetting("Launch", "DebugLaunchKeybind", "Launches you forward", -1, ()->launchEntity(getPlayer()));
+    public static final BooleanSetting showClosestPoint = new BooleanSetting("Show closest point", "DebugShowClosestPoint", "Shows the closest point to the player", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "DebugKeybind", null, -1, () -> instance.toggle(), true);
 
     public DebugModule() {
@@ -71,6 +83,7 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         settings.add(launchStrength);
         settings.add(launchYBoost);
         settings.add(launch);
+        settings.add(showClosestPoint);
         settings.add(keybind);
 
         registerOnOffHandler(packetEventHandler);
@@ -122,6 +135,7 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     }
 
     private static void launchEntity(Entity entity) {
+        System.out.println("Launching entity");
         float theta = MathUtil.toRadians(getPlayer().getYHeadRot());
         entity.lerpMotion(-Math.sin(theta) * launchStrength.getValue(), launchYBoost.getValue(), Math.cos(theta) * launchStrength.getValue());
     }

@@ -45,7 +45,6 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Redirect(method = "onClimbable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/Tag;)Z"))
     public boolean redirectOnClimbable(BlockState blockState, Tag<Block> tag) {
         if (AntiVineModule.getToggle().isOn()) {

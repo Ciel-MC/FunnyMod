@@ -4,7 +4,7 @@ import hk.eric.funnymod.gui.setting.Setting;
 import hk.eric.funnymod.gui.setting.StringSetting;
 import hk.eric.funnymod.modules.Module;
 
-public class Random {
+public class RandomUtil {
     private static final java.util.Random random = new java.util.Random();
 
     public static Module getRandomModule() {

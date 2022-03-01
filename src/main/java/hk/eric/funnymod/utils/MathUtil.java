@@ -2,6 +2,7 @@ package hk.eric.funnymod.utils;
 
 import it.unimi.dsi.fastutil.doubles.DoubleComparator;
 import it.unimi.dsi.fastutil.ints.IntComparator;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -270,6 +271,14 @@ public class MathUtil {
     }
     public static float cos(float a) {
         return sinLookup((int)((a+90f) * precision + 0.5f));
+    }
+
+    public static double clamp(double min, double max, double value) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    public static Vec3 closestPointInAABB(Vec3 point, AABB aabb) {
+        return new Vec3(clamp(aabb.minX, aabb.maxX, point.x), clamp(aabb.minY, aabb.maxY, point.y), clamp(aabb.minZ, aabb.maxZ, point.z));
     }
 
     public enum UnknownSide {

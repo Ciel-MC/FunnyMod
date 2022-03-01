@@ -10,15 +10,13 @@ import hk.eric.funnymod.gui.setting.EnumSetting;
 import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
-import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.combat.killaura.KillauraMode;
 import hk.eric.funnymod.modules.combat.killaura.KillauraModes;
+import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.classes.pathFind.AStarPathFinder;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.stream.StreamSupport;
 
 public class KillAuraModule extends ToggleableModule {
 
@@ -49,9 +47,10 @@ public class KillAuraModule extends ToggleableModule {
             if (shouldAttack(tickEvent.getState())) {
                 KillauraMode mode = getMode();
                 mode.process(
-                        StreamSupport.stream(((OpenLevel)getLevel()).callGetEntities().getAll().spliterator(), false)
-                                .filter(entity -> entity instanceof LivingEntity && !(entity instanceof LocalPlayer))
-                                .map(entity -> (LivingEntity) entity)
+                        EntityUtil.streamAllEntities(new EntityUtil.EntityFilterBuilder()
+                                        .setPredicate(entityAccess -> entityAccess instanceof LivingEntity && !(entityAccess instanceof LocalPlayer))
+                                        .createEntityFilter())
+                                .map(LivingEntity.class::cast)
                                 .filter(entity -> entity.getHealth() > 0)
                 ).forEach(mode::attack);
             }

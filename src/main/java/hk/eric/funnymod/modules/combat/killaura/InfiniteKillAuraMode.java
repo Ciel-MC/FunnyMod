@@ -40,7 +40,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     public Comparator<LivingEntity> getEntityComparator(LocalPlayer player, KillAuraModule.SortType sortType) {
         return switch (sortType) {
-            case DISTANCE -> Comparator.comparingDouble(e -> EntityUtil.distanceToEntitySquared(player, e));
+            case DISTANCE -> Comparator.comparingDouble(e -> MathUtil.getDistance3D(player.getX(), player.getY(), player.getZ(), e.getX(), e.getY(), e.getZ()));
             case HEALTH -> healthEntitySorter;
             case ARMOR -> armorEntitySorter;
         };
