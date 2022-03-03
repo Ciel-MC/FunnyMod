@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(Gui.class)
 public interface OpenGui {
     @Accessor("title")
-    Component getTitle();
+    Component getTitleComponent();
 
     @Accessor("title")
-    void setTitle(Component title);
+    void setTitleComponent(Component title);
 }

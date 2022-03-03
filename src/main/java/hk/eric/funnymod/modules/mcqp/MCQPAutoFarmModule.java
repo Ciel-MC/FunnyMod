@@ -48,7 +48,7 @@ public class MCQPAutoFarmModule extends ToggleableModule {
         if (ticks == 0) {
             ticks = 3;
 
-            if (((OpenGui) mc.gui).getTitle() == null) return;
+            if (((OpenGui) mc.gui).getTitleComponent() == null) return;
 
             if (getBaritone().getPathingBehavior().isPathing() && !wasPathing) {
                 target = getBaritone().getPathingBehavior().getCurrent().getPath().getDest();
