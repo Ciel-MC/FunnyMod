@@ -7,8 +7,8 @@ public class XYRot extends Pair<Float, Float> {
     public XYRot() {
     }
 
-    public XYRot(float first, float second) {
-        super(first, second);
+    public XYRot(float xRot, float yRot) {
+        super(xRot, yRot);
     }
 
     public void setXRot(float x){
