@@ -6,23 +6,52 @@ import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.PacketEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.mixin.flags.HasFlag;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.movement.FlightModule;
 import hk.eric.funnymod.utils.PacketUtil;
+import hk.eric.funnymod.utils.classes.XYRot;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 public class FreecamModule extends ToggleableModule {
 
-    private static final EventHandler<PacketEvent.SendPacketEvent> packetEventHandler = new EventHandler<>() {
+    private static Vec3 lastPos;
+    private static XYRot lastLook;
+    private static Boolean lastOnGround;
+
+    private static final EventHandler<PacketEvent> packetEventHandler = new EventHandler<>() {
         @Override
-        public void handle(PacketEvent.SendPacketEvent event) {
+        public void handle(PacketEvent event) {
             Packet<?> packet = event.getPacket();
-            if (packet instanceof ServerboundMovePlayerPacket && !(packet instanceof ServerboundMovePlayerPacket.StatusOnly)) {
+            if (packet instanceof ServerboundMovePlayerPacket movePlayerPacket) {
+                if (!((HasFlag) movePlayerPacket).getFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD)) {
+                    event.setCancelled(true);
+                    ServerboundMovePlayerPacket p = PacketUtil.ServerboundMovePlayerPacketBuilder.create()
+                            .setPos(lastPos)
+                            .setRot(lastLook)
+                            .setOnGround(lastOnGround)
+                            .build();
+                    ((HasFlag) p).setFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD, true);
+                    PacketUtil.sendPacket(p);
+                    lastPos = null;
+                    lastLook = null;
+                    lastOnGround = null;
+                }
+            }else if(packet instanceof ClientboundTeleportEntityPacket clientboundTeleportEntityPacket && clientboundTeleportEntityPacket.getId() == getPlayer().getId()) {
                 event.setCancelled(true);
-                PacketUtil.sendPacket(PacketUtil.createStatusOnly(fakePlayer.isOnGround()));
+                lastPos = new Vec3(clientboundTeleportEntityPacket.getX(), clientboundTeleportEntityPacket.getY(), clientboundTeleportEntityPacket.getZ());
+                lastLook = new XYRot(clientboundTeleportEntityPacket.getxRot(), clientboundTeleportEntityPacket.getyRot());
+                lastOnGround = clientboundTeleportEntityPacket.isOnGround();
+
+                fakePlayer.setPos(lastPos);
+                fakePlayer.setXRot(lastLook.getXRot());
+                fakePlayer.setYRot(lastLook.getYRot());
+                fakePlayer.setOnGround(lastOnGround);
             }
         }
     };
@@ -76,6 +105,10 @@ public class FreecamModule extends ToggleableModule {
         getPlayer().copyPosition(fakePlayer);
         getPlayer().setOnGround(fakePlayer.isOnGround());
         fakePlayer = null;
+
+        lastLook = null;
+        lastPos = null;
+        lastOnGround = null;
     }
 
     public static IToggleable getToggle() {
