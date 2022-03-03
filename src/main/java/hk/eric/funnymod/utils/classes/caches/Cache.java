@@ -16,14 +16,13 @@ public class Cache<T, R> {
     }
 
     public R get(T t) {
-//        for (Pair<T, R> pair : cache.asList()) {
-//            if (pair.getFirst().equals(t)) {
-//                return pair.getSecond();
-//            }
-//        }
-//        R r = getter.apply(t);
-//        cache.push(new Pair<>(t, r));
-//        return r;
-        return getter.apply(t);
+        for (Pair<T, R> pair : cache.asList()) {
+            if (pair.getFirst().equals(t)) {
+                return pair.getSecond();
+            }
+        }
+        R r = getter.apply(t);
+        cache.push(new Pair<>(t, r));
+        return r;
     }
 }

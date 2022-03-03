@@ -11,9 +11,6 @@ import net.minecraft.network.protocol.game.ServerboundCommandSuggestionPacket;
 
 public class MCQPatchModule extends ToggleableModule {
 
-    private static double x = 0,y = 0,z = 0;
-    private static float yaw = 0,bodyYaw = 0 ,pitch = 0;
-
     private static final EventHandler<PacketEvent.SendPacketEvent> packetEventSendPacketEventHandler = new EventHandler<>() {
         @Override
         public void handle(PacketEvent.SendPacketEvent event) {
