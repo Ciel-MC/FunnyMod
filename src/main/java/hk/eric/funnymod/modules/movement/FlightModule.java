@@ -21,7 +21,7 @@ public class FlightModule extends ToggleableModule {
     public static final DoubleSetting speed = new DoubleSetting("Speed", "FlightSpeed", null, 0, 100, 2, .1D);
     public static final DoubleSetting bob = new DoubleSetting("Bob", "FlightBob", null, 0.01, .1, 0.04, .01D);
     public static final BooleanSettingWithSubSettings antiVanillaKick = new BooleanSettingWithSubSettings("Anti Vanilla Kick", "FlightAntiVanillaKick", "Anti vanilla kick", false);
-    public static final BooleanSetting strongMode = new BooleanSetting("Strong Mode", "FlightStrongMode", null, false);
+    public static final BooleanSetting strongMode = new BooleanSetting("Strong Mode", "FlightStrongMode", "Ensures you dont get kicked, but flying up looks buggy", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "FlightKeybind", null, () -> true, -1, () -> instance.toggle(), true);
 
     public FlightModule() {
