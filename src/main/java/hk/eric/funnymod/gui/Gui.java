@@ -16,8 +16,8 @@ public class Gui {
 
     public void init() {
         Category.init();
-        ClientTickEvents.START_CLIENT_TICK.register((startTick)->new TickEvent.Pre().call());
-        ClientTickEvents.END_CLIENT_TICK.register((endTick)->new TickEvent.Post().call());
+        ClientTickEvents.START_CLIENT_TICK.register((startTick)-> new TickEvent.Pre().call());
+        ClientTickEvents.END_CLIENT_TICK.register((endTick)-> new TickEvent.Post().call());
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!initialized) {
                 gui = new ClickGUI();

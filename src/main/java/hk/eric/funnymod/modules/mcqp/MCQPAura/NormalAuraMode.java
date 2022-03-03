@@ -2,7 +2,6 @@ package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.MathUtil;
-import hk.eric.funnymod.utils.PlayerUtil;
 import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
 import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
 import hk.eric.funnymod.utils.classes.pairs.Pair;
@@ -52,7 +51,7 @@ public class NormalAuraMode implements AuraMode {
     @Override
     public TriConsumer<LivingEntity, LocalPlayer, Consumer<Packet<?>>> getAttack() {
         return (entity, player, packetSender) -> {
-            Pair<Float, Float> yawPitch = PlayerUtil.getRotFromCoordinate(player, entity.getX(), entity.getY(), entity.getZ());
+            Pair<Float, Float> yawPitch = MathUtil.getLookAtRotation(player, entity.getX(), entity.getY(), entity.getZ());
             float rotY = yawPitch.getSecond(), rotX = yawPitch.getFirst();
             Vec3 from = player.getEyePosition(1);
             Vec3 to = entity.position().add(0, entity.getY() - entity.getBbHeight(), 0);

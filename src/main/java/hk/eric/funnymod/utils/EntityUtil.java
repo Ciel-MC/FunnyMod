@@ -1,6 +1,7 @@
 package hk.eric.funnymod.utils;
 
 import hk.eric.funnymod.mixin.OpenLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.NeutralMob;
@@ -45,34 +46,46 @@ public class EntityUtil {
     public static LevelEntityGetter<? extends EntityAccess> getEntityGetter() {
         Level level = mc.level;
         if (level == null) {
-            throw new IllegalStateException("No level loaded");
+            return null;
         }
         return ((OpenLevel)mc.level).callGetEntities();
     }
 
     public static Iterable<? extends EntityAccess> getAllEntities() {
-        return getEntityGetter().getAll();
+        LevelEntityGetter<? extends EntityAccess> getter = getEntityGetter();
+        if (getter == null) {
+            return null;
+        }else {
+            return getter.getAll();
+        }
     }
 
     public static Stream<? extends Entity> streamAllEntities(EntityFilter filter) {
-        return filter.process(StreamSupport.stream(getAllEntities().spliterator(), filter.parallel()).filter(Entity.class::isInstance).map(Entity.class::cast));
+        Iterable<? extends EntityAccess> entities = getAllEntities();
+        if (entities == null) {
+            return Stream.empty();
+        }else {
+            return filter.process(StreamSupport.stream(entities.spliterator(), filter.parallel()).filter(Entity.class::isInstance).filter(e -> !(e instanceof LocalPlayer)).map(Entity.class::cast));
+        }
+    }
+
+    public static Entity getClosestEntity() {
+        return getClosestEntity(EntityFilter.ALL);
     }
 
     public static Entity getClosestEntity(EntityFilter filter) {
         if (mc.player == null) {
             return null;
         }else {
-            return streamAllEntities(filter).min(Comparator.comparingDouble(entity -> distanceToEntitySquared(entity, mc.player))).orElse(null);
+            return streamAllEntities(filter).min(Comparator.comparingDouble(entity -> MathUtil.getDistance3D(entity.position(), mc.player.position(), false))).orElse(null);
         }
-    }
-
-    public static double distanceToEntitySquared(Entity entity, Entity target) {
-        return MathUtil.getDistance3D(entity.position(), target.position(), false);
     }
 
     public record EntityFilter(boolean sortByDistance,
                                Predicate<Entity> predicate,
                                boolean parallel) {
+
+        public static final EntityFilter ALL = new EntityFilter(false, null, false);
 
         public Stream<? extends Entity> process(@NotNull Stream<? extends Entity> stream) {
             Stream<? extends Entity> filtered;

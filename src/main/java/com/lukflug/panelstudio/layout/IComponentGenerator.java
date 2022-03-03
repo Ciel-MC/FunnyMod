@@ -28,7 +28,6 @@ public interface IComponentGenerator {
 	 */
 	@SuppressWarnings("rawtypes")
 	default IComponent getComponent(ISetting<?> setting, Supplier<Animation> animation, IComponentAdder adder, ThemeTuple theme, int colorLevel, Getter<Boolean> isContainer) {
-		System.out.println("Generating component for " + setting.getClass().getSimpleName());
 		if (setting instanceof IBooleanSetting) {
 			return getBooleanComponent((IBooleanSetting)setting,animation,adder,theme,colorLevel,isContainer);
 		} else if (setting instanceof INumberSetting) {

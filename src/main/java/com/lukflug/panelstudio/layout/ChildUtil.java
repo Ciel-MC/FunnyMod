@@ -56,16 +56,16 @@ public record ChildUtil(int width, Supplier<Animation> animation,
 			case POPUP, DRAG_POPUP -> {
 				toggle = new SimpleToggleable(false);
 				Button<T> button = new Button<>(new Labeled(label.getDisplayName(), label.getDescription(), () -> drawTitle && label.isVisible().isOn()), state, Getter.fixed(theme.getButtonRenderer(stateClass, true)));
-				if (popupType.dynamicPopup)
-					popup = ClosableComponent.createDynamicPopup(button, container, state, animation.get(), new RendererTuple<>(stateClass, theme), popupType.popupSize, toggle, width);
+				if (popupType.dynamicPopup())
+					popup = ClosableComponent.createDynamicPopup(button, container, state, animation.get(), new RendererTuple<>(stateClass, theme), popupType.popupSize(), toggle, width);
 				else
-					popup = ClosableComponent.createStaticPopup(button, container, state, animation.get(), new RendererTuple<>(stateClass, theme), popupType.popupSize, toggle, () -> width, false, "", false);
+					popup = ClosableComponent.createStaticPopup(button, container, state, animation.get(), new RendererTuple<>(stateClass, theme), popupType.popupSize(), toggle, () -> width, false, "", false);
 				parent.addComponent(new ComponentProxy<>(title) {
 					@Override
 					public void handleButton(Context context, int button) {
 						super.handleButton(context, button);
 						if (button == IInterface.RBUTTON && context.isClicked(button)) {
-							context.getPopupDisplayer().displayPopup(popup, context.getRect(), toggle, popupType.popupPos);
+							context.getPopupDisplayer().displayPopup(popup, context.getRect(), toggle, popupType.popupPos());
 							context.releaseFocus();
 						}
 					}

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.HasSubSettingsImpl;
 import com.lukflug.panelstudio.setting.ISetting;
+import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.utils.SettingUtil;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public class KeybindSettingWithSubSetting extends KeybindSetting implements HasSubSettingsImpl<Integer> {
@@ -68,8 +70,18 @@ public class KeybindSettingWithSubSetting extends KeybindSetting implements HasS
     }
 
     @Override
-    public void load(ObjectNode node){
+    public void load(ObjectNode node) throws ConfigLoadingFailedException {
         super.load(node);
-        SettingUtil.getSavableStream(getAllSubSettings()).forEach(setting -> setting.load((ObjectNode) node.get(setting.getConfigName())));
+        AtomicBoolean error = new AtomicBoolean(false);
+        SettingUtil.getSavableStream(getAllSubSettings()).forEach(setting -> {
+            try {
+                setting.load((ObjectNode) node.get(setting.getConfigName()));
+            } catch (ConfigLoadingFailedException e) {
+                error.set(true);
+            }
+        });
+        if (error.get()) {
+            throw new ConfigLoadingFailedException();
+        }
     }
 }

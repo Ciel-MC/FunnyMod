@@ -10,6 +10,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 
 public class NPCUtil {
+    /**
+     * @deprecated Will be moved to {@link PlayerUtil} clickEntity method.
+     */
+    @Deprecated(forRemoval = true)
     public static < E extends Entity> void clickNPCByName(String name, EntityType<E> type, MouseUtil.MouseButton mouseButton) {
         if (mouseButton == MouseUtil.MouseButton.MIDDLE) {
             throw new IllegalArgumentException("You can't use middle mouse button to click NPC!");

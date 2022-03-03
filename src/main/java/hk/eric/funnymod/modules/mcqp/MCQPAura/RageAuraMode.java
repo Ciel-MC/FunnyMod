@@ -3,7 +3,6 @@ package hk.eric.funnymod.modules.mcqp.MCQPAura;
 import hk.eric.funnymod.utils.EntityUtil;
 import hk.eric.funnymod.utils.MathUtil;
 import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.PlayerUtil;
 import hk.eric.funnymod.utils.classes.XYRot;
 import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
 import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
@@ -40,7 +39,7 @@ public class RageAuraMode implements AuraMode {
     public TriConsumer<LivingEntity, LocalPlayer, Consumer<Packet<?>>> getAttack() {
         return (entity, player, packetSender) -> {
             Vec3 targetLoc = entity.position();
-            XYRot xyRot = PlayerUtil.getRotFromCoordinate(entity.getX(), entity.getY() + player.getEyeHeight(), entity.getZ(), entity.getX(), entity.getY(), entity.getZ());
+            XYRot xyRot = MathUtil.getLookAtRotation(entity.getX(), entity.getY() + player.getEyeHeight(), entity.getZ(), entity.getX(), entity.getY(), entity.getZ());
             packetSender.accept(new ServerboundMovePlayerPacket.PosRot(targetLoc.x, targetLoc.y, targetLoc.z, xyRot.getYRot(), xyRot.getXRot(), false));
             HitResult result = player.pick(3,1,false);
             if (result.getType() == HitResult.Type.BLOCK) {

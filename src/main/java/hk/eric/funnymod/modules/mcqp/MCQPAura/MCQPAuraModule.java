@@ -4,10 +4,7 @@ import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.MotionEvent;
-import hk.eric.funnymod.gui.setting.BooleanSetting;
-import hk.eric.funnymod.gui.setting.DoubleSetting;
-import hk.eric.funnymod.gui.setting.IntegerSetting;
-import hk.eric.funnymod.gui.setting.KeybindSetting;
+import hk.eric.funnymod.gui.setting.*;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenLevel;
@@ -26,10 +23,10 @@ public class MCQPAuraModule extends ToggleableModule {
     //Normal settings
     public static final BooleanSettingWithSubSettings cycleAttack = new BooleanSettingWithSubSettings("Cycle","MCQPAuraCycle","Cycle different entities on each tick",false);
     public static final IntegerSetting cycleTime = new IntegerSetting("CycleTime","MCQPAuraCycleTime","Time to cycle", 1, 5, 2);
-    public static final DoubleSetting range = new DoubleSetting("Range", "MCQPAuraRange", "The range of the aura", 1, 20, 10, .1);
+    public static final DoubleSetting range = new DoubleSetting("Range","MCQPAuraRange","The range of the aura", 1, 20, 10, .1);
     public static final IntegerSetting maxTarget = new IntegerSetting("Max Target", "MCQPAuraTargets", "How many entity to attack in 1 tick", 1, 20, 5);
     //Rage settings
-    public static final DoubleSetting rageRange = new DoubleSetting("Rage Range", "MCQPAuraRageRange", "The range of rage", 1, 50, 10, .1);
+    public static final DoubleSetting rageRange = new DoubleSetting("Rage Range", "MCQPAuraRageRange", "The range of the aura when in rage mode", 1, 50, 10, .1);
     public static final BooleanSetting inGui = new BooleanSetting("In GUI", "MCQPAuraInGui", "Whether to attack in GUI(May cause inability to revive)", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "MCQPAuraKeybind", null, -1, () -> instance.toggle(), true);
 

@@ -6,13 +6,11 @@ import java.util.function.Supplier;
 
 public class EventManager {
 
-    /*Potential to have mapped events called by strings*/
-
     private final static EventManager instance = new EventManager();
-    private final Map<Class<? extends Event>, SortedSet<ListeningMethod>> registry;
-    private final Map<Class<? extends Event>, SortedSet<EventHandler<?>>> eventHandlers;
-    private final Supplier<SortedSet<ListeningMethod>> listeningMethodSetSupplier = () -> new TreeSet<>(Comparator.comparing(ListeningMethod::priority));
-    private final Supplier<SortedSet<EventHandler<?>>> eventHandlerSetSupplier = () -> new TreeSet<>(Comparator.comparing(EventHandler::getPriority));
+    private final Map<Class<? extends Event>, List<ListeningMethod>> registry;
+    private final Map<Class<? extends Event>, List<EventHandler<?>>> eventHandlers;
+    private final Supplier<List<ListeningMethod>> listeningMethodSetSupplier = ArrayList::new;
+    private final Supplier<List<EventHandler<?>>> eventHandlerSetSupplier = ArrayList::new;
 
     private EventManager() {
         registry = new HashMap<>();
@@ -43,8 +41,8 @@ public class EventManager {
     }
 
     public void unregister(Object handler) {
-        for (Map.Entry<Class<? extends Event>, SortedSet<ListeningMethod>> entry : registry.entrySet()) {
-            Set<ListeningMethod> handlers = entry.getValue();
+        for (Map.Entry<Class<? extends Event>, List<ListeningMethod>> entry : registry.entrySet()) {
+            List<ListeningMethod> handlers = entry.getValue();
             handlers.removeIf(listeningMethod -> listeningMethod.object() == handler);
         }
     }
@@ -54,27 +52,25 @@ public class EventManager {
     }
 
     public void callEvent(Event event) {
-        Set<ListeningMethod> listeningMethods = registry.getOrDefault(event.getClass(), listeningMethodSetSupplier.get());
-        Set<EventHandler<?>> eventHandlers = this.eventHandlers.getOrDefault(event.getClass(), eventHandlerSetSupplier.get());
+        List<ListeningMethod> listeningMethods = registry.getOrDefault(event.getClass(), listeningMethodSetSupplier.get());
+        List<EventHandler<?>> eventHandlers = this.eventHandlers.getOrDefault(event.getClass(), eventHandlerSetSupplier.get());
 
-        Class<? extends Event> clazz = event.getClass();
-        while (clazz != null) {
-            clazz = (Class<? extends Event>) clazz.getSuperclass();
-            listeningMethods.addAll(registry.getOrDefault(clazz, listeningMethodSetSupplier.get()));
-            eventHandlers.addAll(this.eventHandlers.getOrDefault(clazz, eventHandlerSetSupplier.get()));
+        Class<?> eventClass = event.getClass();
+        while (eventClass != Event.class) {
+            eventClass = eventClass.getSuperclass();
+            listeningMethods.addAll(this.registry.getOrDefault(eventClass, listeningMethodSetSupplier.get()));
+            eventHandlers.addAll(this.eventHandlers.getOrDefault(eventClass, eventHandlerSetSupplier.get()));
         }
 
-        if (listeningMethods != null) {
-            listeningMethods.forEach(listeningMethod -> {
-                try {
-                    listeningMethod.method().invoke(listeningMethod.object(), event);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        }
+        new ArrayList<>(listeningMethods).stream().sorted(Comparator.comparing(ListeningMethod::getPriority)).forEach(listeningMethod -> {
+            try {
+                listeningMethod.method().invoke(listeningMethod.object(), event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
-        eventHandlers.forEach(eventHandler -> callEventToEventHandler(eventHandler, event));
+        new ArrayList<>(eventHandlers).stream().sorted(Comparator.comparing(EventHandler::getPriority)).forEach(eventHandler -> callEventToEventHandler(eventHandler, event));
     }
 
     private <E extends Event> void callEventToEventHandler(EventHandler<E> handler, Event event) {

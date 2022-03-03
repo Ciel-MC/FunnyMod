@@ -3,6 +3,7 @@ package hk.eric.funnymod.gui.setting;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.Savable;
+import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.utils.ObjectUtil;
 
 import java.util.function.Consumer;
@@ -37,7 +38,7 @@ public abstract class SavableSetting<T> extends Setting<T> implements Savable<T>
     }
 
     @Override
-    public void load(ObjectNode node) {
+    public void load(ObjectNode node) throws ConfigLoadingFailedException {
         loadThis(node);
     }
 
@@ -52,7 +53,10 @@ public abstract class SavableSetting<T> extends Setting<T> implements Savable<T>
     }
 
     @Override
-    public void loadThis(ObjectNode node) {
+    public void loadThis(ObjectNode node) throws ConfigLoadingFailedException {
+        if (node == null) {
+            throw new ConfigLoadingFailedException();
+        }
         setValue(getConverter().revert(node.get("value").asText()));
     }
 

@@ -12,13 +12,17 @@ import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.PacketEvent;
 import hk.eric.funnymod.event.events.Render3DEvent;
+import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.FloatSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.MathUtil;
+import hk.eric.funnymod.utils.*;
+import hk.eric.funnymod.utils.classes.XYRot;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +40,8 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     public static int ppsSend = 0;
     public static int ppsReceived = 0;
 
+    private static double distance = 0;
+
     private static final EventHandler<PacketEvent> packetEventHandler = new EventHandler<>() {
         @Override
         public void handle(PacketEvent event) {
@@ -50,20 +56,29 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     private static final EventHandler<Render3DEvent> render3DEventHandler = new EventHandler<>() {
         @Override
         public void handle(Render3DEvent event) {
-            
+            if (showClosestPoint.isOn()) {
+                Entity e = EntityUtil.getClosestEntity();
+                if (e == null) return;
+                Vec3 boxLoc = MathUtil.closestPointInAABB(getPlayer().getEyePosition(), e.getBoundingBox());
+                AABB box = new AABB(boxLoc.add(.1, .1, .1), boxLoc.add(-.1, -.1, -.1));
+                distance = MathUtil.getDistance3D(boxLoc, getPlayer().getEyePosition());
+                RenderUtil.drawAABB(event.getStack(), box);
+            }
         }
     };
 
-//    private static final EventHandler<TickEvent.Pre> tickEventPreHandler = new EventHandler<>() {
-//        @Override
-//        public void handle(TickEvent.Pre event) {
-//            if (getLevel() == null) return;
-//            StreamSupport.stream(((OpenLevel) getLevel()).callGetEntities().getAll().spliterator(), false).filter(entity -> !(entity instanceof LocalPlayer)).min(Comparator.comparingDouble(entity -> entity.distanceTo(getPlayer()))).ifPresent(entity -> {
-//                XYRot xyRot = PlayerUtil.getRotFromCoordinate(getPlayer(), entity.getX(), entity.getY(), entity.getZ());
-//                PlayerUtil.setRot(xyRot);
-//            });
-//        }
-//    };
+    private static final EventHandler<TickEvent.Post> tickEventPostHandler = new EventHandler<>() {
+        @Override
+        public void handle(TickEvent.Post event) {
+            if (look.isOn()) {
+                Entity e = EntityUtil.getClosestEntity();
+                if (e == null) return;
+                Vec3 target = MathUtil.closestPointInAABB(getPlayer().getEyePosition(), e.getBoundingBox());
+                XYRot rot = MathUtil.getLookAtRotation(getPlayer(), target);
+                RotationUtil.setRot(rot);
+            }
+        }
+    };
 
     private static final Timer timer = new Timer();
     private static DebugModule instance;
@@ -73,10 +88,11 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     public static final FloatSetting launchYBoost = new FloatSetting("Y boost", "DebugYBoost", "The amount of Y boost that's given with the launch", 0, 10, .5f, 0.1f);
     public static final KeybindSetting launch = new KeybindSetting("Launch", "DebugLaunchKeybind", "Launches you forward", -1, ()->launchEntity(getPlayer()));
     public static final BooleanSetting showClosestPoint = new BooleanSetting("Show closest point", "DebugShowClosestPoint", "Shows the closest point to the player", false);
+    public static final BooleanSetting look = new BooleanSetting("Look", "DebugLook", null, false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "DebugKeybind", null, -1, () -> instance.toggle(), true);
 
     public DebugModule() {
-        super("Debug", "Debug Hud", FunnyModClient.debug);
+        super("Debug", "Debug", FunnyModClient.debug);
         instance = this;
         settings.add(logReceivePacket);
         settings.add(logSendPacket);
@@ -84,10 +100,12 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         settings.add(launchYBoost);
         settings.add(launch);
         settings.add(showClosestPoint);
+        settings.add(look);
         settings.add(keybind);
 
         registerOnOffHandler(packetEventHandler);
-//        registerOnOffHandler(tickEventPreHandler);
+        registerOnOffHandler(render3DEventHandler);
+        registerOnOffHandler(tickEventPostHandler);
     }
 
     public static IToggleable getToggle() {
@@ -125,11 +143,17 @@ public class DebugModule extends ToggleableModule implements HasComponents {
                 context.getInterface().drawString(pos, 10, "Packets Received Per Second: " + ppsReceived, new Color(255, 0, 0));
                 pos.translate(0, 10);
                 context.getInterface().drawString(pos, 10, "Fall distance: " + getPlayer().fallDistance, getPlayer().fallDistance > 3 ? new Color(255, 0, 0) : new Color(0, 255, 0));
+                pos.translate(0, 10);
+                context.getInterface().drawString(pos, 10, "X: " + getPlayer().getX() + " Y: " + getPlayer().getY() + " Z: " + getPlayer().getZ(), new Color(255, 255, 255));
+                pos.translate(0, 10);
+                context.getInterface().drawString(pos, 10, "Pitch: " + getPlayer().getXRot() + " Yaw: " + getPlayer().getYHeadRot(), new Color(255, 255, 255));
+                pos.translate(0, 10);
+                context.getInterface().drawString(pos, 10, "Closest Point: " + distance, new Color(255, 255, 255));
             }
 
             @Override
             public Dimension getSize(IInterface inter) {
-                return new Dimension(500, 30);
+                return new Dimension(500, 60);
             }
         });
     }

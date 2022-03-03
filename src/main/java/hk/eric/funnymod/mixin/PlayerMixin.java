@@ -1,7 +1,9 @@
 package hk.eric.funnymod.mixin;
 
+import hk.eric.funnymod.modules.movement.FlightModule;
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
 import hk.eric.funnymod.modules.player.HeightModule;
+import hk.eric.funnymod.modules.world.FreecamModule;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -74,5 +76,10 @@ public abstract class PlayerMixin extends LivingEntity {
             }
         }
         return HeightModule.getToggle().isOn() ? HeightModule.getHeight(HeightModule.HeightType.NORMAL_EYE_HEIGHT) : 1.62f;
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isSpectator()Z"))
+    public boolean injectTick(Player instance) {
+        return instance.isSpectator() || (FlightModule.getToggle().isOn() && FreecamModule.getToggle().isOn());
     }
 }

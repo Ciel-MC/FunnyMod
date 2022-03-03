@@ -445,7 +445,7 @@ public class ClickGUI extends MinecraftHUDGUI {
 		}
 
 		
-		private class ThemeScheme implements IColorScheme {
+		private static class ThemeScheme implements IColorScheme {
 			private final Theme themeValue;
 			private final String themeName;
 			

@@ -1,10 +1,9 @@
 package hk.eric.funnymod.event;
 
+import hk.eric.funnymod.event.events.TickEvent;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-    class EventManagerTest {
+class EventManagerTest {
         @Test
         public void test() {
             EventHandler<Event> handler = new EventHandler<>(EventPriority.HIGH) {
@@ -33,6 +32,40 @@ import static org.junit.jupiter.api.Assertions.*;
             EventManager.getInstance().register(handlerB);
 
             EventManager.getInstance().callEvent(new EventB());
+        }
+
+        @Test
+        void test1() throws InterruptedException {
+
+            EventHandler<TickEvent.Pre> tickEventPreHandler = new EventHandler<>() {
+                @Override
+                public void handle(TickEvent.Pre event) {
+                    System.out.println("TickEvent.Pre");
+                }
+            };
+
+            EventHandler<TickEvent.Post> tickEventPostHandler = new EventHandler<>() {
+                @Override
+                public void handle(TickEvent.Post event) {
+                    System.out.println("TickEvent.Post");
+                }
+            };
+
+            EventHandler<TickEvent> tickEventHandler = new EventHandler<>() {
+                @Override
+                public void handle(TickEvent event) {
+                    System.out.println("TickEvent: " + event.getState());
+                }
+            };
+
+
+
+            EventManager.getInstance().register(tickEventPreHandler);
+            EventManager.getInstance().register(tickEventPostHandler);
+            EventManager.getInstance().register(tickEventHandler);
+
+            EventManager.getInstance().callEvent(new TickEvent.Pre());
+            EventManager.getInstance().callEvent(new TickEvent.Post());
         }
 
         private class EventA extends Event {

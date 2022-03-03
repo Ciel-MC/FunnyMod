@@ -49,7 +49,7 @@ public class Node {
             }
         }else {
             ClientLevel level;
-            if((level = FunnyModClient.mc.level) != null) {
+            if(FunnyModClient.mc.level != null) {
                 if (canGo(this.getPos().offset(1, 0, 0))) {
                     neighbours.add(new Node(this.getPos().offset(1, 0, 0)));
                 }

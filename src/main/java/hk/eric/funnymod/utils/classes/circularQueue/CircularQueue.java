@@ -7,11 +7,9 @@ import java.util.stream.Stream;
 public class CircularQueue<T> {
 
     private final ArrayBlockingQueue<T> stack;
-    private final int size;
 
     public CircularQueue(int size) {
         this.stack = new ArrayBlockingQueue<>(size);
-        this.size = size;
     }
 
     public void push(T item) {

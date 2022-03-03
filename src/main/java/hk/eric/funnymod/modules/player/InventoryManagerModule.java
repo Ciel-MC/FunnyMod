@@ -114,8 +114,4 @@ public class InventoryManagerModule extends ToggleableModule {
         }
     }
 
-    @Override
-    public void onEnable() {
-        super.onEnable();
-    }
 }

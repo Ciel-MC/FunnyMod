@@ -119,32 +119,23 @@ public abstract class TabItem<S extends Supplier<T>,T> extends ComponentBase {
 	 * @param context the current context
 	 */
 	protected abstract void handleExit (Context context);
-	
-	
+
+
 	/**
 	 * Class representing a tab child item.
-	 * @author lukflug
+	 *
 	 * @param <S> the item state supplier type
 	 * @param <T> the item state type
+	 * @author lukflug
 	 */
-	public static final class ContentItem<S extends Supplier<T>,T> {
-		/**
-		 * The item name.
-		 */
-		public final String name;
-		/**
-		 * The item state supplier.
-		 */
-		public final S content;
-		
+	public record ContentItem<S extends Supplier<T>, T>(String name, S content) {
 		/**
 		 * Constructor.
-		 * @param name the item name
+		 *
+		 * @param name    the item name
 		 * @param content the item state supplier
 		 */
-		public ContentItem (String name, S content) {
-			this.name=name;
-			this.content=content;
+		public ContentItem {
 		}
 	}
 }

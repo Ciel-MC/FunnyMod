@@ -9,11 +9,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TwoDimensionalEnumMap<K1 extends Enum<K1>, K2 extends Enum<K2>, V> implements TwoDimensionalMap<K1,K2,V>{
 
     private final EnumMap<K1, EnumMap<K2,V>> map;
-    private final Class<K1> k1Class;
     private final Class<K2> k2Class;
 
     public TwoDimensionalEnumMap(Class<K1> k1, Class<K2> k2) {
-        k1Class = k1;
         k2Class = k2;
         map = new EnumMap<>(k1);
     }

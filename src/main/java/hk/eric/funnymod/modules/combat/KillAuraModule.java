@@ -22,6 +22,8 @@ public class KillAuraModule extends ToggleableModule {
 
     private static EventState state = EventState.PRE;
 
+    private static int tick = 0;
+
     private static KillAuraModule instance;
     public static final EnumSettingWithSubSettings<KillAuraMode> killAuraMode = new EnumSettingWithSubSettings<>("Killaura Mode", "KillAuraMode", "Mode", KillAuraMode.TELEPORT, KillAuraMode.class);
     public static final EnumSetting<KillAuraType> type = new EnumSetting<>("Type", "KillAuraType", "The type of the tick to attack", KillAuraType.PRE, KillAuraType.class);

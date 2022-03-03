@@ -1,6 +1,7 @@
 package com.lukflug.panelstudio.setting;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 public interface Savable<T> {
@@ -9,11 +10,11 @@ public interface Savable<T> {
 
     ObjectNode save();
 
-    void load(ObjectNode node);
+    void load(ObjectNode node) throws ConfigLoadingFailedException;
 
     ObjectNode saveThis();
 
-    void loadThis(ObjectNode node);
+    void loadThis(ObjectNode node) throws ConfigLoadingFailedException;
 
     String getConfigName();
 }

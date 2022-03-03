@@ -203,7 +203,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 	 *
 	 * @author lukflug
 	 */
-	protected record PopupPair(IPopup popup, Rectangle rect,
+	private record PopupPair(IPopup popup, Rectangle rect,
 							   IToggleable visible,
 							   IPopupPositioner positioner) {
 		/**
@@ -214,7 +214,7 @@ public class FixedContainer extends Container<IFixedComponent> implements IPopup
 		 * @param visible    value for {@link #visible}
 		 * @param positioner value for {@link #positioner}
 		 */
-		protected PopupPair {
+		private PopupPair {
 		}
 	}
 }

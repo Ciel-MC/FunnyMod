@@ -1,7 +1,10 @@
 package hk.eric.funnymod.utils;
 
+import hk.eric.funnymod.utils.classes.XYRot;
 import it.unimi.dsi.fastutil.doubles.DoubleComparator;
 import it.unimi.dsi.fastutil.ints.IntComparator;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -12,25 +15,25 @@ import static java.lang.Math.*;
 
 public class MathUtil {
 
-    static final int precision = 500; // gradations per degree, adjust to suit
-
-    static final int modulus = 360*precision;
-    static final float[] sin = new float[modulus]; // lookup table
-    static {
-        // a static initializer fills the table
-        // in this implementation, units are in degrees
-        for (int i = 0; i<sin.length; i++) {
-            sin[i]=(float)Math.sin((i*Math.PI)/(precision*180));
-        }
-    }
     public static final double toRadians = PI / 180;
     public static final double toDegrees = 180 / PI;
     public static final Comparator<Double> doubleComparator = (DoubleComparator) Double::compare;
-    
+    static final int precision = 500; // gradations per degree, adjust to suit
+    static final int modulus = 360 * precision;
+    static final float[] sin = new float[modulus]; // lookup table
     public static Comparator<Integer> intComparator = (IntComparator) Integer::compare;
+
+    static {
+        // a static initializer fills the table
+        // in this implementation, units are in degrees
+        for (int i = 0; i < sin.length; i++) {
+            sin[i] = (float) Math.sin((i * Math.PI) / (precision * 180));
+        }
+    }
 
     /**
      * Gets the coordinate between two {@link Vec2}.
+     *
      * @param a First coordinate
      * @param b Second coordinate
      * @return The distance between the two coordinates
@@ -41,6 +44,7 @@ public class MathUtil {
 
     /**
      * Gets the coordinate between two 2D coordinates.
+     *
      * @param x1 First X
      * @param y1 First Y
      * @param x2 Second X
@@ -53,6 +57,7 @@ public class MathUtil {
 
     /**
      * Gets the coordinate between two {@link Vec3}.
+     *
      * @param a First coordinate
      * @param b Second coordinate
      * @return The distance between the two coordinates
@@ -63,6 +68,7 @@ public class MathUtil {
 
     /**
      * Gets the coordinate between two {@link Vec3}.
+     *
      * @param a First coordinate
      * @param b Second coordinate
      * @return The distance between the two coordinates
@@ -73,6 +79,7 @@ public class MathUtil {
 
     /**
      * Gets the coordinate between two 3D coordinates.
+     *
      * @param x1 First X
      * @param y1 First Y
      * @param z1 First Z
@@ -87,6 +94,7 @@ public class MathUtil {
 
     /**
      * Gets the coordinate between two 3D coordinates.
+     *
      * @param x1 First X
      * @param y1 First Y
      * @param z1 First Z
@@ -116,6 +124,7 @@ public class MathUtil {
 
     /**
      * Gets the angle between two {@link Vec2}.
+     *
      * @param a First coordinate
      * @param b Second coordinate
      * @return The angle between the two coordinates
@@ -126,6 +135,7 @@ public class MathUtil {
 
     /**
      * Gets the angle between two 2D coordinates.
+     *
      * @param x1 First X
      * @param y1 First Y
      * @param x2 Second X
@@ -138,7 +148,8 @@ public class MathUtil {
 
     /**
      * Rounds number to an integer place.
-     * @param value the value to be rounded
+     *
+     * @param value  the value to be rounded
      * @param places the number of places to round to
      * @return the rounded value
      */
@@ -172,6 +183,7 @@ public class MathUtil {
 
     /**
      * Compares the length of longer side formed by two shorter sides to the longer side.
+     *
      * @param a side 1 of the triangle
      * @param b side 2 of the triangle
      * @param c Side length to be compared to
@@ -183,8 +195,9 @@ public class MathUtil {
 
     /**
      * Generates the component of a vector
-     * @param yaw Left & right
-     * @param pitch Up & down
+     *
+     * @param yaw      Left & right
+     * @param pitch    Up & down
      * @param distance The length of the vector
      * @return The component of the vector
      */
@@ -192,7 +205,7 @@ public class MathUtil {
         double x = distance * -Math.sin(toRadians(yaw) * Math.cos(toRadians(pitch)));
         double y = distance * -Math.sin(toRadians(pitch));
         double z = distance * Math.cos(toRadians(yaw) * Math.cos(toRadians(pitch)));
-        return new Vec3(x,y,z);
+        return new Vec3(x, y, z);
     }
 
     public static Vec3 getCoordFromAngles(float yaw, float pitch) {
@@ -217,6 +230,7 @@ public class MathUtil {
 
     /**
      * Fast way to calculate inverse square root.
+     *
      * @param number The value to calculate the inverse square root of
      * @return The inverse square root of the value
      */
@@ -226,18 +240,19 @@ public class MathUtil {
 
     /**
      * Fast way to calculate inverse square root.
-     * @param number The value to calculate the inverse square root of
+     *
+     * @param number    The value to calculate the inverse square root of
      * @param precision The precision of the calculation, 4 for maximum precision
      * @return The inverse square root of the value
      */
     public static double invSqrt(double number, int precision) {
         double x = number;
-        double halfX = 0.5d*x;
+        double halfX = 0.5d * x;
         long i = Double.doubleToLongBits(x);
-        i = 0x5fe6ec85e7de30daL - (i>>1);
+        i = 0x5fe6ec85e7de30daL - (i >> 1);
         x = Double.longBitsToDouble(i);
-        for(int it = 0; it < 4; it++){
-            x = x*(1.5d - halfX*x*x);
+        for (int it = 0; it < 4; it++) {
+            x = x * (1.5d - halfX * x * x);
         }
         x *= number;
         return x;
@@ -252,6 +267,56 @@ public class MathUtil {
         return number;
     }
 
+
+    public static XYRot getLookAtRotation(Player source, Vec3 target) {
+        return getLookAtRotation(source, target.x, target.y, target.z);
+    }
+
+    public static XYRot getLookAtRotation(Vec3 source, Vec3 target) {
+        return getLookAtRotation(source, target.x, target.y, target.z);
+    }
+
+    public static XYRot getLookAtRotation(Player source, double x, double y, double z) {
+        return getLookAtRotation(source.getX(), source.getEyeY(), source.getZ(), x, y, z);
+    }
+
+    public static XYRot getLookAtRotation(Vec3 source, double x, double y, double z) {
+        return getLookAtRotation(source.x(), source.y(), source.z(), x, y, z);
+    }
+
+    public static XYRot getLookAtRotation(double x, double y, double z, double x1, double y1, double z1) {
+        double xDiff = x1 - x;
+        double yDiff = y1 - y;
+        double zDiff = z1 - z;
+        double distance = Math.sqrt(xDiff * xDiff + zDiff * zDiff);
+        XYRot xyRot = new XYRot();
+        xyRot.setXRot(wrapDegrees(toDegrees(-((float) Mth.atan2(yDiff, distance)))));
+        xyRot.setYRot(wrapDegrees(toDegrees((float) Mth.atan2(zDiff, xDiff)) - 90.0f));
+        return xyRot;
+    }
+
+    public static double wrapDegrees(double degrees) {
+        double result = degrees % 360.0;
+        if (result >= 180.0) {
+            result -= 360.0;
+        }
+        if (result < -180.0) {
+            result += 360.0;
+        }
+        return result;
+    }
+
+    public static float wrapDegrees(float degrees) {
+        float result = degrees % 360.0f;
+        if (result >= 180.0) {
+            result -= 360.0;
+        }
+        if (result < -180.0) {
+            result += 360.0;
+        }
+        return result;
+    }
+
     public static int min(int a, int b, int c) {
         return Math.min(a, Math.min(b, c));
     }
@@ -262,15 +327,16 @@ public class MathUtil {
 
     // Private function for table lookup
     private static float sinLookup(int a) {
-        return a>=0 ? sin[a%(modulus)] : -sin[-a%(modulus)];
+        return a >= 0 ? sin[a % (modulus)] : -sin[-a % (modulus)];
     }
 
     // These are your working functions:
     public static float sin(float a) {
-        return sinLookup((int)(a * precision + 0.5f));
+        return sinLookup((int) (a * precision + 0.5f));
     }
+
     public static float cos(float a) {
-        return sinLookup((int)((a+90f) * precision + 0.5f));
+        return sinLookup((int) ((a + 90f) * precision + 0.5f));
     }
 
     public static double clamp(double min, double max, double value) {

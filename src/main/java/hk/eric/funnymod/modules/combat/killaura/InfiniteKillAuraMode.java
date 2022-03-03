@@ -16,6 +16,7 @@ import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -49,7 +50,8 @@ public class InfiniteKillAuraMode extends KillauraMode {
     @Override
     public Stream<LivingEntity> process(Stream<LivingEntity> entityStream) {
         return entityStream
-                .filter(e -> EntityUtil.distanceToEntitySquared(e, FunnyModClient.mc.player) <= KillAuraModule.infiniteAuraRange.getValue() * KillAuraModule.infiniteAuraRange.getValue())
+                .filter(e -> e instanceof EnderDragon)
+                .filter(e -> MathUtil.getDistance3D(e.position(), FunnyModClient.mc.player.position()) <= KillAuraModule.infiniteAuraRange.getValue() * KillAuraModule.infiniteAuraRange.getValue())
                 .filter(e -> {
                     if (KillAuraModule.infiniteAuraBypass.getValue() != KillAuraModule.TeleportBypass.PAPER) {
                         return true;
@@ -98,7 +100,8 @@ public class InfiniteKillAuraMode extends KillauraMode {
             linesToDraw.add(ThreeDimensionalLine.of(oldNode.getPos().toVec3(), node.getPos().toVec3()));
             boxesToDraw.add(player.getDimensions(player.getPose()).makeBoundingBox(pos));
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
-            XYRot rot = PlayerUtil.getRotFromCoordinate(eyePos, entity.getX(), entity.getY() + entity.getEyeHeight() / 2, entity.getZ());
+//            XYRot rot = PlayerUtil.getLookAtRotation(eyePos, entity.getX(), entity.getY() + entity.getEyeHeight() / 2, entity.getZ());
+            XYRot rot = MathUtil.getLookAtRotation(eyePos, MathUtil.closestPointInAABB(eyePos, entity.getBoundingBox()));
             linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
             sender.accept(PacketUtil.createPosRot(x, y, z, rot.getYaw(), rot.getPitch(), true));
             oldNode = node;

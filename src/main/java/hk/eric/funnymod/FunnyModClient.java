@@ -22,7 +22,7 @@ public class FunnyModClient implements ClientModInitializer {
 
     public static final String MOD_ID = "funnymod";
     public static final String MOD_NAME = "Funny Mod";
-    public static boolean debug = FabricLoader.getInstance().isDevelopmentEnvironment();
+    public static final boolean debug = FabricLoader.getInstance().isDevelopmentEnvironment();
     private static boolean initialized = false;
     private static IBaritone baritone;
     private static PoseStack poseStack;

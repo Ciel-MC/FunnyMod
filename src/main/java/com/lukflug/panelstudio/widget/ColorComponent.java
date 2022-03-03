@@ -229,7 +229,6 @@ public abstract class ColorComponent extends VerticalContainer {
 		}
 
 
-		@SuppressWarnings("rawtypes")
 		@Override
 		public Class<Integer> getSettingClass() {
 			return null;

@@ -5,35 +5,59 @@ import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.ChatReceivedEvent;
 import hk.eric.funnymod.event.events.GuiOpenEvent;
 import hk.eric.funnymod.event.events.TitleEvents;
+import hk.eric.funnymod.utils.classes.pairs.Pair;
 import org.jetbrains.annotations.Blocking;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 public class WaitUtils {
 
-    public static List<Predicate<GuiOpenEvent>> waitingForNewScreen = new LinkedList<>();
+    public static final List<Pair<Predicate<GuiOpenEvent>, CompletableFuture<Void>>> waitingForNewScreen = new LinkedList<>();
     private static final EventHandler<GuiOpenEvent> waitForScreen = new EventHandler<>() {
         @Override
         public void handle(GuiOpenEvent event) {
-            waitingForNewScreen.removeIf((predicate) -> predicate.test(event));
+            waitingForNewScreen.removeIf(pair -> {
+                if (pair.getFirst().test(event)) {
+                    pair.getSecond().complete(null);
+                    return true;
+                }else {
+                    return false;
+                }
+            });
         }
     };
 
-    public static List<Predicate<ChatReceivedEvent>> waitingForChat = new LinkedList<>();
+    public static final List<Pair<Predicate<ChatReceivedEvent>, CompletableFuture<Void>>> waitingForChat = new LinkedList<>();
     private static final EventHandler<ChatReceivedEvent> waitForChat = new EventHandler<>() {
         @Override
         public void handle(ChatReceivedEvent event) {
-            waitingForChat.removeIf((predicate) -> predicate.test(event));
+            waitingForChat.removeIf(pair -> {
+                if (pair.getFirst().test(event)) {
+                    pair.getSecond().complete(null);
+                    return true;
+                }else {
+                    return false;
+                }
+            });
         }
     };
 
-    public static List<Predicate<TitleEvents.TitleEvent>> waitingForTitle = new LinkedList<>();
+    public static final List<Pair<Predicate<TitleEvents.TitleEvent>, CompletableFuture<Void>>> waitingForTitle = new LinkedList<>();
     public static final EventHandler<TitleEvents.TitleEvent> waitForTitle = new EventHandler<>() {
         @Override
         public void handle(TitleEvents.TitleEvent event) {
-            waitingForTitle.removeIf((predicate) -> predicate.test(event));
+            waitingForTitle.removeIf(pair -> {
+                if (pair.getFirst().test(event)) {
+                    pair.getSecond().complete(null);
+                    return true;
+                }else {
+                    return false;
+                }
+            });
         }
     };
 
@@ -46,12 +70,10 @@ public class WaitUtils {
     @Blocking
     public static void waitForNewScreen(Predicate<GuiOpenEvent> predicate) {
         try {
-            waitingForNewScreen.add(predicate);
-            while (waitingForNewScreen.contains(predicate)) {
-                Thread.sleep(10);
-            }
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            waitingForNewScreen.add(new Pair<>(predicate, future));
+            future.get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
     }
@@ -63,13 +85,12 @@ public class WaitUtils {
 
     @Blocking
     public static void waitForChat(Predicate<ChatReceivedEvent> predicate) {
-        waitingForChat.add(predicate);
-        while (waitingForChat.contains(predicate)) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            waitingForChat.add(new Pair<>(predicate, future));
+            future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
     }
 
@@ -80,13 +101,12 @@ public class WaitUtils {
 
     @Blocking
     public static void waitForTitle(Predicate<TitleEvents.TitleEvent> predicate) {
-        waitingForTitle.add(predicate);
-        while (waitingForTitle.contains(predicate)) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            CompletableFuture<Void> future = new CompletableFuture<>();
+            waitingForTitle.add(new Pair<>(predicate, future));
+            future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
     }
 

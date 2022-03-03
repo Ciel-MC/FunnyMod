@@ -11,7 +11,7 @@ import hk.eric.funnymod.modules.ToggleableModule;
 public class TimerModule extends ToggleableModule {
 
     private static TimerModule instance;
-    public static final DoubleSetting speed = new DoubleSetting("Speed","TimerSpeed","Multiplier of timer",.1,10,1, .1, (speed)->{
+    public static final DoubleSetting speed = new DoubleSetting("Speed", "TimerSpeed", "Multiplier of timer", .1, 10, 1, .1, (speed) -> {
         if (getToggle().isOn()) {
             setSpeed(speed);
         }

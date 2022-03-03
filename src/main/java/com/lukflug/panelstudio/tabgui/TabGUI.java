@@ -51,14 +51,14 @@ public class TabGUI extends TabItem<TabGUI.ChildTab,Void> {
 	@Override
 	protected boolean hasChildren() {
 		for (ContentItem<ChildTab,Void> tab: contents) {
-			if (tab.content.visible.isOn()) return true;
+			if (tab.content().visible.isOn()) return true;
 		}
 		return false;
 	}
 
 	@Override
 	protected void handleSelect (Context context) {
-		ChildTab tab=contents.get((int)tabState.getTarget()).content;
+		ChildTab tab=contents.get((int)tabState.getTarget()).content();
 		if (!tab.visible.isOn()) tab.visible.toggle();
 	}
 
@@ -69,7 +69,7 @@ public class TabGUI extends TabItem<TabGUI.ChildTab,Void> {
 	
 	@Override
 	public void exit() {
-		ChildTab tab=contents.get((int)tabState.getTarget()).content;
+		ChildTab tab=contents.get((int)tabState.getTarget()).content();
 		if (tab.visible.isOn()) tab.visible.toggle();
 	}
 	
