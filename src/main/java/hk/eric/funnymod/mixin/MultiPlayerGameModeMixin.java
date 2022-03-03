@@ -33,12 +33,12 @@ public class MultiPlayerGameModeMixin {
     )
     private void onReleaseUsingItem(Player player, CallbackInfo ci) {
         if (BowInstantKillModule.getToggle().isOn() && player.getInventory().getSelected().getItem().equals(Items.BOW)) {
-            PacketUtil.sendPacket(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.START_SPRINTING));
+            PacketUtil.send(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.START_SPRINTING));
             for(int i = 0; i < BowInstantKillModule.cycles.getValue(); ++i) {
-                PacketUtil.sendPacket(PacketUtil.createPos(mc.player.getX(), mc.player.getY() - 1.0E-9D, mc.player.getZ(), true));
-                PacketUtil.sendPacket(PacketUtil.createPos(mc.player.getX(), mc.player.getY() + 1.0E-9D, mc.player.getZ(), false));
+                PacketUtil.send(PacketUtil.ServerboundMovePlayerPacketBuilder.create().setPos(mc.player.position().add(0, - 1.0E-9D, 0)).setOnGround(true).build());
+                PacketUtil.send(PacketUtil.ServerboundMovePlayerPacketBuilder.create().setPos(mc.player.position().add(0, 1.0E-9D, 0)).setOnGround(false).build());
             }
-            PacketUtil.sendPacket(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.STOP_SPRINTING));
+            PacketUtil.send(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.STOP_SPRINTING));
         }
     }
 }

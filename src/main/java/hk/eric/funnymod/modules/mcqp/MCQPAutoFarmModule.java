@@ -56,7 +56,7 @@ public class MCQPAutoFarmModule extends ToggleableModule {
 
             if (!getBaritone().getPathingBehavior().isPathing() && wasPathing) {
                 if (getPlayer() == null) return;
-                PacketUtil.sendPacket(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
+                PacketUtil.send(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
                 ticks = 20;
             }
 

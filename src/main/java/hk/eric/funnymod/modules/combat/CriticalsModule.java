@@ -7,10 +7,8 @@ import hk.eric.funnymod.event.events.AttackEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.PlayerUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.phys.Vec3;
 
 public class CriticalsModule extends ToggleableModule {
 
@@ -22,10 +20,15 @@ public class CriticalsModule extends ToggleableModule {
         public void handle(AttackEvent event) {
             if (!event.isCancelled()) {
                 if (canCrit(getPlayer(),false)) {
-                    Vec3 pos = PlayerUtil.exactPosition(getPlayer());
-                    PacketUtil.sendPacket(PacketUtil.createPos(pos.x, pos.y + 0.11, pos.z, false));
-                    PacketUtil.sendPacket(PacketUtil.createPos(pos.x, pos.y + 0.1100013579, pos.z, false));
-                    PacketUtil.sendPacket(PacketUtil.createPos(pos.x, pos.y + 0.0000013579, pos.z, false));
+                    double y = getPlayer().getY();
+                    PacketUtil.ServerboundMovePlayerPacketBuilder builder
+                            = PacketUtil.ServerboundMovePlayerPacketBuilder
+                            .create()
+                            .setPos(getPlayer().position())
+                            .setOnGround(true);
+                    PacketUtil.send(builder.setY(y + .11).build());
+                    PacketUtil.send(builder.setY(y + 0.1100013579).build());
+                    PacketUtil.send(builder.setY(y + 0.0000013579).build());
                 }
             }
         }
@@ -45,8 +48,7 @@ public class CriticalsModule extends ToggleableModule {
     private static boolean canCrit(LocalPlayer player, boolean ignoreOnGround) {
         return !player.isInLava() && !player.isInWater() && !player.onClimbable() && !player.isNoGravity() &&
                 !player.hasEffect(MobEffects.LEVITATION) && !player.hasEffect(MobEffects.BLINDNESS) &&
-                !player.hasEffect(MobEffects.SLOW_FALLING) && !player.isHandsBusy() && (player.isOnGround() || ignoreOnGround);/* &&
-                !ModuleFly.enabled && !(ModuleLiquidWalk.enabled && ModuleLiquidWalk.standingOnWater())*/
+                !player.hasEffect(MobEffects.SLOW_FALLING) && !player.isHandsBusy() && (player.isOnGround() || ignoreOnGround);
     }
 
 }

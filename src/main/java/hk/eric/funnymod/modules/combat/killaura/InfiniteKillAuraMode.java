@@ -95,15 +95,18 @@ public class InfiniteKillAuraMode extends KillauraMode {
             Node node = nodes.poll();
             Vec3 pos = node.getPos().toCenteredVec3();
             Vec3 oPos = oldNode.getPos().toCenteredVec3();
-            double oX = oPos.x, oY = oPos.y, oZ = oPos.z;
-            double x = pos.x() ,y = pos.y(), z = pos.z();
             linesToDraw.add(ThreeDimensionalLine.of(oldNode.getPos().toVec3(), node.getPos().toVec3()));
             boxesToDraw.add(player.getDimensions(player.getPose()).makeBoundingBox(pos));
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
 //            XYRot rot = PlayerUtil.getLookAtRotation(eyePos, entity.getX(), entity.getY() + entity.getEyeHeight() / 2, entity.getZ());
             XYRot rot = MathUtil.getLookAtRotation(eyePos, MathUtil.closestPointInAABB(eyePos, entity.getBoundingBox()));
             linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
-            sender.accept(PacketUtil.createPosRot(x, y, z, rot.getYaw(), rot.getPitch(), true));
+            sender.accept(PacketUtil.ServerboundMovePlayerPacketBuilder.create()
+                    .setPos(pos)
+                    .setRot(rot)
+                    .setOnGround(true)
+                    .build()
+            );
             oldNode = node;
         }
     }
@@ -128,7 +131,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     private void sendPacket(Packet<?> packet) {
         if (packetThisTick < KillAuraModule.infiniteAuraPacketLimit.getValue()) {
-            PacketUtil.sendPacket(packet);
+            PacketUtil.send(packet);
             packetThisTick++;
         }
     }

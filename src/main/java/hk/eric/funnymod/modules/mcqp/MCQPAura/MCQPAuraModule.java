@@ -42,7 +42,7 @@ public class MCQPAuraModule extends ToggleableModule {
                     case NORMAL -> AuraModes.NORMAL_MODE;
 //                    case RAGE -> AuraModes.RAGE_MODE;
                 };
-                auraMode.getEntities().apply(entities,getPlayer(),range.getValue()).forEach(entity -> auraMode.getAttack().accept(entity, getPlayer(), PacketUtil::sendPacket));
+                auraMode.getEntities().apply(entities,getPlayer(),range.getValue()).forEach(entity -> auraMode.getAttack().accept(entity, getPlayer(), PacketUtil::send));
             }
         }
     };

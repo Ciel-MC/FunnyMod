@@ -1,16 +1,16 @@
 package hk.eric.funnymod.utils.classes.getters;
 
-import hk.eric.funnymod.utils.classes.caches.Cache;
+import hk.eric.funnymod.utils.classes.caches.CircularQueueCache;
 
 import java.util.function.Function;
 
 public class CachedLambdaGetter<T, R> extends LambdaGetter<T, R> {
 
-    private final Cache<T, R> cache;
+    private final CircularQueueCache<T, R> cache;
 
     public CachedLambdaGetter(Function<T, R> function, Getter<T> getter, int cacheSize) {
         super(function, getter);
-        this.cache = new Cache<>(function, cacheSize);
+        this.cache = new CircularQueueCache<>(function, cacheSize);
     }
 
     @Override

@@ -3,7 +3,7 @@ package hk.eric.funnymod.mixin;
 import hk.eric.funnymod.modules.movement.FlightModule;
 import hk.eric.funnymod.modules.movement.KeepSprintModule;
 import hk.eric.funnymod.modules.player.HeightModule;
-import hk.eric.funnymod.modules.world.FreecamModule;
+import hk.eric.funnymod.modules.player.FreecamModule;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

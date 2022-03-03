@@ -7,7 +7,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundChatPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +19,7 @@ public abstract class ClientPacketListenerMixin {
     @Redirect(method = "handleSetEntityMotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;lerpMotion(DDD)V"))
     public void redirectHandleEntityMotion(Entity entity, double x, double y, double z) {
         if (entity instanceof LocalPlayer) {
-            if (VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.MODIFY) {
+            if (VelocityModule.getToggle().isOn()) {
                 double horizontalMultiplier = VelocityModule.horizontal.getValue() / 100d;
                 double verticalMultiplier = VelocityModule.vertical.getValue() / 100d;
                 entity.lerpMotion(x * horizontalMultiplier, y * verticalMultiplier, z * horizontalMultiplier);
@@ -28,13 +27,6 @@ public abstract class ClientPacketListenerMixin {
             }
         }
         entity.lerpMotion(x, y, z);
-    }
-
-    @Inject(method = "handleSetEntityMotion", at = @At("HEAD"), cancellable = true)
-    public void injectHandleEntityMotion(ClientboundSetEntityMotionPacket packet, CallbackInfo ci) {
-        if (VelocityModule.getToggle().isOn() && VelocityModule.velocityMode.getValue() == VelocityModule.Mode.CANCEL) {
-            ci.cancel();
-        }
     }
 
     @Inject(method = "handleOpenScreen", at = @At("HEAD"), cancellable = true)

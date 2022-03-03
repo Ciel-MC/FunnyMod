@@ -33,7 +33,7 @@ public class CommandModule extends ToggleableModule {
         public void handle(PlayerChatEvent event) {
             if (event.getMessage().contains("{fuck}")) {
                 for (String s : fuck) {
-                    PacketUtil.sendPacket(new ServerboundChatPacket(event.getMessage().replace("{fuck}", s)));
+                    PacketUtil.send(new ServerboundChatPacket(event.getMessage().replace("{fuck}", s)));
                 }
                 event.setCancelled(true);
             }

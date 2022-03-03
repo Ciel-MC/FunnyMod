@@ -23,10 +23,10 @@ public class NPCUtil {
         ((OpenLevel) level).callGetEntities().getAll().forEach(entity -> {
             if (entity.getType() == type && entity.getName().getString().contains(name)) {
                 if (mouseButton == MouseUtil.MouseButton.LEFT) {
-                    PacketUtil.sendPacket(ServerboundInteractPacket.createAttackPacket(entity,false));
+                    PacketUtil.send(ServerboundInteractPacket.createAttackPacket(entity,false));
                 }else {
-                    InfiniteKillAuraMode.moveTo(FunnyModClient.mc.player, entity, 10000, PacketUtil::sendPacket, (list) -> true, ((node, node2) -> node.distanceFloat(node2, true) < 6), true);
-                    PacketUtil.sendPacket(ServerboundInteractPacket.createInteractionPacket(entity, false, InteractionHand.MAIN_HAND, entity.position()));
+                    InfiniteKillAuraMode.moveTo(FunnyModClient.mc.player, entity, 10000, PacketUtil::send, (list) -> true, ((node, node2) -> node.distanceFloat(node2, true) < 6), true);
+                    PacketUtil.send(ServerboundInteractPacket.createInteractionPacket(entity, false, InteractionHand.MAIN_HAND, entity.position()));
                 }
             }
         });

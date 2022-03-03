@@ -1,6 +1,6 @@
 package hk.eric.funnymod.mixin;
 
-import hk.eric.funnymod.modules.world.FreecamModule;
+import hk.eric.funnymod.modules.player.FreecamModule;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import org.spongepowered.asm.mixin.Mixin;

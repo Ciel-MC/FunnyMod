@@ -8,7 +8,7 @@ import hk.eric.funnymod.gui.setting.DoubleSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.modules.world.FreecamModule;
+import hk.eric.funnymod.modules.player.FreecamModule;
 import hk.eric.funnymod.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec2;

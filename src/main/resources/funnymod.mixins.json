@@ -22,6 +22,7 @@
     "LocalPlayerMixin",
     "MinecraftMixin",
     "MultiPlayerGameModeMixin",
+    "OpenAbstractClientPlayer",
     "OpenClientboundChatPacket",
     "OpenClientboundOpenScreenPacket",
     "OpenEntityRenderDispatcher",
@@ -29,12 +30,12 @@
     "OpenLevel",
     "OpenLivingEntity",
     "OpenMinecraft",
-    "OpenAbstractClientPlayer",
     "OpenServerboundMovePlayerPacket",
     "OpenTimer",
     "OpenVec3",
     "PlayerMixin",
     "ScreenMixin",
+    "flags.ServerboundMovePlayerPacketFlag",
     "toolTipScrollMixins.AlterPosition",
     "toolTipScrollMixins.TrackScrollWheel"
   ]

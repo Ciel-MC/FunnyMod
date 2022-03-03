@@ -44,9 +44,9 @@ public class RageAuraMode implements AuraMode {
             HitResult result = player.pick(3,1,false);
             if (result.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = ((BlockHitResult) result).getBlockPos();
-                PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockPos, Direction.fromYRot(xyRot.getYRot())));
+                PacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockPos, Direction.fromYRot(xyRot.getYRot())));
             }else {
-                PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                PacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
         };
     }

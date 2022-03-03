@@ -19,7 +19,7 @@ public class MCQPFastReviveModule extends ToggleableModule {
         @Override
         public void handle(TickEvent e) {
             if (e.getState() == EventState.POST) {
-                PacketUtil.sendPacket(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                PacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
         }
     };

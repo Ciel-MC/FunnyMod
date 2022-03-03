@@ -106,11 +106,11 @@ public class InventoryManagerModule extends ToggleableModule {
             if (dropHotbar.isOn()) {
                 Inventory inventory = p.getInventory();
                 inventory.removeItem(inventory.getItem(slot));
-                PacketUtil.sendPacket(new ServerboundSetCarriedItemPacket(slot));
-                PacketUtil.sendPacket(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS, BlockPos.ZERO, Direction.DOWN));
+                PacketUtil.send(new ServerboundSetCarriedItemPacket(slot));
+                PacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS, BlockPos.ZERO, Direction.DOWN));
             }
         } else {
-            PacketUtil.sendPacket(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<>()));
+            PacketUtil.send(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<>()));
         }
     }
 

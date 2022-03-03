@@ -21,7 +21,6 @@ import hk.eric.funnymod.modules.visual.EspModule;
 import hk.eric.funnymod.modules.visual.LogoModule;
 import hk.eric.funnymod.modules.visual.TabGUIModule;
 import hk.eric.funnymod.modules.world.ChatterModule;
-import hk.eric.funnymod.modules.world.FreecamModule;
 import hk.eric.funnymod.modules.world.TimerModule;
 
 import java.util.*;
@@ -62,8 +61,9 @@ public enum Category implements ICategory {
 		addModule(PLAYER,
 				new AutoFishModule(),
 				new FastplaceModule(),
-				new InventoryManagerModule(),
+				new FreecamModule(),
 				new HeightModule(),
+				new InventoryManagerModule(),
 				new NoFallModule(),
 				new NoJumpDelayModule()
 		);
@@ -76,7 +76,6 @@ public enum Category implements ICategory {
 		);
 		addModule(WORLD,
 				new ChatterModule(),
-				new FreecamModule(),
 				new TimerModule()
 		);
 		addModule(MISC,

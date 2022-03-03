@@ -46,7 +46,8 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         @Override
         public void handle(PacketEvent event) {
             if (event instanceof PacketEvent.SendPacketEvent && logSendPacket.isOn()) {
-                System.out.println("[FunnyMod] Send Packet: " + event.getPacket().getClass().getSimpleName());
+//                System.out.println("[FunnyMod] Send Packet: " + event.getPacket().getClass().getSimpleName());
+                logger.info("[FunnyMod] Sending Packet: " + event.getPacket().getClass().getSimpleName());
             }else if (event instanceof PacketEvent.ReceivePacketEvent && logReceivePacket.isOn()) {
                 System.out.println("[FunnyMod] Receive Packet: " + event.getPacket().getClass().getSimpleName());
             }
