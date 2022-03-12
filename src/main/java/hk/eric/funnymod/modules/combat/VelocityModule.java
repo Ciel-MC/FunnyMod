@@ -5,6 +5,7 @@ import hk.eric.funnymod.gui.setting.IntegerSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
+import net.minecraft.world.phys.Vec3;
 
 public class VelocityModule extends ToggleableModule {
 
@@ -30,5 +31,12 @@ public class VelocityModule extends ToggleableModule {
 
     public static IToggleable getToggle() {
         return instance.getToggleable();
+    }
+
+    public static Vec3 processVelocity(Vec3 velocity) {
+        if (instance.getToggleable().isOn()) {
+            return velocity.multiply(horizontal.getValue() / 100d, vertical.getValue() / 100d, horizontal.getValue() / 100d);
+        }
+        return velocity;
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ClientboundChatPacket;
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -22,11 +23,16 @@ public abstract class ClientPacketListenerMixin {
             if (VelocityModule.getToggle().isOn()) {
                 double horizontalMultiplier = VelocityModule.horizontal.getValue() / 100d;
                 double verticalMultiplier = VelocityModule.vertical.getValue() / 100d;
-                entity.lerpMotion(x * horizontalMultiplier, y * verticalMultiplier, z * horizontalMultiplier);
+                entity.setDeltaMovement(new Vec3(x * horizontalMultiplier, y * verticalMultiplier, z * horizontalMultiplier));
                 return;
             }
         }
-        entity.lerpMotion(x, y, z);
+        entity.setDeltaMovement(x, y, z);
+    }
+
+    @Redirect(method = "handleExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"))
+    public void redirectHandleExplosion(LocalPlayer player, Vec3 vec3) {
+        player.setDeltaMovement(player.getDeltaMovement().add(VelocityModule.processVelocity(vec3.subtract(player.getDeltaMovement()))));
     }
 
     @Inject(method = "handleOpenScreen", at = @At("HEAD"), cancellable = true)
