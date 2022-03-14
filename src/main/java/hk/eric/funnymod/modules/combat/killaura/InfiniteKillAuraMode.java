@@ -57,9 +57,9 @@ public class InfiniteKillAuraMode extends KillauraMode {
                         return true;
                     }else {
                         return switch (KillAuraModule.infiniteAuraDistanceCalculationAccuracy.getValue()) {
-                            case INTEGER -> BetterBlockPos.fromEntity(e).asNode().distanceInt(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
-                            case FLOAT -> BetterBlockPos.fromEntity(e).asNode().distanceFloat(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
-                            case DOUBLE -> BetterBlockPos.fromEntity(e).asNode().distanceDouble(BetterBlockPos.fromEntity(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                            case INTEGER -> BetterBlockPos.from(e).asNode().distanceInt(BetterBlockPos.from(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                            case FLOAT -> BetterBlockPos.from(e).asNode().distanceFloat(BetterBlockPos.from(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
+                            case DOUBLE -> BetterBlockPos.from(e).asNode().distanceDouble(BetterBlockPos.from(FunnyModClient.mc.player).asNode(), true) <= KillAuraModule.infiniteAuraPaperDistance.getValue();
                         };
                     }
                 })
@@ -78,7 +78,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
     }
 
     public static void moveTo(LocalPlayer player, Entity entity, int maxStep, Consumer<Packet<?>> sender, Function<List<Node>, Boolean> canGo, BiFunction<Node, Node, Boolean> ended, boolean returnOnFail) {
-        Node path = AStarPathFinder.search(BetterBlockPos.fromEntity(player).asNode(), BetterBlockPos.fromEntity(entity).asNode(), maxStep, true, ended, !returnOnFail);
+        Node path = AStarPathFinder.search(BetterBlockPos.from(player).asNode(), BetterBlockPos.from(entity).asNode(), maxStep, true, ended, !returnOnFail);
         if (path == null) {
             return;
         }
@@ -94,11 +94,9 @@ public class InfiniteKillAuraMode extends KillauraMode {
         while (!nodes.isEmpty()) {
             Node node = nodes.poll();
             Vec3 pos = node.getPos().toCenteredVec3();
-            Vec3 oPos = oldNode.getPos().toCenteredVec3();
             linesToDraw.add(ThreeDimensionalLine.of(oldNode.getPos().toVec3(), node.getPos().toVec3()));
             boxesToDraw.add(player.getDimensions(player.getPose()).makeBoundingBox(pos));
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
-//            XYRot rot = PlayerUtil.getLookAtRotation(eyePos, entity.getX(), entity.getY() + entity.getEyeHeight() / 2, entity.getZ());
             XYRot rot = MathUtil.getLookAtRotation(eyePos, MathUtil.closestPointInAABB(eyePos, entity.getBoundingBox()));
             linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
             sender.accept(PacketUtil.ServerboundMovePlayerPacketBuilder.create()

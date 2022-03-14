@@ -15,11 +15,11 @@ public class BetterBlockPos extends BlockPos {
 
     public static final BetterBlockPos ZERO = new BetterBlockPos(0, 0, 0);
 
-    public static BetterBlockPos fromEntity(Entity entity) {
+    public static BetterBlockPos from(Entity entity) {
         return new BetterBlockPos(entity.getX(), entity.getY(), entity.getZ());
     }
 
-    public static BetterBlockPos fromBlockPos(BlockPos position) {
+    public static BetterBlockPos from(BlockPos position) {
         return new BetterBlockPos(position.getX(), position.getY(), position.getZ());
     }
 
