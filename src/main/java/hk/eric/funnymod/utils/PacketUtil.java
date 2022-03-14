@@ -1,6 +1,7 @@
 package hk.eric.funnymod.utils;
 
 import hk.eric.funnymod.FunnyModClient;
+import hk.eric.funnymod.utils.classes.PosRot;
 import hk.eric.funnymod.utils.classes.XYRot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.Packet;
@@ -77,6 +78,21 @@ public class PacketUtil {
         public ServerboundMovePlayerPacketBuilder(boolean onGround) {
             this.onGround = onGround;
             this.hasOnGround = true;
+        }
+
+        public ServerboundMovePlayerPacketBuilder setPosRot(PosRot posRot) {
+            if (posRot.hasPos()) {
+                this.x = posRot.getX();
+                this.y = posRot.getY();
+                this.z = posRot.getZ();
+                this.hasPos = true;
+            }
+            if (posRot.hasRot()) {
+                this.yaw = posRot.getYaw();
+                this.pitch = posRot.getPitch();
+                this.hasRot = true;
+            }
+            return this;
         }
 
         public ServerboundMovePlayerPacketBuilder setPos(double x, double y, double z) {
