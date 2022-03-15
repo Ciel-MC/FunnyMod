@@ -4,7 +4,10 @@ import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.combat.KillAuraModule;
-import hk.eric.funnymod.utils.*;
+import hk.eric.funnymod.utils.EntityUtil;
+import hk.eric.funnymod.utils.MathUtil;
+import hk.eric.funnymod.utils.PacketUtil;
+import hk.eric.funnymod.utils.RenderUtil;
 import hk.eric.funnymod.utils.classes.ThreeDimensionalLine;
 import hk.eric.funnymod.utils.classes.XYRot;
 import hk.eric.funnymod.utils.classes.minecraftPlus.BetterBlockPos;
@@ -16,7 +19,6 @@ import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -48,9 +50,8 @@ public class InfiniteKillAuraMode extends KillauraMode {
     }
 
     @Override
-    public Stream<LivingEntity> process(Stream<LivingEntity> entityStream) {
+    public Stream<? extends LivingEntity> process(Stream<? extends LivingEntity> entityStream) {
         return entityStream
-                .filter(e -> e instanceof EnderDragon)
                 .filter(e -> MathUtil.getDistance3D(e.position(), FunnyModClient.mc.player.position()) <= KillAuraModule.infiniteAuraRange.getValue() * KillAuraModule.infiniteAuraRange.getValue())
                 .filter(e -> {
                     if (KillAuraModule.infiniteAuraBypass.getValue() != KillAuraModule.TeleportBypass.PAPER) {
@@ -99,7 +100,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
             XYRot rot = MathUtil.getLookAtRotation(eyePos, MathUtil.closestPointInAABB(eyePos, entity.getBoundingBox()));
             linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
-            sender.accept(PacketUtil.ServerboundMovePlayerPacketBuilder.create()
+            sender.accept(PacketUtil.movePlayerPacketBuilder()
                     .setPos(pos)
                     .setRot(rot)
                     .setOnGround(true)

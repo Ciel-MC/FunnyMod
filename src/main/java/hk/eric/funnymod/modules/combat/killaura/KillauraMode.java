@@ -14,7 +14,7 @@ public abstract class KillauraMode {
      * @param entityStream The stream to filter.
      * @return The filtered stream.
      */
-    public abstract Stream<LivingEntity> process(Stream<LivingEntity> entityStream);
+    public abstract Stream<? extends LivingEntity> process(Stream<? extends LivingEntity> entityStream);
 
     /**
      * Attacks the {@code entity} and fires an {@link AttackEvent}.

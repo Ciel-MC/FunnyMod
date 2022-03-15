@@ -19,6 +19,7 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.utils.*;
+import hk.eric.funnymod.utils.classes.TimedCounter;
 import hk.eric.funnymod.utils.classes.XYRot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
@@ -41,6 +42,8 @@ public class DebugModule extends ToggleableModule implements HasComponents {
     public static int ppsReceived = 0;
 
     private static double distance = 0;
+
+    public static final TimedCounter counter = new TimedCounter(1000);
 
     private static final EventHandler<PacketEvent> packetEventHandler = new EventHandler<>() {
         @Override
@@ -150,11 +153,13 @@ public class DebugModule extends ToggleableModule implements HasComponents {
                 context.getInterface().drawString(pos, 10, "Pitch: " + getPlayer().getXRot() + " Yaw: " + getPlayer().getYHeadRot(), new Color(255, 255, 255));
                 pos.translate(0, 10);
                 context.getInterface().drawString(pos, 10, "Closest Point: " + distance, new Color(255, 255, 255));
+                pos.translate(0, 10);
+                context.getInterface().drawString(pos, 10, "Counter: " + counter.getCount(), new Color(255, 255, 255));
             }
 
             @Override
             public Dimension getSize(IInterface inter) {
-                return new Dimension(500, 60);
+                return new Dimension(500, 70);
             }
         });
     }

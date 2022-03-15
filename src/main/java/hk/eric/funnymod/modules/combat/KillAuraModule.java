@@ -3,6 +3,7 @@ package hk.eric.funnymod.modules.combat;
 import com.lukflug.panelstudio.base.IToggleable;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
+import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
@@ -13,7 +14,10 @@ import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSet
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.combat.killaura.KillauraMode;
 import hk.eric.funnymod.modules.combat.killaura.KillauraModes;
+import hk.eric.funnymod.modules.debug.DebugModule;
 import hk.eric.funnymod.utils.EntityUtil;
+import hk.eric.funnymod.utils.classes.Flag;
+import hk.eric.funnymod.utils.classes.TimedAPSCounter;
 import hk.eric.funnymod.utils.classes.pathFind.AStarPathFinder;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,8 +26,13 @@ public class KillAuraModule extends ToggleableModule {
 
     private static EventState state = EventState.PRE;
 
+    private static final TimedAPSCounter timer = new TimedAPSCounter();
+
+    private static final Flag attackTick = new Flag();
+
     private static KillAuraModule instance;
     public static final EnumSettingWithSubSettings<KillAuraMode> killAuraMode = new EnumSettingWithSubSettings<>("Killaura Mode", "KillAuraMode", "Mode", KillAuraMode.TELEPORT, KillAuraMode.class);
+    public static final IntegerSetting attacksPerSecond = new IntegerSetting("Max Attacks Per Second", "KillAuraAttacksPerSecond", "Attacks per second", 1, 20, 18, timer::setAPS);
     public static final EnumSetting<KillAuraType> type = new EnumSetting<>("Type", "KillAuraType", "The type of the tick to attack", KillAuraType.PRE, KillAuraType.class);
     public static final EnumSetting<SortType> sortType = new EnumSetting<>("Sort Type", "InfiniteAuraSortType", "How to sort enemies", SortType.HEALTH, SortType.class);
 
@@ -40,19 +49,27 @@ public class KillAuraModule extends ToggleableModule {
     public static final BooleanSetting noAttackCooldown = new BooleanSetting("No attack cooldown", "KillAuraNoCooldown", "Assume no 1.9+ attack cooldown", false);
     public static final KeybindSetting keybind = new KeybindSetting("Keybind", "KillAuraKeybind", null, -1, () -> instance.toggle(), true);
 
-    private static final EventHandler<TickEvent> aura = new EventHandler<>(){
+    private static final EventHandler<Render3DEvent.Pre> render3DEventHandler = new EventHandler<>() {
         @Override
-        public void handle(TickEvent tickEvent) {
+        public void handle(Render3DEvent.Pre event) {
+            if (timer.canAttack()) {
+                attackTick.set();
+            }
+        }
+    };
+
+    private static final EventHandler<MotionEvent> aura = new EventHandler<>(){
+        @Override
+        public void handle(MotionEvent motionEvent) {
             if (!noAttackCooldown.isOn() && getPlayer().getAttackStrengthScale(0.0f) < 1.0f) return;
-            if (shouldAttack(tickEvent.getState())) {
+            if (shouldAttack(motionEvent.getState()) && attackTick.consume()) {
                 KillauraMode mode = getMode();
                 mode.process(
-                        EntityUtil.streamAllEntities(new EntityUtil.EntityFilterBuilder()
-                                        .setPredicate(entityAccess -> entityAccess instanceof LivingEntity && !(entityAccess instanceof LocalPlayer))
-                                        .createEntityFilter())
-                                .map(LivingEntity.class::cast)
-                                .filter(entity -> entity.getHealth() > 0)
-                ).forEach(mode::attack);
+                        EntityUtil.streamLivingEntities(new EntityUtil.EntityFilterBuilder<LivingEntity>()
+                                .setPredicate(livingEntity -> !(livingEntity instanceof LocalPlayer))
+                                .createEntityFilter()
+                        ).filter(LivingEntity::isAlive)
+                ).peek((e) -> DebugModule.counter.count()).forEach(mode::attack);
             }
         }
     };
@@ -77,6 +94,7 @@ public class KillAuraModule extends ToggleableModule {
         super("KillAura", null);
         instance = this;
         settings.add(killAuraMode);
+        settings.add(attacksPerSecond);
         settings.add(type);
         settings.add(sortType);
         killAuraMode.addSubSettings(KillAuraMode.TELEPORT, infiniteAuraRange, infiniteAuraMaxStep, infiniteAuraPacketLimit, infiniteAuraTargetLimit, infiniteAuraBypass);
@@ -85,9 +103,12 @@ public class KillAuraModule extends ToggleableModule {
         settings.add(noAttackCooldown);
         settings.add(keybind);
 
+        timer.setAPS(attacksPerSecond.getValue());
+
         registerOnOffHandler(aura);
         registerOnOffHandler(renderHandler);
         registerOnOffHandler(tickEventHandler);
+        registerOnOffHandler(render3DEventHandler);
     }
 
     private static boolean shouldAttack(EventState state) {

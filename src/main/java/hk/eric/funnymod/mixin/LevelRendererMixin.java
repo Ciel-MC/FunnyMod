@@ -2,7 +2,6 @@ package hk.eric.funnymod.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
-import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class LevelRendererMixin {
     @Inject(method = "renderLevel", at = @At("HEAD"))
     public void injectRenderLevelHead(PoseStack poseStack, float partialTicks, long finishTimeNano, boolean drawBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightMapIn, Matrix4f projectionIn, CallbackInfo ci) {
-        new Render3DEvent(poseStack, partialTicks, projectionIn, EventState.PRE).call();
+        new Render3DEvent.Pre(poseStack, partialTicks, projectionIn).call();
     }
 
     @Inject(
@@ -27,7 +26,7 @@ public class LevelRendererMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     public void injectRenderLevelReturn(PoseStack poseStack, float partialTicks, long finishTimeNano, boolean drawBlockOutline, Camera camera, GameRenderer gameRenderer, LightTexture lightMapIn, Matrix4f projectionIn, CallbackInfo ci) {
-        new Render3DEvent(poseStack, partialTicks, projectionIn, EventState.POST).call();
+        new Render3DEvent.Post(poseStack, partialTicks, projectionIn).call();
     }
 
 }

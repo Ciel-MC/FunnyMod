@@ -22,8 +22,8 @@ public class CriticalsModule extends ToggleableModule {
                 if (canCrit(getPlayer(),false)) {
                     double y = getPlayer().getY();
                     PacketUtil.ServerboundMovePlayerPacketBuilder builder
-                            = PacketUtil.ServerboundMovePlayerPacketBuilder
-                            .create()
+                            = PacketUtil
+                            .movePlayerPacketBuilder()
                             .setPos(getPlayer().position())
                             .setOnGround(true);
                     PacketUtil.send(builder.setY(y + .11).build());

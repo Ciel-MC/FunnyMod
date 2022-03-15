@@ -14,8 +14,9 @@ public class AStarPathFinder {
             20
     );
 
+    //TODO: Add vertical clipping
     public static Node search(Node start, Node end, int maxSteps, boolean diagonal, BiFunction<Node, Node, Boolean> ended, boolean dontReturnFail) {
-        Queue<Node> queue = new PriorityQueue<>(cache.get(start,end,diagonal)); //add different accuracies to pathfinding algorithm
+        Queue<Node> queue = new PriorityQueue<>(cache.get(start,end,diagonal));
         Set<Node> explored = new HashSet<>();
         Node current = start;
         queue.add(start);

@@ -13,7 +13,7 @@ public class Render3DEvent extends Event implements HasState {
     private final Matrix4f projection;
     private final EventState state;
 
-    public Render3DEvent(PoseStack stack, float partialTicks, Matrix4f projection, EventState state) {
+    private Render3DEvent(PoseStack stack, float partialTicks, Matrix4f projection, EventState state) {
         this.stack = stack;
         this.partialTicks = partialTicks;
         this.projection = projection;
@@ -35,5 +35,17 @@ public class Render3DEvent extends Event implements HasState {
     @Override
     public EventState getState() {
         return state;
+    }
+
+    public static class Pre extends Render3DEvent {
+        public Pre(PoseStack stack, float partialTicks, Matrix4f projection) {
+            super(stack, partialTicks, projection, EventState.PRE);
+        }
+    }
+
+    public static class Post extends Render3DEvent {
+        public Post(PoseStack stack, float partialTicks, Matrix4f projection) {
+            super(stack, partialTicks, projection, EventState.POST);
+        }
     }
 }

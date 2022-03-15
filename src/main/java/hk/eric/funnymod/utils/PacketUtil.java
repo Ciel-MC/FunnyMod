@@ -55,6 +55,10 @@ public class PacketUtil {
         return new ServerboundAcceptTeleportationPacket(packet.getId());
     }
 
+    public static ServerboundMovePlayerPacketBuilder movePlayerPacketBuilder() {
+        return new ServerboundMovePlayerPacketBuilder();
+    }
+
     public static class ServerboundMovePlayerPacketBuilder {
         private double x;
         private double y;
@@ -69,10 +73,6 @@ public class PacketUtil {
         private boolean hasOnGround;
 
         private ServerboundMovePlayerPacketBuilder() {
-        }
-
-        public static ServerboundMovePlayerPacketBuilder create() {
-            return new ServerboundMovePlayerPacketBuilder();
         }
 
         public ServerboundMovePlayerPacketBuilder(boolean onGround) {

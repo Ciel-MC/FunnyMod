@@ -35,8 +35,8 @@ public class MultiPlayerGameModeMixin {
         if (BowInstantKillModule.getToggle().isOn() && player.getInventory().getSelected().getItem().equals(Items.BOW)) {
             PacketUtil.send(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.START_SPRINTING));
             for(int i = 0; i < BowInstantKillModule.cycles.getValue(); ++i) {
-                PacketUtil.send(PacketUtil.ServerboundMovePlayerPacketBuilder.create().setPos(mc.player.position().add(0, - 1.0E-9D, 0)).setOnGround(true).build());
-                PacketUtil.send(PacketUtil.ServerboundMovePlayerPacketBuilder.create().setPos(mc.player.position().add(0, 1.0E-9D, 0)).setOnGround(false).build());
+                PacketUtil.send(PacketUtil.movePlayerPacketBuilder().setPos(mc.player.position().add(0, - 1.0E-9D, 0)).setOnGround(true).build());
+                PacketUtil.send(PacketUtil.movePlayerPacketBuilder().setPos(mc.player.position().add(0, 1.0E-9D, 0)).setOnGround(false).build());
             }
             PacketUtil.send(PacketUtil.createPlayerCommand(ServerboundPlayerCommandPacket.Action.STOP_SPRINTING));
         }

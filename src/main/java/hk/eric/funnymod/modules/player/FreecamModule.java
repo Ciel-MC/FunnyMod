@@ -29,7 +29,7 @@ public class FreecamModule extends ToggleableModule {
             if (packet instanceof ServerboundMovePlayerPacket movePlayerPacket) {
                 if (!((HasFlag) movePlayerPacket).getFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD)) {
                     event.setCancelled(true);
-                    ServerboundMovePlayerPacket p = PacketUtil.ServerboundMovePlayerPacketBuilder.create()
+                    ServerboundMovePlayerPacket p = PacketUtil.movePlayerPacketBuilder()
                             .setOnGround(fakePlayer.isOnGround())
                             .build();
                     ((HasFlag) p).setFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD, true);
@@ -43,7 +43,7 @@ public class FreecamModule extends ToggleableModule {
                 fakePlayer.moveTo(pos.x, pos.y, pos.z, rot.getYRot(), rot.getXRot());
 
                 PacketUtil.send(PacketUtil.creatAcceptTeleport(playerPositionPacket));
-                PacketUtil.send(PacketUtil.ServerboundMovePlayerPacketBuilder.create()
+                PacketUtil.send(PacketUtil.movePlayerPacketBuilder()
                         .setPos(pos)
                         .setRot(rot)
                         .setOnGround(false)

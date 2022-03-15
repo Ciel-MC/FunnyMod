@@ -60,7 +60,7 @@ public class EntityUtil {
         }
     }
 
-    public static Stream<? extends Entity> streamAllEntities(EntityFilter filter) {
+    public static Stream<? extends Entity> streamAllEntities(EntityFilter<Entity> filter) {
         Iterable<? extends EntityAccess> entities = getAllEntities();
         if (entities == null) {
             return Stream.empty();
@@ -69,11 +69,20 @@ public class EntityUtil {
         }
     }
 
-    public static Entity getClosestEntity() {
-        return getClosestEntity(EntityFilter.ALL);
+    public static Stream<? extends LivingEntity> streamLivingEntities(EntityFilter<LivingEntity> filter) {
+        Iterable<? extends EntityAccess> entities = getAllEntities();
+        if (entities == null) {
+            return Stream.empty();
+        }else {
+            return filter.process(StreamSupport.stream(entities.spliterator(), filter.parallel()).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast));
+        }
     }
 
-    public static Entity getClosestEntity(EntityFilter filter) {
+    public static Entity getClosestEntity() {
+        return getClosestEntity(EntityFilter.ALL());
+    }
+
+    public static Entity getClosestEntity(EntityFilter<Entity> filter) {
         if (mc.player == null) {
             return null;
         }else {
@@ -81,14 +90,16 @@ public class EntityUtil {
         }
     }
 
-    public record EntityFilter(boolean sortByDistance,
-                               Predicate<Entity> predicate,
+    public record EntityFilter<T extends Entity>(boolean sortByDistance,
+                               Predicate<T> predicate,
                                boolean parallel) {
 
-        public static final EntityFilter ALL = new EntityFilter(false, null, false);
+        public static < T extends Entity> EntityFilter<T> ALL() {
+            return new EntityFilter<>(false, null, false);
+        }
 
-        public Stream<? extends Entity> process(@NotNull Stream<? extends Entity> stream) {
-            Stream<? extends Entity> filtered;
+        public Stream<T> process(@NotNull Stream<T> stream) {
+            Stream<T> filtered;
             if (predicate != null) {
                 filtered = stream.filter(predicate);
             } else {
@@ -101,28 +112,28 @@ public class EntityUtil {
         }
     }
 
-    public static class EntityFilterBuilder {
+    public static class EntityFilterBuilder<T extends Entity> {
         private boolean sortByDistance = false;
-        private Predicate<Entity> predicate = null;
+        private Predicate<T> predicate = null;
         private boolean parallel = false;
 
-        public EntityFilterBuilder setPredicate(Predicate<Entity> predicate) {
+        public EntityFilterBuilder<T> setPredicate(Predicate<T> predicate) {
             this.predicate = predicate;
             return this;
         }
 
-        public EntityFilterBuilder setParallel(boolean parallel) {
+        public EntityFilterBuilder<T> setParallel(boolean parallel) {
             this.parallel = parallel;
             return this;
         }
 
-        public EntityFilterBuilder setSortByDistance(boolean sortByDistance) {
+        public EntityFilterBuilder<T> setSortByDistance(boolean sortByDistance) {
             this.sortByDistance = sortByDistance;
             return this;
         }
 
-        public EntityUtil.EntityFilter createEntityFilter() {
-            return new EntityUtil.EntityFilter(sortByDistance, predicate, parallel);
+        public EntityUtil.EntityFilter<T> createEntityFilter() {
+            return new EntityUtil.EntityFilter<T>(sortByDistance, predicate, parallel);
         }
     }
 }
