@@ -9,8 +9,8 @@ import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.KeybindComponent;
 import com.lukflug.panelstudio.widget.TextField;
-import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.util.function.IntPredicate;
 import java.util.function.Supplier;

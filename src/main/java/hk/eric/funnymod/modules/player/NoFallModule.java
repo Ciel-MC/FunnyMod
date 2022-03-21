@@ -8,8 +8,8 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenServerboundMovePlayerPacket;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.classes.Result;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.Result;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 
 public class NoFallModule extends ToggleableModule {

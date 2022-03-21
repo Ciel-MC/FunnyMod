@@ -20,7 +20,7 @@ import com.lukflug.panelstudio.theme.RendererTuple;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.Button;
 import com.lukflug.panelstudio.widget.ResizableComponent;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.function.Supplier;

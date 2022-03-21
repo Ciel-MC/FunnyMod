@@ -3,7 +3,6 @@ package hk.eric.funnymod;
 import baritone.api.BaritoneAPI;
 import baritone.api.IBaritone;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.viaversion.fabric.mc117.ViaFabric;
 import hk.eric.funnymod.event.FabricEventAdapter;
 import hk.eric.funnymod.gui.Gui;
 import hk.eric.funnymod.mixin.MixinConfigPlugin;
@@ -32,7 +31,7 @@ public class FunnyModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         if (!MixinConfigPlugin.isEnabled) return;
-        ViaFabric.config.setClientSideEnabled(true);
+//        ViaFabric.config.setClientSideEnabled(true);
         new Gui().init();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (!initialized) {

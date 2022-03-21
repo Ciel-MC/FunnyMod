@@ -19,7 +19,7 @@ import com.lukflug.panelstudio.widget.ITextFieldKeys;
 import com.lukflug.panelstudio.widget.ScrollBarComponent;
 import com.lukflug.panelstudio.widget.SearchableRadioButton;
 import hk.eric.funnymod.utils.Constants;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.util.Arrays;

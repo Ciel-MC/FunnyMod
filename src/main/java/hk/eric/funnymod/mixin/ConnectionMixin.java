@@ -21,7 +21,7 @@ public abstract class ConnectionMixin {
         if (new PacketEvent.SendPacketEvent(packet).call().isCancelled()) {
             ci.cancel();
         }else {
-            DebugModule.countSend();
+            DebugModule.packetSendCounter.count();
         }
     }
 
@@ -30,7 +30,7 @@ public abstract class ConnectionMixin {
         if (new PacketEvent.ReceivePacketEvent(packet).call().isCancelled()) {
             ci.cancel();
         }else {
-            DebugModule.countReceive();
+            DebugModule.packetRecvCounter.count();
         }
     }
 

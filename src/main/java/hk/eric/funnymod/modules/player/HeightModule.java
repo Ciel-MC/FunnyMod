@@ -1,16 +1,16 @@
 package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.classes.TypedPairList;
+import hk.eric.ericLib.utils.maps.TwoDimensionalEnumMap;
+import hk.eric.ericLib.utils.references.FinalFloatReference;
+import hk.eric.ericLib.utils.references.FloatReference;
+import hk.eric.ericLib.utils.references.LinkedFloatReferenceImpl;
 import hk.eric.funnymod.gui.setting.FloatSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.references.FinalFloatReference;
-import hk.eric.funnymod.utils.references.FloatReference;
-import hk.eric.funnymod.utils.references.LinkedFloatReferenceImpl;
-import hk.eric.funnymod.utils.classes.*;
-import hk.eric.funnymod.utils.maps.TwoDimensionalEnumMap;
 
 public class HeightModule extends ToggleableModule {
 

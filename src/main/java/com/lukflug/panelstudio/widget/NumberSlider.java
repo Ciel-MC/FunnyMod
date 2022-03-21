@@ -2,7 +2,7 @@ package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.setting.INumberSetting;
 import com.lukflug.panelstudio.theme.ISliderRenderer;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * Component that represents a number-valued setting through a {@link Slider}.

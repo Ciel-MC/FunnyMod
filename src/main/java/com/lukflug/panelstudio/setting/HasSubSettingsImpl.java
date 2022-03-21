@@ -1,6 +1,6 @@
 package com.lukflug.panelstudio.setting;
 
-import hk.eric.funnymod.utils.ArrayUtil;
+import hk.eric.ericLib.utils.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

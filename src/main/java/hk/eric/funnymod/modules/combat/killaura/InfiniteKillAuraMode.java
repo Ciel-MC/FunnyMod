@@ -1,18 +1,18 @@
 package hk.eric.funnymod.modules.combat.killaura;
 
+import hk.eric.ericLib.utils.ClientPacketUtil;
+import hk.eric.ericLib.utils.MathUtil;
+import hk.eric.ericLib.utils.classes.ThreeDimensionalLine;
+import hk.eric.ericLib.utils.classes.XYRot;
+import hk.eric.ericLib.utils.classes.minecraftPlus.BetterBlockPos;
+import hk.eric.ericLib.utils.classes.pathFind.AStarPathFinder;
+import hk.eric.ericLib.utils.classes.pathFind.Node;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.events.Render3DEvent;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.modules.combat.KillAuraModule;
 import hk.eric.funnymod.utils.EntityUtil;
-import hk.eric.funnymod.utils.MathUtil;
-import hk.eric.funnymod.utils.PacketUtil;
 import hk.eric.funnymod.utils.RenderUtil;
-import hk.eric.funnymod.utils.classes.ThreeDimensionalLine;
-import hk.eric.funnymod.utils.classes.XYRot;
-import hk.eric.funnymod.utils.classes.minecraftPlus.BetterBlockPos;
-import hk.eric.funnymod.utils.classes.pathFind.AStarPathFinder;
-import hk.eric.funnymod.utils.classes.pathFind.Node;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
@@ -79,7 +79,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
     }
 
     public static void moveTo(LocalPlayer player, Entity entity, int maxStep, Consumer<Packet<?>> sender, Function<List<Node>, Boolean> canGo, BiFunction<Node, Node, Boolean> ended, boolean returnOnFail) {
-        Node path = AStarPathFinder.search(BetterBlockPos.from(player).asNode(), BetterBlockPos.from(entity).asNode(), maxStep, true, ended, !returnOnFail);
+        Node path = AStarPathFinder.search(BetterBlockPos.from(player).asNode(), BetterBlockPos.from(entity).asNode(), maxStep, true, ended, !returnOnFail, FunnyModClient.mc.level);
         if (path == null) {
             return;
         }
@@ -100,7 +100,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
             Vec3 eyePos = node.getPos().toVec3().add(0, player.getEyeHeight(), 0);
             XYRot rot = MathUtil.getLookAtRotation(eyePos, MathUtil.closestPointInAABB(eyePos, entity.getBoundingBox()));
             linesToDraw.add(ThreeDimensionalLine.of(eyePos, eyePos.add(MathUtil.getCoordFromAngles(rot.getYaw(), rot.getPitch(), 3))));
-            sender.accept(PacketUtil.movePlayerPacketBuilder()
+            sender.accept(ClientPacketUtil.movePlayerPacketBuilder()
                     .setPos(pos)
                     .setRot(rot)
                     .setOnGround(true)
@@ -130,7 +130,7 @@ public class InfiniteKillAuraMode extends KillauraMode {
 
     private void sendPacket(Packet<?> packet) {
         if (packetThisTick < KillAuraModule.infiniteAuraPacketLimit.getValue()) {
-            PacketUtil.send(packet);
+            ClientPacketUtil.send(packet);
             packetThisTick++;
         }
     }

@@ -6,14 +6,14 @@ import baritone.api.event.events.ChatEvent;
 import baritone.api.event.events.PlayerUpdateEvent;
 import baritone.api.event.events.SprintStateEvent;
 import com.mojang.authlib.GameProfile;
+import hk.eric.ericLib.utils.MathUtil;
 import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.modules.mcqp.MCQPPreventDropModule;
 import hk.eric.funnymod.modules.movement.NoSlowModule;
 import hk.eric.funnymod.modules.movement.SprintModule;
 import hk.eric.funnymod.modules.player.NoFallModule;
-import hk.eric.funnymod.utils.MathUtil;
-import hk.eric.funnymod.utils.classes.Result;
+import hk.eric.ericLib.utils.classes.Result;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.client.ClientRecipeBook;
@@ -76,7 +76,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         if (MCQPPreventDropModule.getToggle().isOn()) {
             if (this.getInventory().getSelected() != null) {
                 ChatManager.sendMessage(Component.text("A feature has stopped you from dropping your hotbar.").color(TextColor.color(0x00FFFF)));
-                cir.cancel();
                 cir.setReturnValue(false);
             }
         }

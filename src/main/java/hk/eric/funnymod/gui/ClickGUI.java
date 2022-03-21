@@ -18,6 +18,7 @@ import com.lukflug.panelstudio.popup.PopupTuple;
 import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.*;
 import com.lukflug.panelstudio.widget.*;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.ColorSetting;
@@ -26,7 +27,6 @@ import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.Theme;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.classes.getters.Getter;
 import net.minecraft.ChatFormatting;
 import org.lwjgl.glfw.GLFW;
 

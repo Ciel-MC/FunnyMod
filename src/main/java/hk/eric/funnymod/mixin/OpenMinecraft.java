@@ -14,7 +14,7 @@ public interface OpenMinecraft /*extends OpenMinecraft*/ {
     Timer getTimer();
 
     @Invoker("startAttack")
-    void invokeStartAttack();
+    boolean invokeStartAttack();
 
     @Invoker("startUseItem")
     void invokeStartUseItem();

@@ -15,7 +15,7 @@ repositories {
     }
     maven {
         allowInsecureProtocol(true)
-        url = "http://172.105.231.97"
+        url = "http://172.105.231.97/releases"
     }
     maven {
         name = "meteor-maven-snapshots"
@@ -46,15 +46,18 @@ dependencies {
     include(modImplementation("baritone:baritone-unoptimized-fabric:${project.baritone_version}"))
 
     //Integrate with viaversion
-    include(modImplementation("com.viaversion.viafabric:viafabric:${project.viafabric_version}"))
-    modImplementation("com.viaversion.viafabric:viafabric-mc117:${project.viafabric_version}")
-    modImplementation("com.viaversion.viaversion:viaversion:${project.viaversion_version}")
+//    modImplementation("com.viaversion.fabric:viafabric:${project.viafabric_version}")
+//    modImplementation("com.viaversion.viafabric:viafabric-mc118:${project.viafabric_version}")
+//    modImplementation("com.viaversion.viaversion:viaversion:${project.viaversion_version}")
     include(modImplementation("org.yaml.snakeyml:snakeyaml:${project.snakeyaml_version}"))
 
     //For Json
     include(modImplementation ("com.fasterxml.jackson.core:jackson-core:${project.jackson_version}"))
     include(modImplementation ("com.fasterxml.jackson.core:jackson-annotations:${project.jackson_version}"))
     include(modImplementation ("com.fasterxml.jackson.core:jackson-databind:${project.jackson_version}"))
+
+    //EricLib
+    include(modImplementation("hk.eric:EricLib:${project.ericlib_version}"))
 }
 
 processResources {

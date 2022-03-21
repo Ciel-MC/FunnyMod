@@ -1,12 +1,12 @@
 package hk.eric.funnymod.modules.combat;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventPriority;
 import hk.eric.funnymod.event.events.AttackEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffects;
 
@@ -21,14 +21,14 @@ public class CriticalsModule extends ToggleableModule {
             if (!event.isCancelled()) {
                 if (canCrit(getPlayer(),false)) {
                     double y = getPlayer().getY();
-                    PacketUtil.ServerboundMovePlayerPacketBuilder builder
-                            = PacketUtil
+                    ClientPacketUtil.ServerboundMovePlayerPacketBuilder builder
+                            = ClientPacketUtil
                             .movePlayerPacketBuilder()
                             .setPos(getPlayer().position())
                             .setOnGround(true);
-                    PacketUtil.send(builder.setY(y + .11).build());
-                    PacketUtil.send(builder.setY(y + 0.1100013579).build());
-                    PacketUtil.send(builder.setY(y + 0.0000013579).build());
+                    ClientPacketUtil.send(builder.setY(y + .11).build());
+                    ClientPacketUtil.send(builder.setY(y + 0.1100013579).build());
+                    ClientPacketUtil.send(builder.setY(y + 0.0000013579).build());
                 }
             }
         }

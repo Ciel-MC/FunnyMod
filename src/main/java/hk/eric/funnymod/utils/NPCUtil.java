@@ -1,5 +1,6 @@
 package hk.eric.funnymod.utils;
 
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.combat.killaura.InfiniteKillAuraMode;
@@ -23,10 +24,10 @@ public class NPCUtil {
         ((OpenLevel) level).callGetEntities().getAll().forEach(entity -> {
             if (entity.getType() == type && entity.getName().getString().contains(name)) {
                 if (mouseButton == MouseUtil.MouseButton.LEFT) {
-                    PacketUtil.send(ServerboundInteractPacket.createAttackPacket(entity,false));
+                    ClientPacketUtil.send(ServerboundInteractPacket.createAttackPacket(entity,false));
                 }else {
-                    InfiniteKillAuraMode.moveTo(FunnyModClient.mc.player, entity, 10000, PacketUtil::send, (list) -> true, ((node, node2) -> node.distanceFloat(node2, true) < 6), true);
-                    PacketUtil.send(ServerboundInteractPacket.createInteractionPacket(entity, false, InteractionHand.MAIN_HAND, entity.position()));
+                    InfiniteKillAuraMode.moveTo(FunnyModClient.mc.player, entity, 10000, ClientPacketUtil::send, (list) -> true, ((node, node2) -> node.distanceFloat(node2, true) < 6), true);
+                    ClientPacketUtil.send(ServerboundInteractPacket.createInteractionPacket(entity, false, InteractionHand.MAIN_HAND, entity.position()));
                 }
             }
         });

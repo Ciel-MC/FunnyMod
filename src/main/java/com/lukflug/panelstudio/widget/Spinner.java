@@ -13,8 +13,8 @@ import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ITheme;
 import com.lukflug.panelstudio.theme.ThemeTuple;
-import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * A spinner for fine-tuning numerical settings.

@@ -4,7 +4,7 @@ import hk.eric.funnymod.modules.movement.AntiVineModule;
 import hk.eric.funnymod.modules.player.NoJumpDelayModule;
 import hk.eric.funnymod.modules.visual.EspModule;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -45,8 +45,8 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Redirect(method = "onClimbable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/Tag;)Z"))
-    public boolean redirectOnClimbable(BlockState blockState, Tag<Block> tag) {
+    @Redirect(method = "onClimbable", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/tags/TagKey;)Z"))
+    public boolean redirectOnClimbable(BlockState blockState, TagKey<Block> tag) {
         if (AntiVineModule.getToggle().isOn()) {
             if (tag == BlockTags.CLIMBABLE && blockState.getBlock().equals(Blocks.VINE)) {
                 return false;

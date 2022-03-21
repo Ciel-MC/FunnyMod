@@ -1,8 +1,8 @@
 package hk.eric.funnymod.utils.teleport;
 
-import hk.eric.funnymod.utils.classes.PosRot;
-import hk.eric.funnymod.utils.classes.getters.Getter;
-import hk.eric.funnymod.utils.classes.pathFind.Node;
+import hk.eric.ericLib.utils.classes.PosRot;
+import hk.eric.ericLib.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.pathFind.Node;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;

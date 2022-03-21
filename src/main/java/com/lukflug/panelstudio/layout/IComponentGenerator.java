@@ -6,8 +6,8 @@ import com.lukflug.panelstudio.component.IComponent;
 import com.lukflug.panelstudio.setting.*;
 import com.lukflug.panelstudio.theme.ThemeTuple;
 import com.lukflug.panelstudio.widget.*;
-import hk.eric.funnymod.utils.classes.getters.CachedLambdaGetter;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.CachedLambdaGetter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.util.function.Supplier;
 

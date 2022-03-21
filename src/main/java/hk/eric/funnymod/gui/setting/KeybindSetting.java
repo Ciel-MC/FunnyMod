@@ -3,8 +3,8 @@ package hk.eric.funnymod.gui.setting;
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IKeybindSetting;
 import com.mojang.blaze3d.platform.InputConstants;
-import hk.eric.funnymod.utils.classes.Converters;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
+import hk.eric.ericLib.utils.classes.Converters;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.function.Consumer;

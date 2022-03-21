@@ -1,6 +1,7 @@
 package hk.eric.funnymod.modules.movement;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.MathUtil;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.MotionEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
@@ -9,7 +10,6 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.player.FreecamModule;
-import hk.eric.funnymod.utils.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.phys.Vec2;
 

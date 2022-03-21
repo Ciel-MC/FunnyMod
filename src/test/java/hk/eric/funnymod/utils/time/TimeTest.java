@@ -1,5 +1,7 @@
 package hk.eric.funnymod.utils.time;
 
+import hk.eric.ericLib.utils.time.Time;
+import hk.eric.ericLib.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

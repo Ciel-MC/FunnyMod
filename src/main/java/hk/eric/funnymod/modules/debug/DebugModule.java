@@ -8,6 +8,10 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.hud.HUDComponent;
 import com.lukflug.panelstudio.setting.IClient;
+import hk.eric.ericLib.utils.MathUtil;
+import hk.eric.ericLib.utils.RotationUtil;
+import hk.eric.ericLib.utils.classes.TimedCounter;
+import hk.eric.ericLib.utils.classes.XYRot;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.PacketEvent;
@@ -18,9 +22,8 @@ import hk.eric.funnymod.gui.setting.FloatSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.*;
-import hk.eric.funnymod.utils.classes.TimedCounter;
-import hk.eric.funnymod.utils.classes.XYRot;
+import hk.eric.funnymod.utils.EntityUtil;
+import hk.eric.funnymod.utils.RenderUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -30,20 +33,17 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.util.Collections;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Supplier;
 
 public class DebugModule extends ToggleableModule implements HasComponents {
 
     private static final Logger logger = LogManager.getLogger("FunnyMod Debug");
 
-    public static int ppsSend = 0;
-    public static int ppsReceived = 0;
-
     private static double distance = 0;
 
     public static final TimedCounter counter = new TimedCounter(1000);
+    public static final TimedCounter packetSendCounter = new TimedCounter(1000);
+    public static final TimedCounter packetRecvCounter = new TimedCounter(1000);
 
     private static final EventHandler<PacketEvent> packetEventHandler = new EventHandler<>() {
         @Override
@@ -84,7 +84,6 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         }
     };
 
-    private static final Timer timer = new Timer();
     private static DebugModule instance;
     public static final BooleanSetting logReceivePacket = new BooleanSetting("Log receive packet", "logReceivePacket", "Logs all packets received by the client", false);
     public static final BooleanSetting logSendPacket = new BooleanSetting("Log send packet", "logSendPacket", "Logs all packets sent by the client", false);
@@ -116,35 +115,15 @@ public class DebugModule extends ToggleableModule implements HasComponents {
         return instance.getToggleable();
     }
 
-    public static void countSend() {
-        ppsSend++;
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ppsSend--;
-            }
-        }, 1000);
-    }
-
-    public static void countReceive() {
-        ppsReceived++;
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ppsReceived--;
-            }
-        }, 1000);
-    }
-
     public Set<IFixedComponent> getComponents(IClient client, IContainer<IFixedComponent> container, Supplier<Animation> animation) {
         return Collections.singleton(new HUDComponent(() -> "MCQP Display", new Point(500, 10), "mcqp") {
             @Override
             public void render(Context context) {
                 super.render(context);
                 Point pos = context.getPos();
-                context.getInterface().drawString(pos, 10, "Packets Sent Per Second: " + ppsSend, new Color(0, 255, 0));
+                context.getInterface().drawString(pos, 10, "Packets Sent Per Second: " + packetSendCounter.getCount(), new Color(0, 255, 0));
                 pos.translate(0, 10);
-                context.getInterface().drawString(pos, 10, "Packets Received Per Second: " + ppsReceived, new Color(255, 0, 0));
+                context.getInterface().drawString(pos, 10, "Packets Received Per Second: " + packetRecvCounter.getCount(), new Color(255, 0, 0));
                 pos.translate(0, 10);
                 context.getInterface().drawString(pos, 10, "Fall distance: " + getPlayer().fallDistance, getPlayer().fallDistance > 3 ? new Color(255, 0, 0) : new Color(0, 255, 0));
                 pos.translate(0, 10);

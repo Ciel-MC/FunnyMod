@@ -1,10 +1,10 @@
 package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
+import hk.eric.ericLib.utils.MathUtil;
+import hk.eric.ericLib.utils.classes.Pair;
+import hk.eric.ericLib.utils.classes.lamdba.TriConsumer;
+import hk.eric.ericLib.utils.classes.lamdba.TriFunction;
 import hk.eric.funnymod.utils.EntityUtil;
-import hk.eric.funnymod.utils.MathUtil;
-import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
-import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
-import hk.eric.funnymod.utils.classes.pairs.Pair;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
@@ -52,7 +52,7 @@ public class NormalAuraMode implements AuraMode {
     public TriConsumer<LivingEntity, LocalPlayer, Consumer<Packet<?>>> getAttack() {
         return (entity, player, packetSender) -> {
             Pair<Float, Float> yawPitch = MathUtil.getLookAtRotation(player, entity.getX(), entity.getY(), entity.getZ());
-            float rotY = yawPitch.getSecond(), rotX = yawPitch.getFirst();
+            float rotY = yawPitch.second(), rotX = yawPitch.first();
             Vec3 from = player.getEyePosition(1);
             Vec3 to = entity.position().add(0, entity.getY() - entity.getBbHeight(), 0);
             HitResult result = player.pick(3,1,false);

@@ -8,6 +8,8 @@ import com.lukflug.panelstudio.component.IFixedComponent;
 import com.lukflug.panelstudio.container.IContainer;
 import com.lukflug.panelstudio.hud.HUDComponent;
 import com.lukflug.panelstudio.setting.IClient;
+import hk.eric.ericLib.utils.time.Time;
+import hk.eric.ericLib.utils.time.TimeUnit;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.UseItemEvent;
@@ -15,16 +17,14 @@ import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.HasComponents;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.time.Time;
-import hk.eric.funnymod.utils.time.TimeUnit;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class MCQPHudModule extends ToggleableModule implements HasComponents {

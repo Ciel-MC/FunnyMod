@@ -5,7 +5,7 @@ import com.lukflug.panelstudio.base.IInterface;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * Component representing an enumeration-valued setting which cycles.

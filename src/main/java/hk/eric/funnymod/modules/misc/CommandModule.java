@@ -1,6 +1,8 @@
 package hk.eric.funnymod.modules.misc;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
+import hk.eric.ericLib.utils.StringUtil;
 import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.config.ConfigManager;
 import hk.eric.funnymod.event.EventHandler;
@@ -9,8 +11,6 @@ import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.Category;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.StringUtil;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ public class CommandModule extends ToggleableModule {
         public void handle(PlayerChatEvent event) {
             if (event.getMessage().contains("{fuck}")) {
                 for (String s : fuck) {
-                    PacketUtil.send(new ServerboundChatPacket(event.getMessage().replace("{fuck}", s)));
+                    ClientPacketUtil.send(new ServerboundChatPacket(event.getMessage().replace("{fuck}", s)));
                 }
                 event.setCancelled(true);
             }

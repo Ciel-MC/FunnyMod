@@ -1,13 +1,13 @@
 package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -106,11 +106,11 @@ public class InventoryManagerModule extends ToggleableModule {
             if (dropHotbar.isOn()) {
                 Inventory inventory = p.getInventory();
                 inventory.removeItem(inventory.getItem(slot));
-                PacketUtil.send(new ServerboundSetCarriedItemPacket(slot));
-                PacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS, BlockPos.ZERO, Direction.DOWN));
+                ClientPacketUtil.send(new ServerboundSetCarriedItemPacket(slot));
+                ClientPacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.DROP_ALL_ITEMS, BlockPos.ZERO, Direction.DOWN));
             }
         } else {
-            PacketUtil.send(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<>()));
+            ClientPacketUtil.send(new ServerboundContainerClickPacket(p.inventoryMenu.containerId, p.inventoryMenu.getStateId(), slot, 1, ClickType.THROW, p.getInventory().getItem(slot), new Int2ObjectOpenHashMap<>()));
         }
     }
 

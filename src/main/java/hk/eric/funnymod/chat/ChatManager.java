@@ -1,7 +1,7 @@
 package hk.eric.funnymod.chat;
 
-import hk.eric.funnymod.utils.classes.caches.Cache;
-import hk.eric.funnymod.utils.classes.caches.HashMapCache;
+import hk.eric.ericLib.utils.classes.caches.CachedGetter;
+import hk.eric.ericLib.utils.classes.caches.HashMapCache;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.fabric.FabricClientAudiences;
 import net.kyori.adventure.text.Component;
@@ -15,7 +15,7 @@ public class ChatManager {
             .append(Component.text("[")).color(NamedTextColor.GRAY)
             .append(Component.text("Funny").color(NamedTextColor.AQUA));
 
-    private static final Cache<String, JoinConfiguration> prefixCache = new HashMapCache<>((s) -> {
+    private static final CachedGetter<String, JoinConfiguration> prefixCache = new HashMapCache<>((s) -> {
         if (s == null) {
             return JoinConfiguration.builder().prefix(
                     prefixTemplate
@@ -31,8 +31,6 @@ public class ChatManager {
                     ).build();
         }
     });
-
-    private static final JoinConfiguration prefixConfig = JoinConfiguration.builder().build();
 
     private static final Audience client = FabricClientAudiences.of().audience();
 

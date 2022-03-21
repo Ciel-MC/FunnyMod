@@ -2,7 +2,7 @@ package com.lukflug.panelstudio.widget;
 
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.theme.ThemeTuple;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * Full color picker with field and slider.

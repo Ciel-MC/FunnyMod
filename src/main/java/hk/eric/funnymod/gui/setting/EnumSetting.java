@@ -4,7 +4,7 @@ import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IEnumSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.setting.ISetting;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 
 import java.util.ArrayList;
 import java.util.Arrays;

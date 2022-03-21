@@ -1,12 +1,12 @@
 package hk.eric.funnymod.modules.mcqp;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
 import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.world.InteractionHand;
 
@@ -19,7 +19,7 @@ public class MCQPFastReviveModule extends ToggleableModule {
         @Override
         public void handle(TickEvent e) {
             if (e.getState() == EventState.POST) {
-                PacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                ClientPacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
         }
     };

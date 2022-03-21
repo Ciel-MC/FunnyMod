@@ -1,11 +1,11 @@
 package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
+import hk.eric.ericLib.utils.ClientPacketUtil;
+import hk.eric.ericLib.utils.MathUtil;
+import hk.eric.ericLib.utils.classes.XYRot;
+import hk.eric.ericLib.utils.classes.lamdba.TriConsumer;
+import hk.eric.ericLib.utils.classes.lamdba.TriFunction;
 import hk.eric.funnymod.utils.EntityUtil;
-import hk.eric.funnymod.utils.MathUtil;
-import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.classes.XYRot;
-import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
-import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,9 +44,9 @@ public class RageAuraMode implements AuraMode {
             HitResult result = player.pick(3,1,false);
             if (result.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = ((BlockHitResult) result).getBlockPos();
-                PacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockPos, Direction.fromYRot(xyRot.getYRot())));
+                ClientPacketUtil.send(new ServerboundPlayerActionPacket(ServerboundPlayerActionPacket.Action.START_DESTROY_BLOCK, blockPos, Direction.fromYRot(xyRot.getYRot())));
             }else {
-                PacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
+                ClientPacketUtil.send(new ServerboundSwingPacket(InteractionHand.MAIN_HAND));
             }
         };
     }

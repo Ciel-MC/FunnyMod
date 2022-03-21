@@ -2,8 +2,8 @@ package hk.eric.funnymod.gui.setting;
 
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
-import hk.eric.funnymod.utils.classes.Converters;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
+import hk.eric.ericLib.utils.classes.Converters;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 
 import java.util.function.Consumer;
 

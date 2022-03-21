@@ -1,6 +1,7 @@
 package hk.eric.funnymod.utils.classes.pathFind;
 
-import hk.eric.funnymod.utils.classes.minecraftPlus.BetterBlockPos;
+import hk.eric.ericLib.utils.classes.minecraftPlus.BetterBlockPos;
+import hk.eric.ericLib.utils.classes.pathFind.Node;
 import org.junit.jupiter.api.Test;
 
 class NodeTest {

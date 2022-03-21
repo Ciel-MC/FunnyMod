@@ -1,15 +1,18 @@
 package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.MotionEvent;
-import hk.eric.funnymod.gui.setting.*;
+import hk.eric.funnymod.gui.setting.BooleanSetting;
+import hk.eric.funnymod.gui.setting.DoubleSetting;
+import hk.eric.funnymod.gui.setting.IntegerSetting;
+import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.BooleanSettingWithSubSettings;
 import hk.eric.funnymod.gui.setting.settingWithSubSettings.EnumSettingWithSubSettings;
 import hk.eric.funnymod.mixin.OpenLevel;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.stream.Stream;
@@ -42,7 +45,7 @@ public class MCQPAuraModule extends ToggleableModule {
                     case NORMAL -> AuraModes.NORMAL_MODE;
 //                    case RAGE -> AuraModes.RAGE_MODE;
                 };
-                auraMode.getEntities().apply(entities,getPlayer(),range.getValue()).forEach(entity -> auraMode.getAttack().accept(entity, getPlayer(), PacketUtil::send));
+                auraMode.getEntities().apply(entities,getPlayer(),range.getValue()).forEach(entity -> auraMode.getAttack().accept(entity, getPlayer(), ClientPacketUtil::send));
             }
         }
     };

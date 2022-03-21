@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.*;
 import com.lukflug.panelstudio.widget.ClosableComponent;
 import com.lukflug.panelstudio.widget.ToggleButton;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.awt.*;
 

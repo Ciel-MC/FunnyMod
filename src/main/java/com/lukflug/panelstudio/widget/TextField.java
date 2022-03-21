@@ -6,7 +6,7 @@ import com.lukflug.panelstudio.base.IToggleable;
 import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.theme.ITextFieldRenderer;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;

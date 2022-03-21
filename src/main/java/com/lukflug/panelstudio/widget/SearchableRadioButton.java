@@ -10,7 +10,7 @@ import com.lukflug.panelstudio.setting.IStringSetting;
 import com.lukflug.panelstudio.setting.Labeled;
 import com.lukflug.panelstudio.theme.IContainerRenderer;
 import com.lukflug.panelstudio.theme.ThemeTuple;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;

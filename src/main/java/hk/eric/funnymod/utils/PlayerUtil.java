@@ -46,8 +46,8 @@ public class PlayerUtil {
         }
     }
 
-    public static void leftClick() {
-        ((OpenMinecraft) Minecraft.getInstance()).invokeStartAttack();
+    public static boolean leftClick() {
+        return ((OpenMinecraft) Minecraft.getInstance()).invokeStartAttack();
     }
 
     public static void rightClick() {

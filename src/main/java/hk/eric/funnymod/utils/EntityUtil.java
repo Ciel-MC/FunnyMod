@@ -1,5 +1,6 @@
 package hk.eric.funnymod.utils;
 
+import hk.eric.ericLib.utils.MathUtil;
 import hk.eric.funnymod.mixin.OpenLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.Entity;

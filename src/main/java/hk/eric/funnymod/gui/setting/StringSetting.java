@@ -2,9 +2,9 @@ package hk.eric.funnymod.gui.setting;
 
 import com.lukflug.panelstudio.base.IBoolean;
 import com.lukflug.panelstudio.setting.IStringSetting;
+import hk.eric.ericLib.utils.classes.Converters;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 import hk.eric.funnymod.utils.Constants;
-import hk.eric.funnymod.utils.classes.Converters;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
 
 public class StringSetting extends SavableSetting<String> implements IStringSetting {
 	public StringSetting(String displayName, String configName, String description, String value) {

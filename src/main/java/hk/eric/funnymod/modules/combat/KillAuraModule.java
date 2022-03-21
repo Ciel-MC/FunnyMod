@@ -1,6 +1,9 @@
 package hk.eric.funnymod.modules.combat;
 
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.classes.Flag;
+import hk.eric.ericLib.utils.classes.TimedAPSCounter;
+import hk.eric.ericLib.utils.classes.pathFind.AStarPathFinder;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventState;
 import hk.eric.funnymod.event.events.MotionEvent;
@@ -16,9 +19,6 @@ import hk.eric.funnymod.modules.combat.killaura.KillauraMode;
 import hk.eric.funnymod.modules.combat.killaura.KillauraModes;
 import hk.eric.funnymod.modules.debug.DebugModule;
 import hk.eric.funnymod.utils.EntityUtil;
-import hk.eric.funnymod.utils.classes.Flag;
-import hk.eric.funnymod.utils.classes.TimedAPSCounter;
-import hk.eric.funnymod.utils.classes.pathFind.AStarPathFinder;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.LivingEntity;
 

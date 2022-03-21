@@ -8,7 +8,7 @@ import hk.eric.funnymod.modules.ClickGUIModule;
 import hk.eric.funnymod.modules.ClickGUIModule.ColorModel;
 import hk.eric.funnymod.utils.Constants;
 import hk.eric.funnymod.utils.ObjectUtil;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 
 import java.awt.*;
 

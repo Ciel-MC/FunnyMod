@@ -5,7 +5,7 @@ import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.IColorSetting;
 import com.lukflug.panelstudio.setting.INumberSetting;
 import com.lukflug.panelstudio.theme.ThemeTuple;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * Returns color component consisting of sliders.

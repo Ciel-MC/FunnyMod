@@ -8,7 +8,7 @@ import com.lukflug.panelstudio.component.FocusableComponent;
 import com.lukflug.panelstudio.setting.IBooleanSetting;
 import com.lukflug.panelstudio.setting.ILabeled;
 import com.lukflug.panelstudio.theme.IButtonRenderer;
-import hk.eric.funnymod.utils.classes.getters.Getter;
+import hk.eric.ericLib.utils.classes.getters.Getter;
 
 /**
  * Button with two values that can be toggled by the left mouse button.

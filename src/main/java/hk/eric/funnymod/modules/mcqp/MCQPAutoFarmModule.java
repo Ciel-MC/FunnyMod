@@ -4,13 +4,13 @@ import baritone.api.IBaritone;
 import baritone.api.utils.BetterBlockPos;
 import baritone.api.utils.BlockOptionalMeta;
 import com.lukflug.panelstudio.base.IToggleable;
+import hk.eric.ericLib.utils.ClientPacketUtil;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.event.EventListener;
 import hk.eric.funnymod.event.events.TickEvent;
 import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.mixin.OpenGui;
 import hk.eric.funnymod.modules.ToggleableModule;
-import hk.eric.funnymod.utils.PacketUtil;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Blocks;
@@ -56,7 +56,7 @@ public class MCQPAutoFarmModule extends ToggleableModule {
 
             if (!getBaritone().getPathingBehavior().isPathing() && wasPathing) {
                 if (getPlayer() == null) return;
-                PacketUtil.send(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
+                ClientPacketUtil.send(new ServerboundUseItemOnPacket(InteractionHand.MAIN_HAND, new BlockHitResult(getPlayer().position(), getPlayer().getDirection(), target, false)));
                 ticks = 20;
             }
 

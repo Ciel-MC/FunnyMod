@@ -1,7 +1,7 @@
 package hk.eric.funnymod.modules.mcqp.MCQPAura;
 
-import hk.eric.funnymod.utils.classes.lamdba.TriConsumer;
-import hk.eric.funnymod.utils.classes.lamdba.TriFunction;
+import hk.eric.ericLib.utils.classes.lamdba.TriConsumer;
+import hk.eric.ericLib.utils.classes.lamdba.TriFunction;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.LivingEntity;

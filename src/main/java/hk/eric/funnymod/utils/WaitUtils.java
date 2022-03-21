@@ -1,11 +1,11 @@
 package hk.eric.funnymod.utils;
 
+import hk.eric.ericLib.utils.classes.Pair;
 import hk.eric.funnymod.event.EventHandler;
 import hk.eric.funnymod.event.EventManager;
 import hk.eric.funnymod.event.events.ChatReceivedEvent;
 import hk.eric.funnymod.event.events.GuiOpenEvent;
 import hk.eric.funnymod.event.events.TitleEvents;
-import hk.eric.funnymod.utils.classes.pairs.Pair;
 import org.jetbrains.annotations.Blocking;
 
 import java.util.LinkedList;
@@ -21,8 +21,8 @@ public class WaitUtils {
         @Override
         public void handle(GuiOpenEvent event) {
             waitingForNewScreen.removeIf(pair -> {
-                if (pair.getFirst().test(event)) {
-                    pair.getSecond().complete(null);
+                if (pair.first().test(event)) {
+                    pair.second().complete(null);
                     return true;
                 }else {
                     return false;
@@ -36,8 +36,8 @@ public class WaitUtils {
         @Override
         public void handle(ChatReceivedEvent event) {
             waitingForChat.removeIf(pair -> {
-                if (pair.getFirst().test(event)) {
-                    pair.getSecond().complete(null);
+                if (pair.first().test(event)) {
+                    pair.second().complete(null);
                     return true;
                 }else {
                     return false;
@@ -51,8 +51,8 @@ public class WaitUtils {
         @Override
         public void handle(TitleEvents.TitleEvent event) {
             waitingForTitle.removeIf(pair -> {
-                if (pair.getFirst().test(event)) {
-                    pair.getSecond().complete(null);
+                if (pair.first().test(event)) {
+                    pair.second().complete(null);
                     return true;
                 }else {
                     return false;

@@ -3,9 +3,9 @@ package hk.eric.funnymod.utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import hk.eric.ericLib.utils.classes.ThreeDimensionalLine;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.utils.accessor.IEntityRenderDispatcher;
-import hk.eric.funnymod.utils.classes.ThreeDimensionalLine;
 import net.minecraft.core.Position;
 import net.minecraft.world.phys.AABB;
 

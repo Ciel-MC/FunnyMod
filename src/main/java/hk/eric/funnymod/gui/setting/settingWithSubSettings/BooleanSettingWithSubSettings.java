@@ -7,8 +7,8 @@ import com.lukflug.panelstudio.setting.ISetting;
 import hk.eric.funnymod.exceptions.ConfigLoadingFailedException;
 import hk.eric.funnymod.gui.setting.BooleanSetting;
 import hk.eric.funnymod.utils.SettingUtil;
-import hk.eric.funnymod.utils.classes.Converters;
-import hk.eric.funnymod.utils.classes.TwoWayFunction;
+import hk.eric.ericLib.utils.classes.Converters;
+import hk.eric.ericLib.utils.classes.TwoWayFunction;
 
 import java.util.ArrayList;
 import java.util.HashMap;

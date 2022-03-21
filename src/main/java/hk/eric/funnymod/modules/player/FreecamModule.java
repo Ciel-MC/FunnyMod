@@ -2,6 +2,8 @@ package hk.eric.funnymod.modules.player;
 
 import com.lukflug.panelstudio.base.IToggleable;
 import com.mojang.authlib.GameProfile;
+import hk.eric.ericLib.utils.ClientPacketUtil;
+import hk.eric.ericLib.utils.classes.XYRot;
 import hk.eric.funnymod.FunnyModClient;
 import hk.eric.funnymod.chat.ChatManager;
 import hk.eric.funnymod.event.EventHandler;
@@ -11,8 +13,6 @@ import hk.eric.funnymod.gui.setting.KeybindSetting;
 import hk.eric.funnymod.modules.ToggleableModule;
 import hk.eric.funnymod.modules.movement.FlightModule;
 import hk.eric.funnymod.utils.HasFlag;
-import hk.eric.funnymod.utils.PacketUtil;
-import hk.eric.funnymod.utils.classes.XYRot;
 import net.minecraft.client.player.RemotePlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
@@ -29,11 +29,11 @@ public class FreecamModule extends ToggleableModule {
             if (packet instanceof ServerboundMovePlayerPacket movePlayerPacket) {
                 if (!((HasFlag) movePlayerPacket).getFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD)) {
                     event.setCancelled(true);
-                    ServerboundMovePlayerPacket p = PacketUtil.movePlayerPacketBuilder()
+                    ServerboundMovePlayerPacket p = ClientPacketUtil.movePlayerPacketBuilder()
                             .setOnGround(fakePlayer.isOnGround())
                             .build();
                     ((HasFlag) p).setFlag(HasFlag.Flags.SENT_BY_FUNNY_MOD, true);
-                    PacketUtil.send(p);
+                    ClientPacketUtil.send(p);
                 }
             }else if(packet instanceof ClientboundPlayerPositionPacket playerPositionPacket) {
                 event.setCancelled(true);
@@ -42,8 +42,8 @@ public class FreecamModule extends ToggleableModule {
 
                 fakePlayer.moveTo(pos.x, pos.y, pos.z, rot.getYRot(), rot.getXRot());
 
-                PacketUtil.send(PacketUtil.creatAcceptTeleport(playerPositionPacket));
-                PacketUtil.send(PacketUtil.movePlayerPacketBuilder()
+                ClientPacketUtil.send(ClientPacketUtil.creatAcceptTeleport(playerPositionPacket));
+                ClientPacketUtil.send(ClientPacketUtil.movePlayerPacketBuilder()
                         .setPos(pos)
                         .setRot(rot)
                         .setOnGround(false)
